@@ -1,2 +1,2 @@
 # MainMaster
-基于springboot的多模块项目开发脚手架
+本项目是努力打造springboot框架的极致细腻的脚手架。原生纯净，可在线生成controller、mapperxml、dao、service代码，极大减少开发难度，增加开发进度神器脚手架！
