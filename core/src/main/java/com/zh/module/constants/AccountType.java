@@ -5,9 +5,6 @@ package com.zh.module.constants;
  */
 public class AccountType {
 
-    public static  final int ACCOUNT_C2C = 0;
-    public static  final int ACCOUNT_SPOT = 1;
-    public static  final int ACCOUNT_DIG = 2;
-    public static  final int ACCOUNT_GANGGAN = 3;
-    public static  final int ACCOUNT_YUBI = 4;
+    //现在使用的账户
+    public static  final int ACCOUNT_TYPE_ACTIVE = 0;
 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Users implements Serializable {
-    private static final long serialVersionUID = -3830640338420146103L;
+    private static final long serialVersionUID = -7859941990505274035L;
 
     private Integer id;
 
@@ -20,9 +20,13 @@ public class Users implements Serializable {
 
     private Integer contribution;
 
-    private Byte level;
+    private Byte teamLevel;
 
-    private Byte uuid;
+    private Byte personLevel;
+
+    private String uuid;
+
+    private String referId;
 
     private Byte state;
 
@@ -86,20 +90,36 @@ public class Users implements Serializable {
         this.contribution = contribution;
     }
 
-    public Byte getLevel() {
-        return level;
+    public Byte getTeamLevel() {
+        return teamLevel;
     }
 
-    public void setLevel(Byte level) {
-        this.level = level;
+    public void setTeamLevel(Byte teamLevel) {
+        this.teamLevel = teamLevel;
     }
 
-    public Byte getUuid() {
+    public Byte getPersonLevel() {
+        return personLevel;
+    }
+
+    public void setPersonLevel(Byte personLevel) {
+        this.personLevel = personLevel;
+    }
+
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(Byte uuid) {
-        this.uuid = uuid;
+    public void setUuid(String uuid) {
+        this.uuid = uuid == null ? null : uuid.trim();
+    }
+
+    public String getReferId() {
+        return referId;
+    }
+
+    public void setReferId(String referId) {
+        this.referId = referId == null ? null : referId.trim();
     }
 
     public Byte getState() {
@@ -140,8 +160,10 @@ public class Users implements Serializable {
         sb.append(", nickName=").append(nickName);
         sb.append(", orderPwd=").append(orderPwd);
         sb.append(", contribution=").append(contribution);
-        sb.append(", level=").append(level);
+        sb.append(", teamLevel=").append(teamLevel);
+        sb.append(", personLevel=").append(personLevel);
         sb.append(", uuid=").append(uuid);
+        sb.append(", referId=").append(referId);
         sb.append(", state=").append(state);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);

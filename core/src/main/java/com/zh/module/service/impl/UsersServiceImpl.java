@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-19 18:31:27
+ * @date: 2019-12-21 20:10:57
  **/ 
 @Service("usersService")
 public class UsersServiceImpl implements UsersService {
@@ -69,19 +69,19 @@ public class UsersServiceImpl implements UsersService {
     public int selectCount(Map<Object, Object> param) {
         return this.usersMapper.selectCount(param);
     }
-
     @Override
-    public Users login(Users user) {
-        Map<Object, Object> param = new HashMap<>();
-        param.put("phone", user.getPhone());
-        try {
-            param.put("password", MD5.getMd5(user.getPassword()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        List<Users> list = usersMapper.selectAll(param);
-        return list.size() == 0 ? null : list.get(0);
+    public Users selectByUUID(String uuid) {
+        Map<Object, Object> map = new HashMap();
+        map.put("uuid", uuid);
+        List<Users> users = selectAll(map);
+        return users == null || users.isEmpty() ? null : users.get(0);
     }
+    @Override
+    public Users selectByPhone(String phone) {
+        Map<Object, Object> map = new HashMap();
+        map.put("phone", phone);
+        List<Users> users = selectAll(map);
 
-
+        return users == null|| users.isEmpty() ? null : users.get(0);
+    }
 }

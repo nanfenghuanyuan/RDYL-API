@@ -1,52 +1,52 @@
 package com.zh.module.service;
 
-import com.zh.module.entity.Users;
+import com.zh.module.entity.Sysparams;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-21 20:10:57
+ * @date: 2019-12-20 16:04:55
  **/ 
-public interface UsersService {
+public interface SysparamsService {
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-21 20:10:57
+     * @date: 2019-12-20 16:04:55
      **/ 
-    int insert(Users record);
+    int insert(Sysparams record);
 
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-21 20:10:57
+     * @date: 2019-12-20 16:04:55
      **/ 
-    int insertSelective(Users record);
+    int insertSelective(Sysparams record);
 
     /**
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-21 20:10:57
+     * @date: 2019-12-20 16:04:55
      **/ 
-    int updateByPrimaryKey(Users record);
+    int updateByPrimaryKey(Sysparams record);
 
     /**
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-21 20:10:57
+     * @date: 2019-12-20 16:04:55
      **/ 
-    int updateByPrimaryKeySelective(Users record);
+    int updateByPrimaryKeySelective(Sysparams record);
 
     /**
      * 删除
      * 
      * @author: autogeneration
-     * @date: 2019-12-21 20:10:57
+     * @date: 2019-12-20 16:04:55
      **/ 
     int deleteByPrimaryKey(Integer id);
 
@@ -54,35 +54,33 @@ public interface UsersService {
      * 按主键查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-21 20:10:57
+     * @date: 2019-12-20 16:04:55
      **/ 
-    Users selectByPrimaryKey(Integer id);
+    Sysparams selectByPrimaryKey(Integer id);
 
     /**
      * 条件查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-21 20:10:57
+     * @date: 2019-12-20 16:04:55
      **/ 
-    List<Users> selectAll(Map<Object, Object> param);
+    List<Sysparams> selectAll(Map<Object, Object> param);
 
     /**
      * 分页查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-21 20:10:57
+     * @date: 2019-12-20 16:04:55
      **/ 
-    List<Users> selectPaging(Map<Object, Object> param);
+    List<Sysparams> selectPaging(Map<Object, Object> param);
 
     /**
      * 统计查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-21 20:10:57
+     * @date: 2019-12-20 16:04:55
      **/ 
     int selectCount(Map<Object, Object> param);
 
-    Users selectByPhone(String phone);
-
-    Users selectByUUID(String uuid);
+    Sysparams getValByKey(String key);
 }

@@ -5,33 +5,10 @@ package com.zh.module.constants;
  */
 public class GlobalParams {
 
-    public static final int INACTIVE = 0;
-    public static final int ACTIVE = 1;
-    public static final int FORBIDDEN = 2;
-    public static final int LOGOFF = 3;
-
-    public static final int ACCOUNT_TYPE_C2C = 0;//C2C账户
-    public static final int ACCOUNT_TYPE_SPOT = 1;//现货账户
-    public static final int ACCOUNT_TYPE_DIG = 2;//挖矿账户
-    public static final int ACCOUNT_TYPE_LEVERAGE = 3;//杠杆账户
-    public static final int ACCOUNT_TYPE_YUBI = 4;//余币宝账户
-    public static final int ACCOUNT_TYPE_GAME=5;//dkbaby游戏账户
-
-    public static final int ROLE_TYPE_COMMON = 0;//普通用户
-    public static final int ROLE_TYPE_PLATFORM = 1;//平台用户
-    public static final int ROLE_TYPE_YIBIELVE = 2;//一笔精灵
-    public static final int ROLE_TYPE_ROBOT = 3;//机器人任务执行用户
-
-    public static final int ROLE_TYPE_PARTNER = 1;//合伙人
-    public static final int ROLE_TYPE_COMMONUSER = 2;//普通用户
-
-    //邀请推荐人等级
-    public static final int REFER_STATUS_0 = 0;
-    public static final int REFER_STATUS_1 = 1;
-    public static final int REFER_STATUS_2 = 2;
-    public static final int REFER_STATUS_3 = 3;
-    public static final int REFER_STATUS_4 = 4;
-    public static final int REFER_STATUS_5 = 5;
+    public static final int INACTIVE = 0; //未激活
+    public static final int ACTIVE = 1; //激活
+    public static final int FORBIDDEN = 2; //冻结
+    public static final int LOGOFF = 3; //注销
 
     public static final int PAY_COMMON = 0;//提现到pc钱包
     public static final int PAY_SPOT = 1;//提现到现货账户
@@ -40,6 +17,7 @@ public class GlobalParams {
     public static final int ORDER_STATE_TREATED = 1;//已成功
     public static final int ORDER_STATE_BACK = 2;//已撤销
     public static final int ORDER_STATE_FAIL = 3;//已失败
+
     public static  final int PAY_ALIPAY=0;//支付宝
     public static  final int PAY_WECHANT=1;//微信
     public static  final int PAY_BANK=2;//银行卡
@@ -156,22 +134,4 @@ public class GlobalParams {
     public static  final  int RECHARGE_STATE_FINISH = 1;//充值完成
     public static  final  int RECHARGE_STATE_CANCEL = 2;//充值撤销
 
-
-
-    public static final String FILE_UPLOAD_PATH="http://img.yb.link/upload.php";//文件上传地址
-
-    public static final String FILE_URL="http://img.yb.link/";//文件服务器域名
-
-    public static final int SYSTEM_PARAMS_VERSION = 3;/*启动参数版本号*/
-
-    public static  final int RED_PACKET_STATE_TRAININE=0;//未领取
-    public static  final int RED_PACKET_STATE_FINISHED=1;//已领取
-    public static  final int RED_PACKET_STATE_OUTTIME=2;//已超时
-    public static final String PARAM="params";
-    public static final String SIGN="sign";
-    public static final String SECRET = "g33uFoxOkWbTDsrp";
-
-
-    public static final int ORDER_TYPE_SPOT = 0; //现货交易挂单
-    public static final int ORDER_TYPE_LEVER = 1;//杠杆交易挂单
 }

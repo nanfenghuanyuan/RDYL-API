@@ -8,8 +8,10 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.zh.module.annotation.PassToken;
 import com.zh.module.annotation.UserLoginToken;
 import com.zh.module.entity.Users;
+import com.zh.module.exception.NoTokenException;
 import com.zh.module.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +26,7 @@ import java.lang.reflect.Method;
  * @author: zhaohe
  * @create: 2019-12-19 18:51
  **/
+@Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Autowired
     UsersService userService;
@@ -51,7 +54,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             if (userLoginToken.required()) {
                 // 执行认证
                 if (token == null) {
-                    throw new RuntimeException("无token，请重新登录");
+                    throw new NoTokenException("无token，请重新登录");
                 }
                 // 获取 token 中的 user id
                 String userId;
@@ -62,7 +65,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 }
                 Users user = userService.selectByPrimaryKey(Integer.valueOf(userId));
                 if (user == null) {
-                    throw new RuntimeException("用户不存在，请重新登录");
+                    throw new NoTokenException("用户不存在，请重新登录");
                 }
                 // 验证 token
                 JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();

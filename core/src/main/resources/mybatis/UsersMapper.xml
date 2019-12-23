@@ -9,15 +9,17 @@
     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
     <result column="order_pwd" jdbcType="VARCHAR" property="orderPwd" />
     <result column="contribution" jdbcType="INTEGER" property="contribution" />
-    <result column="level" jdbcType="TINYINT" property="level" />
-    <result column="uuid" jdbcType="TINYINT" property="uuid" />
+    <result column="team_level" jdbcType="TINYINT" property="teamLevel" />
+    <result column="person_level" jdbcType="TINYINT" property="personLevel" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
+    <result column="refer_id" jdbcType="VARCHAR" property="referId" />
     <result column="state" jdbcType="TINYINT" property="state" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, account, phone, password, nick_name, order_pwd, contribution, level, uuid, state, 
-    create_time, update_time
+    id, account, phone, password, nick_name, order_pwd, contribution, team_level, person_level, 
+    uuid, refer_id, state, create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.Users">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -25,12 +27,14 @@
     </selectKey>
     insert into users (account, phone, password, 
       nick_name, order_pwd, contribution, 
-      level, uuid, state, 
-      create_time, update_time)
+      team_level, person_level, uuid, 
+      refer_id, state, create_time, 
+      update_time)
     values (#{account,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{nickName,jdbcType=VARCHAR}, #{orderPwd,jdbcType=VARCHAR}, #{contribution,jdbcType=INTEGER}, 
-      #{level,jdbcType=TINYINT}, #{uuid,jdbcType=TINYINT}, #{state,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{teamLevel,jdbcType=TINYINT}, #{personLevel,jdbcType=TINYINT}, #{uuid,jdbcType=VARCHAR}, 
+      #{referId,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.Users">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -56,11 +60,17 @@
       <if test="contribution != null">
         contribution,
       </if>
-      <if test="level != null">
-        level,
+      <if test="teamLevel != null">
+        team_level,
+      </if>
+      <if test="personLevel != null">
+        person_level,
       </if>
       <if test="uuid != null">
         uuid,
+      </if>
+      <if test="referId != null">
+        refer_id,
       </if>
       <if test="state != null">
         state,
@@ -91,11 +101,17 @@
       <if test="contribution != null">
         #{contribution,jdbcType=INTEGER},
       </if>
-      <if test="level != null">
-        #{level,jdbcType=TINYINT},
+      <if test="teamLevel != null">
+        #{teamLevel,jdbcType=TINYINT},
+      </if>
+      <if test="personLevel != null">
+        #{personLevel,jdbcType=TINYINT},
       </if>
       <if test="uuid != null">
-        #{uuid,jdbcType=TINYINT},
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="referId != null">
+        #{referId,jdbcType=VARCHAR},
       </if>
       <if test="state != null">
         #{state,jdbcType=TINYINT},
@@ -116,8 +132,10 @@
       nick_name = #{nickName,jdbcType=VARCHAR},
       order_pwd = #{orderPwd,jdbcType=VARCHAR},
       contribution = #{contribution,jdbcType=INTEGER},
-      level = #{level,jdbcType=TINYINT},
-      uuid = #{uuid,jdbcType=TINYINT},
+      team_level = #{teamLevel,jdbcType=TINYINT},
+      person_level = #{personLevel,jdbcType=TINYINT},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      refer_id = #{referId,jdbcType=VARCHAR},
       state = #{state,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
@@ -144,11 +162,17 @@
       <if test="contribution != null">
         contribution = #{contribution,jdbcType=INTEGER},
       </if>
-      <if test="level != null">
-        level = #{level,jdbcType=TINYINT},
+      <if test="teamLevel != null">
+        team_level = #{teamLevel,jdbcType=TINYINT},
+      </if>
+      <if test="personLevel != null">
+        person_level = #{personLevel,jdbcType=TINYINT},
       </if>
       <if test="uuid != null">
-        uuid = #{uuid,jdbcType=TINYINT},
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="referId != null">
+        refer_id = #{referId,jdbcType=VARCHAR},
       </if>
       <if test="state != null">
         state = #{state,jdbcType=TINYINT},
@@ -195,11 +219,17 @@
     <if test="contribution != null">
        and  contribution = #{contribution,jdbcType=INTEGER}
     </if>
-    <if test="level != null">
-       and  level = #{level,jdbcType=TINYINT}
+    <if test="teamLevel != null">
+       and  team_level = #{teamLevel,jdbcType=TINYINT}
+    </if>
+    <if test="personLevel != null">
+       and  person_level = #{personLevel,jdbcType=TINYINT}
     </if>
     <if test="uuid != null">
-       and  uuid = #{uuid,jdbcType=TINYINT}
+       and  uuid = #{uuid,jdbcType=VARCHAR}
+    </if>
+    <if test="referId != null">
+       and  refer_id = #{referId,jdbcType=VARCHAR}
     </if>
     <if test="state != null">
        and  state = #{state,jdbcType=TINYINT}
@@ -235,11 +265,17 @@
     <if test="contribution != null">
        and  contribution = #{contribution,jdbcType=INTEGER}
     </if>
-    <if test="level != null">
-       and  level = #{level,jdbcType=TINYINT}
+    <if test="teamLevel != null">
+       and  team_level = #{teamLevel,jdbcType=TINYINT}
+    </if>
+    <if test="personLevel != null">
+       and  person_level = #{personLevel,jdbcType=TINYINT}
     </if>
     <if test="uuid != null">
-       and  uuid = #{uuid,jdbcType=TINYINT}
+       and  uuid = #{uuid,jdbcType=VARCHAR}
+    </if>
+    <if test="referId != null">
+       and  refer_id = #{referId,jdbcType=VARCHAR}
     </if>
     <if test="state != null">
        and  state = #{state,jdbcType=TINYINT}
@@ -274,11 +310,17 @@
     <if test="contribution != null">
        and  contribution = #{contribution,jdbcType=INTEGER}
     </if>
-    <if test="level != null">
-       and  level = #{level,jdbcType=TINYINT}
+    <if test="teamLevel != null">
+       and  team_level = #{teamLevel,jdbcType=TINYINT}
+    </if>
+    <if test="personLevel != null">
+       and  person_level = #{personLevel,jdbcType=TINYINT}
     </if>
     <if test="uuid != null">
-       and  uuid = #{uuid,jdbcType=TINYINT}
+       and  uuid = #{uuid,jdbcType=VARCHAR}
+    </if>
+    <if test="referId != null">
+       and  refer_id = #{referId,jdbcType=VARCHAR}
     </if>
     <if test="state != null">
        and  state = #{state,jdbcType=TINYINT}
