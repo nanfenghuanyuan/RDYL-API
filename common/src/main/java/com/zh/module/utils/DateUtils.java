@@ -136,6 +136,23 @@ public class DateUtils {
 		long between_days = (beforeMillis - afterMillis) / (1000 * 3600);
 		return Integer.parseInt(String.valueOf(between_days));
 	}
+	/**
+	 * @描述 计算机两个时间相差分钟数<br>
+	 *            字符串格式日期时间,例：XXXX-XX-XX XX:XX:XX
+	 * @return
+	 * @author administrator
+	 * @版本 v1.0.0
+	 * @日期 2017-6-17
+	 */
+	public static int minBetween(String dateStr) {
+		Date after = strToDate(dateStr);
+		Calendar cal = Calendar.getInstance();
+		Date before = cal.getTime();
+		long afterMillis = after.getTime();
+		long beforeMillis = before.getTime();
+		long between_days = (beforeMillis - afterMillis) / (1000 * 60);
+		return Integer.parseInt(String.valueOf(between_days));
+	}
 
 	/**
 	 * @描述 获取当前月份第一天<br>
@@ -249,6 +266,15 @@ public class DateUtils {
 			w = 0;
 		}
 		return weekDays[w];
+	}
+
+	public static void main(String[] args) {
+		int start = DateUtils.minBetween("2019-12-24 15:00:00");
+		int end = DateUtils.minBetween("2019-12-24 15:01:00");
+		boolean a =start > -10 &&  end< 0;
+		System.out.println(start);
+		System.out.println(end);
+		System.out.println(a);
 	}
 
 

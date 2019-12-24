@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zh.module.dao.PetsListMapper">
+  <resultMap id="BaseResultMap" type="com.zh.module.entity.PetsList">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="pet_id" jdbcType="TINYINT" property="petId" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="spend" jdbcType="DECIMAL" property="spend" />
+    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="profit_days" jdbcType="INTEGER" property="profitDays" />
+    <result column="profit_rate" jdbcType="DECIMAL" property="profitRate" />
+    <result column="profit_coin" jdbcType="VARCHAR" property="profitCoin" />
+    <result column="profit_coin_rate" jdbcType="VARCHAR" property="profitCoinRate" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="source_from" jdbcType="TINYINT" property="sourceFrom" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, pet_id, price, spend, level, profit_days, profit_rate, profit_coin, profit_coin_rate, 
+    start_time, end_time, state, source_from, create_time, update_time
+  </sql>
+  <insert id="insert" parameterType="com.zh.module.entity.PetsList">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pets_list (pet_id, price, spend, 
+      level, profit_days, profit_rate, 
+      profit_coin, profit_coin_rate, start_time, 
+      end_time, state, source_from, 
+      create_time, update_time)
+    values (#{petId,jdbcType=TINYINT}, #{price,jdbcType=DECIMAL}, #{spend,jdbcType=DECIMAL}, 
+      #{level,jdbcType=TINYINT}, #{profitDays,jdbcType=INTEGER}, #{profitRate,jdbcType=DECIMAL}, 
+      #{profitCoin,jdbcType=VARCHAR}, #{profitCoinRate,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, 
+      #{endTime,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, #{sourceFrom,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zh.module.entity.PetsList">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pets_list
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="petId != null">
+        pet_id,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="spend != null">
+        spend,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="profitDays != null">
+        profit_days,
+      </if>
+      <if test="profitRate != null">
+        profit_rate,
+      </if>
+      <if test="profitCoin != null">
+        profit_coin,
+      </if>
+      <if test="profitCoinRate != null">
+        profit_coin_rate,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="sourceFrom != null">
+        source_from,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="petId != null">
+        #{petId,jdbcType=TINYINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="spend != null">
+        #{spend,jdbcType=DECIMAL},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=TINYINT},
+      </if>
+      <if test="profitDays != null">
+        #{profitDays,jdbcType=INTEGER},
+      </if>
+      <if test="profitRate != null">
+        #{profitRate,jdbcType=DECIMAL},
+      </if>
+      <if test="profitCoin != null">
+        #{profitCoin,jdbcType=VARCHAR},
+      </if>
+      <if test="profitCoinRate != null">
+        #{profitCoinRate,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="sourceFrom != null">
+        #{sourceFrom,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.zh.module.entity.PetsList">
+    update pets_list
+    set pet_id = #{petId,jdbcType=TINYINT},
+      price = #{price,jdbcType=DECIMAL},
+      spend = #{spend,jdbcType=DECIMAL},
+      level = #{level,jdbcType=TINYINT},
+      profit_days = #{profitDays,jdbcType=INTEGER},
+      profit_rate = #{profitRate,jdbcType=DECIMAL},
+      profit_coin = #{profitCoin,jdbcType=VARCHAR},
+      profit_coin_rate = #{profitCoinRate,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      state = #{state,jdbcType=TINYINT},
+      source_from = #{sourceFrom,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zh.module.entity.PetsList">
+    update pets_list
+    <set>
+      <if test="petId != null">
+        pet_id = #{petId,jdbcType=TINYINT},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="spend != null">
+        spend = #{spend,jdbcType=DECIMAL},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="profitDays != null">
+        profit_days = #{profitDays,jdbcType=INTEGER},
+      </if>
+      <if test="profitRate != null">
+        profit_rate = #{profitRate,jdbcType=DECIMAL},
+      </if>
+      <if test="profitCoin != null">
+        profit_coin = #{profitCoin,jdbcType=VARCHAR},
+      </if>
+      <if test="profitCoinRate != null">
+        profit_coin_rate = #{profitCoinRate,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="sourceFrom != null">
+        source_from = #{sourceFrom,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from pets_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pets_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pets_list
+    where 1=1 
+    <if test="petId != null">
+       and  pet_id = #{petId,jdbcType=TINYINT}
+    </if>
+    <if test="price != null">
+       and  price = #{price,jdbcType=DECIMAL}
+    </if>
+    <if test="spend != null">
+       and  spend = #{spend,jdbcType=DECIMAL}
+    </if>
+    <if test="level != null">
+       and  level = #{level,jdbcType=TINYINT}
+    </if>
+    <if test="profitDays != null">
+       and  profit_days = #{profitDays,jdbcType=INTEGER}
+    </if>
+    <if test="profitRate != null">
+       and  profit_rate = #{profitRate,jdbcType=DECIMAL}
+    </if>
+    <if test="profitCoin != null">
+       and  profit_coin = #{profitCoin,jdbcType=VARCHAR}
+    </if>
+    <if test="profitCoinRate != null">
+       and  profit_coin_rate = #{profitCoinRate,jdbcType=VARCHAR}
+    </if>
+    <if test="startTime != null">
+       and  start_time = #{startTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != null">
+       and  end_time = #{endTime,jdbcType=VARCHAR}
+    </if>
+    <if test="state != null">
+       and  state = #{state,jdbcType=TINYINT}
+    </if>
+    <if test="sourceFrom != null">
+       and  source_from = #{sourceFrom,jdbcType=TINYINT}
+    </if>
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
+    </if>
+     order by id desc 
+  </select>
+  <select id="selectPaging" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pets_list
+    where 1=1 
+    <if test="petId != null">
+       and  pet_id = #{petId,jdbcType=TINYINT}
+    </if>
+    <if test="price != null">
+       and  price = #{price,jdbcType=DECIMAL}
+    </if>
+    <if test="spend != null">
+       and  spend = #{spend,jdbcType=DECIMAL}
+    </if>
+    <if test="level != null">
+       and  level = #{level,jdbcType=TINYINT}
+    </if>
+    <if test="profitDays != null">
+       and  profit_days = #{profitDays,jdbcType=INTEGER}
+    </if>
+    <if test="profitRate != null">
+       and  profit_rate = #{profitRate,jdbcType=DECIMAL}
+    </if>
+    <if test="profitCoin != null">
+       and  profit_coin = #{profitCoin,jdbcType=VARCHAR}
+    </if>
+    <if test="profitCoinRate != null">
+       and  profit_coin_rate = #{profitCoinRate,jdbcType=VARCHAR}
+    </if>
+    <if test="startTime != null">
+       and  start_time = #{startTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != null">
+       and  end_time = #{endTime,jdbcType=VARCHAR}
+    </if>
+    <if test="state != null">
+       and  state = #{state,jdbcType=TINYINT}
+    </if>
+    <if test="sourceFrom != null">
+       and  source_from = #{sourceFrom,jdbcType=TINYINT}
+    </if>
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
+    </if>
+     order by id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
+  </select>
+  <select id="selectByHomePage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+  </select>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(*) 
+    from pets_list 
+    where 1=1 
+    <if test="petId != null">
+       and  pet_id = #{petId,jdbcType=TINYINT}
+    </if>
+    <if test="price != null">
+       and  price = #{price,jdbcType=DECIMAL}
+    </if>
+    <if test="spend != null">
+       and  spend = #{spend,jdbcType=DECIMAL}
+    </if>
+    <if test="level != null">
+       and  level = #{level,jdbcType=TINYINT}
+    </if>
+    <if test="profitDays != null">
+       and  profit_days = #{profitDays,jdbcType=INTEGER}
+    </if>
+    <if test="profitRate != null">
+       and  profit_rate = #{profitRate,jdbcType=DECIMAL}
+    </if>
+    <if test="profitCoin != null">
+       and  profit_coin = #{profitCoin,jdbcType=VARCHAR}
+    </if>
+    <if test="profitCoinRate != null">
+       and  profit_coin_rate = #{profitCoinRate,jdbcType=VARCHAR}
+    </if>
+    <if test="startTime != null">
+       and  start_time = #{startTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != null">
+       and  end_time = #{endTime,jdbcType=VARCHAR}
+    </if>
+    <if test="state != null">
+       and  state = #{state,jdbcType=TINYINT}
+    </if>
+    <if test="sourceFrom != null">
+       and  source_from = #{sourceFrom,jdbcType=TINYINT}
+    </if>
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+</mapper>

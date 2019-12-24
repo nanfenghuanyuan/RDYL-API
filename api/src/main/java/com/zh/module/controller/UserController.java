@@ -1,6 +1,7 @@
 package com.zh.module.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zh.module.annotation.CurrentUser;
 import com.zh.module.annotation.UserLoginToken;
 import com.zh.module.biz.UsersBiz;
 import com.zh.module.dto.Result;
@@ -69,10 +70,9 @@ public class UserController {
         }
     }
 
-    @UserLoginToken
     @GetMapping("/getMessage")
-    public String getMessage(){
-        return "你已通过验证";
+    public String getMessage(@CurrentUser Users users){
+        return Result.toResult(ResultCode.SUCCESS, JSONObject.toJSON(users))    ;
     }
 
 }

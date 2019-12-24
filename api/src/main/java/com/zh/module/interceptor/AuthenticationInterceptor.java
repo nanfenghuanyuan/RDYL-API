@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.zh.module.Constants;
 import com.zh.module.annotation.PassToken;
 import com.zh.module.annotation.UserLoginToken;
 import com.zh.module.entity.Users;
@@ -29,7 +30,7 @@ import java.lang.reflect.Method;
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Autowired
-    UsersService userService;
+    UsersService usersService;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
@@ -63,7 +64,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 } catch (JWTDecodeException j) {
                     throw new RuntimeException("401");
                 }
-                Users user = userService.selectByPrimaryKey(Integer.valueOf(userId));
+                Users user = usersService.selectByPrimaryKey(Integer.valueOf(userId));
                 if (user == null) {
                     throw new NoTokenException("用户不存在，请重新登录");
                 }
