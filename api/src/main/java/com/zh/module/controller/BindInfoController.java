@@ -28,7 +28,7 @@ public class BindInfoController {
      * @param users
      * @return
      */
-    @GetMapping("/getBindInfo")
+    @GetMapping(value = "/getBindInfo", produces = { "application/json;charset=UTF-8"})
     public String getBindInfo(@CurrentUser Users users){
         try {
             return bindInfoBiz.getBindInfo(users);
@@ -41,7 +41,7 @@ public class BindInfoController {
      * @param users
      * @return
      */
-    @PostMapping("/binding")
+    @PostMapping(value = "/binding", produces = { "application/json;charset=UTF-8"})
     public String binding(@CurrentUser Users users, @RequestBody String param){
         try {
             JSONObject params = JSONObject.parseObject(param);

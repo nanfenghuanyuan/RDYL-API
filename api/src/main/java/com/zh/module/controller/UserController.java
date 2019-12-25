@@ -27,7 +27,7 @@ public class UserController {
     @Autowired
     private UsersBiz usersBiz;
 
-    @PostMapping(value = "register")
+    @PostMapping(value = "register", produces = { "application/json;charset=UTF-8"})
     public String register(@RequestBody String param){
         JSONObject params = JSONObject.parseObject(param);
         String phone = params.getString("phone");
@@ -61,7 +61,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", produces = { "application/json;charset=UTF-8"})
     public Object login(@RequestBody Users user){
         try {
             return usersBiz.login(user);

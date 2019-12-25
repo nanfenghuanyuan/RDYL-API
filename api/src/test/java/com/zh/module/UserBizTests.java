@@ -19,7 +19,6 @@ public class UserBizTests {
     public void init() {
         Users users = new Users();
         users.setId(1);
-        System.out.println(usersBiz.getBindInfo(users));
     }
 
 }
