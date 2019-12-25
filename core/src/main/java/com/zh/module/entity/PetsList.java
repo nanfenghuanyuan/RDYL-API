@@ -5,17 +5,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class PetsList implements Serializable {
-    private static final long serialVersionUID = 5948430784482313200L;
+    private static final long serialVersionUID = -8109869753101480996L;
 
     private Integer id;
 
-    private Byte petId;
+    private Byte level;
 
     private BigDecimal price;
 
     private BigDecimal spend;
-
-    private Byte level;
 
     private Integer profitDays;
 
@@ -45,12 +43,12 @@ public class PetsList implements Serializable {
         this.id = id;
     }
 
-    public Byte getPetId() {
-        return petId;
+    public Byte getLevel() {
+        return level;
     }
 
-    public void setPetId(Byte petId) {
-        this.petId = petId;
+    public void setLevel(Byte level) {
+        this.level = level;
     }
 
     public BigDecimal getPrice() {
@@ -67,14 +65,6 @@ public class PetsList implements Serializable {
 
     public void setSpend(BigDecimal spend) {
         this.spend = spend;
-    }
-
-    public Byte getLevel() {
-        return level;
-    }
-
-    public void setLevel(Byte level) {
-        this.level = level;
     }
 
     public Integer getProfitDays() {
@@ -165,10 +155,9 @@ public class PetsList implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append(", id=").append(id);
-        sb.append(", petId=").append(petId);
+        sb.append(", level=").append(level);
         sb.append(", price=").append(price);
         sb.append(", spend=").append(spend);
-        sb.append(", level=").append(level);
         sb.append(", profitDays=").append(profitDays);
         sb.append(", profitRate=").append(profitRate);
         sb.append(", profitCoin=").append(profitCoin);

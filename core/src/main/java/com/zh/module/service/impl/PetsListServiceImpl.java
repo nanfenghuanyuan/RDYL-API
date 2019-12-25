@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-23 20:03:16
+ * @date: 2019-12-25 10:06:29
  **/ 
 @Service("petsListService")
 public class PetsListServiceImpl implements PetsListService {
@@ -65,10 +65,5 @@ public class PetsListServiceImpl implements PetsListService {
     @Override
     public int selectCount(Map<Object, Object> param) {
         return this.petsListMapper.selectCount(param);
-    }
-
-    @Override
-    public List<PetsList> selectByHomePage(Map<Object, Object> map) {
-        return this.petsListMapper.selectByHomePage(map);
     }
 }

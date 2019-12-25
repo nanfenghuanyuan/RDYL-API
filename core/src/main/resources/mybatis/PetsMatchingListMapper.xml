@@ -3,7 +3,7 @@
 <mapper namespace="com.zh.module.dao.PetsMatchingListMapper">
   <resultMap id="BaseResultMap" type="com.zh.module.entity.PetsMatchingList">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="pet_id" jdbcType="TINYINT" property="petId" />
+    <result column="pet_list_id" jdbcType="TINYINT" property="petListId" />
     <result column="level" jdbcType="TINYINT" property="level" />
     <result column="buy_user_id" jdbcType="TINYINT" property="buyUserId" />
     <result column="sale_user_id" jdbcType="TINYINT" property="saleUserId" />
@@ -13,16 +13,16 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, pet_id, level, buy_user_id, sale_user_id, amount, state, create_time, update_time
+    id, pet_list_id, level, buy_user_id, sale_user_id, amount, state, create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.PetsMatchingList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pets_matching_list (pet_id, level, buy_user_id, 
+    insert into pets_matching_list (pet_list_id, level, buy_user_id, 
       sale_user_id, amount, state, 
       create_time, update_time)
-    values (#{petId,jdbcType=TINYINT}, #{level,jdbcType=TINYINT}, #{buyUserId,jdbcType=TINYINT}, 
+    values (#{petListId,jdbcType=TINYINT}, #{level,jdbcType=TINYINT}, #{buyUserId,jdbcType=TINYINT}, 
       #{saleUserId,jdbcType=TINYINT}, #{amount,jdbcType=DECIMAL}, #{state,jdbcType=TINYINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -32,8 +32,8 @@
     </selectKey>
     insert into pets_matching_list
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="petId != null">
-        pet_id,
+      <if test="petListId != null">
+        pet_list_id,
       </if>
       <if test="level != null">
         level,
@@ -58,8 +58,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="petId != null">
-        #{petId,jdbcType=TINYINT},
+      <if test="petListId != null">
+        #{petListId,jdbcType=TINYINT},
       </if>
       <if test="level != null">
         #{level,jdbcType=TINYINT},
@@ -86,7 +86,7 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.zh.module.entity.PetsMatchingList">
     update pets_matching_list
-    set pet_id = #{petId,jdbcType=TINYINT},
+    set pet_list_id = #{petListId,jdbcType=TINYINT},
       level = #{level,jdbcType=TINYINT},
       buy_user_id = #{buyUserId,jdbcType=TINYINT},
       sale_user_id = #{saleUserId,jdbcType=TINYINT},
@@ -99,8 +99,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zh.module.entity.PetsMatchingList">
     update pets_matching_list
     <set>
-      <if test="petId != null">
-        pet_id = #{petId,jdbcType=TINYINT},
+      <if test="petListId != null">
+        pet_list_id = #{petListId,jdbcType=TINYINT},
       </if>
       <if test="level != null">
         level = #{level,jdbcType=TINYINT},
@@ -141,8 +141,8 @@
     <include refid="Base_Column_List" />
     from pets_matching_list
     where 1=1 
-    <if test="petId != null">
-       and  pet_id = #{petId,jdbcType=TINYINT}
+    <if test="petListId != null">
+       and  pet_list_id = #{petListId,jdbcType=TINYINT}
     </if>
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}
@@ -172,8 +172,8 @@
     <include refid="Base_Column_List" />
     from pets_matching_list
     where 1=1 
-    <if test="petId != null">
-       and  pet_id = #{petId,jdbcType=TINYINT}
+    <if test="petListId != null">
+       and  pet_list_id = #{petListId,jdbcType=TINYINT}
     </if>
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}
@@ -198,15 +198,12 @@
     </if>
      order by id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
   </select>
-  <select id="selectByHomePage" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select
-  </select>
   <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
     select count(*) 
     from pets_matching_list 
     where 1=1 
-    <if test="petId != null">
-       and  pet_id = #{petId,jdbcType=TINYINT}
+    <if test="petListId != null">
+       and  pet_list_id = #{petListId,jdbcType=TINYINT}
     </if>
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}

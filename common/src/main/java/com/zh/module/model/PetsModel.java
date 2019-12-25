@@ -10,16 +10,32 @@ import lombok.Data;
  **/
 @Data
 public class PetsModel {
-    //宠物名称
+    /**
+     * 宠物名称
+     */
     private String name;
-    //价格区间
+    /**
+     * 价格区间
+     */
     private String priceSection;
-    //图片url
+    /**
+     * 时间区间
+     */
+    private String dateSection;
+    /**
+     * 图片url
+     */
     private String imgUrl;
-    //预约、直购价格
+    /**
+     * 预约、直购价格
+     */
     private String payPrice;
-    //合约收益
+    /**
+     * 合约收益
+     */
     private String profit;
-    //状态 0可预约 1可领养 2待领养 3已领养 4成长中
+    /**
+     * 状态 0可预约 1已预约 2可领养 3待领养 4已领养 5成长中
+     */
     private Integer state;
 }

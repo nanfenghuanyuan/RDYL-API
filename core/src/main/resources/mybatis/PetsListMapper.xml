@@ -3,10 +3,9 @@
 <mapper namespace="com.zh.module.dao.PetsListMapper">
   <resultMap id="BaseResultMap" type="com.zh.module.entity.PetsList">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="pet_id" jdbcType="TINYINT" property="petId" />
+    <result column="level" jdbcType="TINYINT" property="level" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="spend" jdbcType="DECIMAL" property="spend" />
-    <result column="level" jdbcType="TINYINT" property="level" />
     <result column="profit_days" jdbcType="INTEGER" property="profitDays" />
     <result column="profit_rate" jdbcType="DECIMAL" property="profitRate" />
     <result column="profit_coin" jdbcType="VARCHAR" property="profitCoin" />
@@ -19,23 +18,23 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, pet_id, price, spend, level, profit_days, profit_rate, profit_coin, profit_coin_rate, 
+    id, level, price, spend, profit_days, profit_rate, profit_coin, profit_coin_rate, 
     start_time, end_time, state, source_from, create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.PetsList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pets_list (pet_id, price, spend, 
-      level, profit_days, profit_rate, 
-      profit_coin, profit_coin_rate, start_time, 
-      end_time, state, source_from, 
-      create_time, update_time)
-    values (#{petId,jdbcType=TINYINT}, #{price,jdbcType=DECIMAL}, #{spend,jdbcType=DECIMAL}, 
-      #{level,jdbcType=TINYINT}, #{profitDays,jdbcType=INTEGER}, #{profitRate,jdbcType=DECIMAL}, 
-      #{profitCoin,jdbcType=VARCHAR}, #{profitCoinRate,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, 
-      #{endTime,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, #{sourceFrom,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into pets_list (level, price, spend, 
+      profit_days, profit_rate, profit_coin, 
+      profit_coin_rate, start_time, end_time, 
+      state, source_from, create_time, 
+      update_time)
+    values (#{level,jdbcType=TINYINT}, #{price,jdbcType=DECIMAL}, #{spend,jdbcType=DECIMAL}, 
+      #{profitDays,jdbcType=INTEGER}, #{profitRate,jdbcType=DECIMAL}, #{profitCoin,jdbcType=VARCHAR}, 
+      #{profitCoinRate,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, 
+      #{state,jdbcType=TINYINT}, #{sourceFrom,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.PetsList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -43,17 +42,14 @@
     </selectKey>
     insert into pets_list
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="petId != null">
-        pet_id,
+      <if test="level != null">
+        level,
       </if>
       <if test="price != null">
         price,
       </if>
       <if test="spend != null">
         spend,
-      </if>
-      <if test="level != null">
-        level,
       </if>
       <if test="profitDays != null">
         profit_days,
@@ -87,17 +83,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="petId != null">
-        #{petId,jdbcType=TINYINT},
+      <if test="level != null">
+        #{level,jdbcType=TINYINT},
       </if>
       <if test="price != null">
         #{price,jdbcType=DECIMAL},
       </if>
       <if test="spend != null">
         #{spend,jdbcType=DECIMAL},
-      </if>
-      <if test="level != null">
-        #{level,jdbcType=TINYINT},
       </if>
       <if test="profitDays != null">
         #{profitDays,jdbcType=INTEGER},
@@ -133,10 +126,9 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.zh.module.entity.PetsList">
     update pets_list
-    set pet_id = #{petId,jdbcType=TINYINT},
+    set level = #{level,jdbcType=TINYINT},
       price = #{price,jdbcType=DECIMAL},
       spend = #{spend,jdbcType=DECIMAL},
-      level = #{level,jdbcType=TINYINT},
       profit_days = #{profitDays,jdbcType=INTEGER},
       profit_rate = #{profitRate,jdbcType=DECIMAL},
       profit_coin = #{profitCoin,jdbcType=VARCHAR},
@@ -152,17 +144,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zh.module.entity.PetsList">
     update pets_list
     <set>
-      <if test="petId != null">
-        pet_id = #{petId,jdbcType=TINYINT},
+      <if test="level != null">
+        level = #{level,jdbcType=TINYINT},
       </if>
       <if test="price != null">
         price = #{price,jdbcType=DECIMAL},
       </if>
       <if test="spend != null">
         spend = #{spend,jdbcType=DECIMAL},
-      </if>
-      <if test="level != null">
-        level = #{level,jdbcType=TINYINT},
       </if>
       <if test="profitDays != null">
         profit_days = #{profitDays,jdbcType=INTEGER},
@@ -212,17 +201,14 @@
     <include refid="Base_Column_List" />
     from pets_list
     where 1=1 
-    <if test="petId != null">
-       and  pet_id = #{petId,jdbcType=TINYINT}
+    <if test="level != null">
+       and  level = #{level,jdbcType=TINYINT}
     </if>
     <if test="price != null">
        and  price = #{price,jdbcType=DECIMAL}
     </if>
     <if test="spend != null">
        and  spend = #{spend,jdbcType=DECIMAL}
-    </if>
-    <if test="level != null">
-       and  level = #{level,jdbcType=TINYINT}
     </if>
     <if test="profitDays != null">
        and  profit_days = #{profitDays,jdbcType=INTEGER}
@@ -261,17 +247,14 @@
     <include refid="Base_Column_List" />
     from pets_list
     where 1=1 
-    <if test="petId != null">
-       and  pet_id = #{petId,jdbcType=TINYINT}
+    <if test="level != null">
+       and  level = #{level,jdbcType=TINYINT}
     </if>
     <if test="price != null">
        and  price = #{price,jdbcType=DECIMAL}
     </if>
     <if test="spend != null">
        and  spend = #{spend,jdbcType=DECIMAL}
-    </if>
-    <if test="level != null">
-       and  level = #{level,jdbcType=TINYINT}
     </if>
     <if test="profitDays != null">
        and  profit_days = #{profitDays,jdbcType=INTEGER}
@@ -305,24 +288,18 @@
     </if>
      order by id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
   </select>
-  <select id="selectByHomePage" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select
-  </select>
   <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
     select count(*) 
     from pets_list 
     where 1=1 
-    <if test="petId != null">
-       and  pet_id = #{petId,jdbcType=TINYINT}
+    <if test="level != null">
+       and  level = #{level,jdbcType=TINYINT}
     </if>
     <if test="price != null">
        and  price = #{price,jdbcType=DECIMAL}
     </if>
     <if test="spend != null">
        and  spend = #{spend,jdbcType=DECIMAL}
-    </if>
-    <if test="level != null">
-       and  level = #{level,jdbcType=TINYINT}
     </if>
     <if test="profitDays != null">
        and  profit_days = #{profitDays,jdbcType=INTEGER}

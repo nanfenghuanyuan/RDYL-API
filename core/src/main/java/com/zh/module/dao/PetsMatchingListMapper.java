@@ -22,6 +22,4 @@ public interface PetsMatchingListMapper {
     List<PetsMatchingList> selectPaging(Map<Object, Object> param);
 
     int selectCount(Map<Object, Object> param);
-
-    List<PetsMatchingList> selectByHomePage(Map<Object, Object> map);
 }

@@ -92,10 +92,52 @@ public class GlobalParams {
     public static  final  int RECHARGE_STATE_FINISH = 1;//充值完成
     public static  final  int RECHARGE_STATE_CANCEL = 2;//充值撤销
 
-    public static  final  int PET_STATE_0 = 0;//可预约
-    public static  final  int PET_STATE_1 = 1;//可领养
-    public static  final  int PET_STATE_2 = 2;//待领养
-    public static  final  int PET_STATE_3 = 3;//已领养
-    public static  final  int PET_STATE_4 = 4;//成长中
+    /**
+     * 首页宠物状态 可预约
+     */
+    public static  final  int PET_STATE_0 = 0;
+    /**
+     * 首页宠物状态 已预约
+     */
+    public static  final  int PET_STATE_1 = 1;
+    /**
+     * 首页宠物状态 可领养
+     */
+    public static  final  int PET_STATE_2 = 2;
+    /**
+     * 首页宠物状态 待领养
+     */
+    public static  final  int PET_STATE_3 = 3;
+    /**
+     * 首页宠物状态 已领养
+     */
+    public static  final  int PET_STATE_4 = 4;
+    /**
+     * 首页宠物状态 成长中
+     */
+    public static  final  int PET_STATE_5 = 5;
+
+    /**
+     * 宠物匹配状态 已预约
+     */
+    public static  final  int PET_MATCHING_STATE_APPOINTMENTING = 0;
+    /**
+     * 宠物匹配状态 未付款
+     */
+    public static  final  int PET_MATCHING_STATE_NOPAY = 1;
+    /**
+     * 宠物匹配状态 未确认
+     */
+    public static  final  int PET_MATCHING_STATE_PAYED = 2;
+    /**
+     * 宠物匹配状态 已完成
+     */
+    public static  final  int PET_MATCHING_STATE_COMPLIETE = 3;
+    /**
+     * 宠物匹配状态 已取消
+     */
+    public static  final  int PET_MATCHING_STATE_CANCEL = 4;
+
+
 
 }

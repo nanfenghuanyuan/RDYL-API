@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class PetsMatchingList implements Serializable {
-    private static final long serialVersionUID = -3559740004928792305L;
+    private static final long serialVersionUID = 8770992249981148925L;
 
     private Integer id;
 
-    private Byte petId;
+    private Byte petListId;
 
     private Byte level;
 
@@ -33,12 +33,12 @@ public class PetsMatchingList implements Serializable {
         this.id = id;
     }
 
-    public Byte getPetId() {
-        return petId;
+    public Byte getPetListId() {
+        return petListId;
     }
 
-    public void setPetId(Byte petId) {
-        this.petId = petId;
+    public void setPetListId(Byte petListId) {
+        this.petListId = petListId;
     }
 
     public Byte getLevel() {
@@ -105,7 +105,7 @@ public class PetsMatchingList implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append(", id=").append(id);
-        sb.append(", petId=").append(petId);
+        sb.append(", petListId=").append(petListId);
         sb.append(", level=").append(level);
         sb.append(", buyUserId=").append(buyUserId);
         sb.append(", saleUserId=").append(saleUserId);

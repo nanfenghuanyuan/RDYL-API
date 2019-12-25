@@ -79,6 +79,24 @@ public class DateUtils {
 		}
 		return date;
 	}
+	/**
+	 * @描述 字符串转时间 自定义格式 例：XXXX-XX-XX XX:XX:XX<br>
+	 * @param str
+	 * @return
+	 * @author administrator
+	 * @版本 v1.0.0
+	 * @日期 2017-6-17
+	 */
+	public static Date strToDateFormat(String str, String formatDate) {
+		SimpleDateFormat format = new SimpleDateFormat(formatDate);
+		Date date = null;
+		try {
+			date = format.parse(str);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
 
 	/**
 	 * 时间字符串格式化
