@@ -46,10 +46,23 @@ public class BindInfoBizImpl implements BindInfoBiz {
 
     @Override
     public String binding(Users users, JSONObject params) {
+        BindInfo bindInfo = new BindInfo();
         Integer type = params.getInteger("type");
-        switch (type){
-
+        bindInfo.setType(type.byteValue());
+        bindInfo.setUserId(users.getId());
+        bindInfo.setState((byte) GlobalParams.ACTIVE);
+        bindInfo.setImgUrl(params.getString("imgUrl"));
+        String account = params.getString("account");
+        bindInfo.setAccount(account);
+        String name = params.getString("name");
+        bindInfo.setName(name);
+        if(type.equals(GlobalParams.PAY_BANK)){
+            String bankName = params.getString("bankName");
+            bindInfo.setBankName(bankName);
+            String branchName = params.getString("branchName");
+            bindInfo.setBranchName(branchName);
         }
-        return null;
+        bindInfoService.insertSelective(bindInfo);
+        return Result.toResult(ResultCode.SUCCESS);
     }
 }

@@ -41,7 +41,7 @@ public class BindInfoController {
      * @param users
      * @return
      */
-    @GetMapping("/binding")
+    @PostMapping("/binding")
     public String binding(@CurrentUser Users users, @RequestBody String param){
         try {
             JSONObject params = JSONObject.parseObject(param);
