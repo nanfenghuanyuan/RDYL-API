@@ -75,18 +75,6 @@ public class UserController {
         return Result.toResult(ResultCode.SUCCESS, JSONObject.toJSON(users))    ;
     }
 
-    /**
-     * 获取绑定信息
-     * @param users
-     * @return
-     */
-    @GetMapping("/getBindInfo")
-    public String getBindInfo(@CurrentUser Users users){
-        try {
-            return usersBiz.getBindInfo(users);
-        } catch (Exception e) {
-            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
-        }
-    }
+
 
 }

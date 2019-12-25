@@ -13,5 +13,4 @@ public interface UsersBiz {
 
     String register(String phone, String password, String uuid, Integer codeId, String code) throws Exception;
 
-    String getBindInfo(Users users);
 }

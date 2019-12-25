@@ -215,9 +215,5 @@ public class UsersBizImpl implements UsersBiz {
         }
     }
 
-    @Override
-    public String getBindInfo(Users users) {
-        List<BindInfo> list = bindInfoService.queryByUser(users.getId());
-        return Result.toResult(ResultCode.SUCCESS, list);
-    }
+
 }
