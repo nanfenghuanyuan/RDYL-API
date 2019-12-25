@@ -3,6 +3,8 @@
 <mapper namespace="com.zh.module.dao.PetsListMapper">
   <resultMap id="BaseResultMap" type="com.zh.module.entity.PetsList">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="transfer_user_id" jdbcType="INTEGER" property="transferUserId" />
     <result column="level" jdbcType="TINYINT" property="level" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="spend" jdbcType="DECIMAL" property="spend" />
@@ -18,23 +20,25 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, level, price, spend, profit_days, profit_rate, profit_coin, profit_coin_rate, 
-    start_time, end_time, state, source_from, create_time, update_time
+    id, user_id, transfer_user_id, level, price, spend, profit_days, profit_rate, profit_coin, 
+    profit_coin_rate, start_time, end_time, state, source_from, create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.PetsList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pets_list (level, price, spend, 
-      profit_days, profit_rate, profit_coin, 
-      profit_coin_rate, start_time, end_time, 
-      state, source_from, create_time, 
-      update_time)
-    values (#{level,jdbcType=TINYINT}, #{price,jdbcType=DECIMAL}, #{spend,jdbcType=DECIMAL}, 
-      #{profitDays,jdbcType=INTEGER}, #{profitRate,jdbcType=DECIMAL}, #{profitCoin,jdbcType=VARCHAR}, 
-      #{profitCoinRate,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, 
-      #{state,jdbcType=TINYINT}, #{sourceFrom,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into pets_list (user_id, transfer_user_id, level, 
+      price, spend, profit_days, 
+      profit_rate, profit_coin, profit_coin_rate, 
+      start_time, end_time, state, 
+      source_from, create_time, update_time
+      )
+    values (#{userId,jdbcType=INTEGER}, #{transferUserId,jdbcType=INTEGER}, #{level,jdbcType=TINYINT}, 
+      #{price,jdbcType=DECIMAL}, #{spend,jdbcType=DECIMAL}, #{profitDays,jdbcType=INTEGER}, 
+      #{profitRate,jdbcType=DECIMAL}, #{profitCoin,jdbcType=VARCHAR}, #{profitCoinRate,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, 
+      #{sourceFrom,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.PetsList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -42,6 +46,12 @@
     </selectKey>
     insert into pets_list
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="transferUserId != null">
+        transfer_user_id,
+      </if>
       <if test="level != null">
         level,
       </if>
@@ -83,6 +93,12 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="transferUserId != null">
+        #{transferUserId,jdbcType=INTEGER},
+      </if>
       <if test="level != null">
         #{level,jdbcType=TINYINT},
       </if>
@@ -126,7 +142,9 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.zh.module.entity.PetsList">
     update pets_list
-    set level = #{level,jdbcType=TINYINT},
+    set user_id = #{userId,jdbcType=INTEGER},
+      transfer_user_id = #{transferUserId,jdbcType=INTEGER},
+      level = #{level,jdbcType=TINYINT},
       price = #{price,jdbcType=DECIMAL},
       spend = #{spend,jdbcType=DECIMAL},
       profit_days = #{profitDays,jdbcType=INTEGER},
@@ -144,6 +162,12 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zh.module.entity.PetsList">
     update pets_list
     <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="transferUserId != null">
+        transfer_user_id = #{transferUserId,jdbcType=INTEGER},
+      </if>
       <if test="level != null">
         level = #{level,jdbcType=TINYINT},
       </if>
@@ -201,6 +225,12 @@
     <include refid="Base_Column_List" />
     from pets_list
     where 1=1 
+    <if test="userId != null">
+       and  user_id = #{userId,jdbcType=INTEGER}
+    </if>
+    <if test="transferUserId != null">
+       and  transfer_user_id = #{transferUserId,jdbcType=INTEGER}
+    </if>
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}
     </if>
@@ -247,6 +277,12 @@
     <include refid="Base_Column_List" />
     from pets_list
     where 1=1 
+    <if test="userId != null">
+       and  user_id = #{userId,jdbcType=INTEGER}
+    </if>
+    <if test="transferUserId != null">
+       and  transfer_user_id = #{transferUserId,jdbcType=INTEGER}
+    </if>
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}
     </if>
@@ -292,6 +328,12 @@
     select count(*) 
     from pets_list 
     where 1=1 
+    <if test="userId != null">
+       and  user_id = #{userId,jdbcType=INTEGER}
+    </if>
+    <if test="transferUserId != null">
+       and  transfer_user_id = #{transferUserId,jdbcType=INTEGER}
+    </if>
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}
     </if>

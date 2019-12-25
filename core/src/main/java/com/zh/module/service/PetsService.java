@@ -88,4 +88,11 @@ public interface PetsService {
      * @return
      */
     List<Pets> homePageInitPets();
+
+    /**
+     * 根据等级查询
+     * @param level
+     * @return
+     */
+    Pets selectByLevel(Integer level);
 }

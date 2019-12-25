@@ -60,4 +60,14 @@ public class SystemBizImpl implements SystemBiz {
         config.setNotice(notice);
         return Result.toResult(ResultCode.SUCCESS, config);
     }
+
+    @Override
+    public String getCustomerService() {
+        String wechatAccount = sysparamsService.getValStringByKey(SystemParams.WECHAT_ACCOUNT);
+        String wechatImgUrl = sysparamsService.getValStringByKey(SystemParams.WECHAT_IMG_URL);
+        Map<String, Object> map = new HashMap<>();
+        map.put("account", wechatAccount);
+        map.put("imgUrl", wechatImgUrl);
+        return Result.toResult(ResultCode.SUCCESS, map);
+    }
 }

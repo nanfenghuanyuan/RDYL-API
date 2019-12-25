@@ -22,4 +22,6 @@ public interface AccountMapper {
     List<Account> selectPaging(Map<Object, Object> param);
 
     int selectCount(Map<Object, Object> param);
+
+    int updateBalance(Account account);
 }

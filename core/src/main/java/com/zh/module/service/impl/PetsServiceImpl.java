@@ -3,6 +3,8 @@ package com.zh.module.service.impl;
 import com.zh.module.dao.PetsMapper;
 import com.zh.module.entity.Pets;
 import com.zh.module.service.PetsService;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -70,5 +72,13 @@ public class PetsServiceImpl implements PetsService {
     @Override
     public List<Pets> homePageInitPets() {
         return petsMapper.homePageInitPets();
+    }
+
+    @Override
+    public Pets selectByLevel(Integer level) {
+        Map<Object, Object> param = new HashMap<>();
+        param.put("level", level);
+        List<Pets> petsList = this.petsMapper.selectAll(param);
+        return petsList.size() == 0 ? null : petsList.get(0);
     }
 }

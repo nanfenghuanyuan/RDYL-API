@@ -1,52 +1,52 @@
 package com.zh.module.service;
 
-import com.zh.module.entity.Sysparams;
+import com.zh.module.entity.Flow;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-20 16:04:55
+ * @date: 2019-12-25 17:52:13
  **/ 
-public interface SysparamsService {
+public interface FlowService {
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 17:52:13
      **/ 
-    int insert(Sysparams record);
+    int insert(Flow record);
 
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 17:52:13
      **/ 
-    int insertSelective(Sysparams record);
+    int insertSelective(Flow record);
 
     /**
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 17:52:13
      **/ 
-    int updateByPrimaryKey(Sysparams record);
+    int updateByPrimaryKey(Flow record);
 
     /**
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 17:52:13
      **/ 
-    int updateByPrimaryKeySelective(Sysparams record);
+    int updateByPrimaryKeySelective(Flow record);
 
     /**
      * 删除
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 17:52:13
      **/ 
     int deleteByPrimaryKey(Integer id);
 
@@ -54,35 +54,31 @@ public interface SysparamsService {
      * 按主键查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 17:52:13
      **/ 
-    Sysparams selectByPrimaryKey(Integer id);
+    Flow selectByPrimaryKey(Integer id);
 
     /**
      * 条件查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 17:52:13
      **/ 
-    List<Sysparams> selectAll(Map<Object, Object> param);
+    List<Flow> selectAll(Map<Object, Object> param);
 
     /**
      * 分页查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 17:52:13
      **/ 
-    List<Sysparams> selectPaging(Map<Object, Object> param);
+    List<Flow> selectPaging(Map<Object, Object> param);
 
     /**
      * 统计查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 17:52:13
      **/ 
     int selectCount(Map<Object, Object> param);
-
-    Sysparams getValByKey(String key);
-
-    String getValStringByKey(String key);
 }

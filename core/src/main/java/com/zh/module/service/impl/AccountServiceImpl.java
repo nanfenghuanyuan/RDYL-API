@@ -1,11 +1,20 @@
 package com.zh.module.service.impl;
 
 import com.zh.module.dao.AccountMapper;
+import com.zh.module.dao.FlowMapper;
 import com.zh.module.entity.Account;
+import com.zh.module.entity.Flow;
+import com.zh.module.exception.BanlanceNotEnoughException;
 import com.zh.module.service.AccountService;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
+
+import com.zh.module.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,11 +23,14 @@ import org.springframework.stereotype.Service;
  * 
  * @author: autogeneration
  * @date: 2019-12-20 18:18:17
- **/ 
+ **/
+@Slf4j
 @Service("accountService")
 public class AccountServiceImpl implements AccountService {
     @Resource
     private AccountMapper accountMapper;
+    @Resource
+    private FlowMapper flowMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
@@ -65,5 +77,66 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public int selectCount(Map<Object, Object> param) {
         return this.accountMapper.selectCount(param);
+    }
+
+    @Override
+    public void updateAccountAndInsertFlow(Integer userId, Integer accountType, Integer coinType,
+                                           BigDecimal availIncrement, BigDecimal frozenIncrement, Integer operId, String operType, Integer relateId) throws BanlanceNotEnoughException {
+
+        Map<Object, Object> map = new HashMap();
+        map.put("userid", userId);
+        map.put("accounttype", accountType);
+        map.put("cointype", coinType);
+        List<Account> accountList = selectAll(map);
+
+        Account account = new Account();
+        account.setUserId(userId);
+        account.setCoinType(coinType);
+        account.setAccountType(accountType);
+        account.setAvailbalance(availIncrement);
+        account.setFrozenblance(frozenIncrement);
+
+        int ut;
+        if (accountList == null || accountList.isEmpty()) {
+            if (availIncrement.compareTo(BigDecimal.ZERO) == -1 || frozenIncrement.compareTo(BigDecimal.ZERO) == -1) {
+                log.info("账户余额不足，update account-->{}", account.toString());
+                throw new BanlanceNotEnoughException("账户余额不足");
+            }
+            ut = insertSelective(account);
+        } else {
+            ut = this.accountMapper.updateBalance(account);
+        }
+
+        if (ut != 1) {
+            log.info("账户余额不足，update account-->{}", account.toString());
+            throw new BanlanceNotEnoughException("账户余额不足");
+        }
+
+        if (availIncrement.compareTo(BigDecimal.ZERO) != 0) {
+            Flow flow = new Flow();
+            flow.setUserId(userId);
+            flow.setAccountType(accountType);
+            flow.setCoinType(coinType);
+            flow.setOperId(operId);
+            flow.setOperType(operType);
+            flow.setRelateId(relateId);
+            flow.setAmount(availIncrement);
+            flow.setResultAmount(account.getAvailbalance().add(availIncrement).toPlainString());
+            flowMapper.insert(flow);
+        }else
+        if (frozenIncrement.compareTo(BigDecimal.ZERO) != 0) {
+            Flow flow = new Flow();
+            flow.setUserId(userId);
+            flow.setAccountType(accountType);
+            flow.setCoinType(coinType);
+            flow.setOperId(operId);
+            flow.setOperType(operType);
+            flow.setRelateId(relateId);
+            flow.setAmount(frozenIncrement);
+            flow.setResultAmount(account.getFrozenblance().add(frozenIncrement).toPlainString());
+            flowMapper.insert(flow);
+        }
+
+
     }
 }

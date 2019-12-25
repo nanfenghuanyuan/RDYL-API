@@ -10,4 +10,6 @@ import com.zh.module.entity.Users;
  **/
 public interface SystemBiz {
     String getStartupParam();
+
+    String getCustomerService();
 }

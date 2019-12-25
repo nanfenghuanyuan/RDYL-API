@@ -1,52 +1,52 @@
 package com.zh.module.service;
 
-import com.zh.module.entity.Sysparams;
+import com.zh.module.entity.BindInfo;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-20 16:04:55
+ * @date: 2019-12-25 20:55:41
  **/ 
-public interface SysparamsService {
+public interface BindInfoService {
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 20:55:41
      **/ 
-    int insert(Sysparams record);
+    int insert(BindInfo record);
 
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 20:55:41
      **/ 
-    int insertSelective(Sysparams record);
+    int insertSelective(BindInfo record);
 
     /**
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 20:55:41
      **/ 
-    int updateByPrimaryKey(Sysparams record);
+    int updateByPrimaryKey(BindInfo record);
 
     /**
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 20:55:41
      **/ 
-    int updateByPrimaryKeySelective(Sysparams record);
+    int updateByPrimaryKeySelective(BindInfo record);
 
     /**
      * 删除
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 20:55:41
      **/ 
     int deleteByPrimaryKey(Integer id);
 
@@ -54,35 +54,33 @@ public interface SysparamsService {
      * 按主键查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 20:55:41
      **/ 
-    Sysparams selectByPrimaryKey(Integer id);
+    BindInfo selectByPrimaryKey(Integer id);
 
     /**
      * 条件查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 20:55:41
      **/ 
-    List<Sysparams> selectAll(Map<Object, Object> param);
+    List<BindInfo> selectAll(Map<Object, Object> param);
 
     /**
      * 分页查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 20:55:41
      **/ 
-    List<Sysparams> selectPaging(Map<Object, Object> param);
+    List<BindInfo> selectPaging(Map<Object, Object> param);
 
     /**
      * 统计查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2019-12-25 20:55:41
      **/ 
     int selectCount(Map<Object, Object> param);
 
-    Sysparams getValByKey(String key);
-
-    String getValStringByKey(String key);
+    List<BindInfo> queryByUser(Integer id);
 }

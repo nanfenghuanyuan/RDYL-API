@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class PetsMatchingList implements Serializable {
-    private static final long serialVersionUID = 8770992249981148925L;
+    private static final long serialVersionUID = 4775690109857574937L;
 
     private Integer id;
 
@@ -13,9 +13,9 @@ public class PetsMatchingList implements Serializable {
 
     private Byte level;
 
-    private Byte buyUserId;
+    private Integer buyUserId;
 
-    private Byte saleUserId;
+    private Integer saleUserId;
 
     private BigDecimal amount;
 
@@ -49,19 +49,19 @@ public class PetsMatchingList implements Serializable {
         this.level = level;
     }
 
-    public Byte getBuyUserId() {
+    public Integer getBuyUserId() {
         return buyUserId;
     }
 
-    public void setBuyUserId(Byte buyUserId) {
+    public void setBuyUserId(Integer buyUserId) {
         this.buyUserId = buyUserId;
     }
 
-    public Byte getSaleUserId() {
+    public Integer getSaleUserId() {
         return saleUserId;
     }
 
-    public void setSaleUserId(Byte saleUserId) {
+    public void setSaleUserId(Integer saleUserId) {
         this.saleUserId = saleUserId;
     }
 

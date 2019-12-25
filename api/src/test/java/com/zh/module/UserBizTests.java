@@ -1,7 +1,7 @@
 package com.zh.module;
 
 import com.zh.module.biz.HomeBiz;
-import com.zh.module.biz.SystemBiz;
+import com.zh.module.biz.UsersBiz;
 import com.zh.module.entity.Users;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,23 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-/**
- * @program: R.D.Y.LMain
- * @description:
- * @author: zhaohe
- * @create: 2019-12-25 12:06
- **/
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SystemBizTest {
+public class UserBizTests {
+
     @Autowired
-    private SystemBiz systemBiz;
+    private UsersBiz usersBiz;
     @Test
     public void init() {
-        System.out.println(systemBiz.getStartupParam());
+        Users users = new Users();
+        users.setId(1);
+        System.out.println(usersBiz.getBindInfo(users));
     }
-    @Test
-    public void custom() {
-        System.out.println(systemBiz.getCustomerService());
-    }
+
 }

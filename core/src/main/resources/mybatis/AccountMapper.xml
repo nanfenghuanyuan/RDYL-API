@@ -207,4 +207,15 @@
        and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
     </if>
   </select>
+  <update id="updateBalance" parameterType="com.zh.module.entity.Account">
+    update account
+    set availbalance=availbalance + #{availbalance},frozenblance = frozenblance+ #{frozenblance}
+    where user_id=#{userId} and account_type=#{accountType} and coin_type=#{coinType}
+    <if test="availbalance &lt; 0">
+      and availbalance &gt;= -#{availbalance}
+    </if>
+    <if test="frozenblance &lt; 0">
+      and frozenblance &gt;= -#{frozenblance}
+    </if>
+  </update>
 </mapper>

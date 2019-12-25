@@ -5,6 +5,8 @@ package com.zh.module.constants;
  */
 public class GlobalParams {
 
+    public static final int DEFAULT_PETS_ID = -1; //无具体指向
+
     public static final int INACTIVE = 0; //未激活
     public static final int ACTIVE = 1; //激活
     public static final int FORBIDDEN = 2; //冻结
@@ -21,6 +23,7 @@ public class GlobalParams {
     public static  final int PAY_ALIPAY=0;//支付宝
     public static  final int PAY_WECHANT=1;//微信
     public static  final int PAY_BANK=2;//银行卡
+    public static  final int PAY_TOKEN=3;//虚拟币
     public static final int TRANSFER_TYPE_IN = 0;//转入
     public static final int TRANSFER_TYPE_OUT = 1;//转出
 
@@ -137,6 +140,23 @@ public class GlobalParams {
      * 宠物匹配状态 已取消
      */
     public static  final  int PET_MATCHING_STATE_CANCEL = 4;
+
+    /**
+     * 宠物信息 收益中
+     */
+    public static  final  int PET_LIST_STATE_PROFITING = 0;
+    /**
+     * 宠物信息 待转让
+     */
+    public static  final  int PET_LIST_STATE_WAIT = 1;
+    /**
+     * 宠物信息 转让中
+     */
+    public static  final  int PET_LIST_STATE_WAITING = 2;
+    /**
+     * 宠物信息 已转让
+     */
+    public static  final  int PET_LIST_STATE_COMPLETE = 3;
 
 
 

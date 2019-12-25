@@ -25,11 +25,25 @@ public class SystemController {
     private SystemBiz systemBiz;
     @ResponseBody
     @RequestMapping(value="config",method=RequestMethod.GET,produces="application/json;charset=utf-8")
-    public String getStartupParam2(){
+    public String getStartupParam(){
         try {
-
             //获取启动参数
             return systemBiz.getStartupParam();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+
+    /**
+     * 客服信息
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="getCustomerService",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String getCustomerService(){
+        try {
+            return systemBiz.getCustomerService();
         }catch (Exception e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);

@@ -48,10 +48,10 @@ public class UserController {
             return Result.toResult(ResultCode.REFERPHONE_TYPE_ERROR);
         }
         if(!PatternUtil.isVerificationCode(code)){
-            return Result.toResult(ResultCode.SMSCODE_TYPE_ERROR);
+            return Result.toResult(ResultCode.SMS_CHECK_ERROR);
         }
         if(!PatternUtil.isDigitalAndWord(password)){
-            return Result.toResult(ResultCode.PASSWORD_TYPE_ERROR);
+            return Result.toResult(ResultCode.USER_LOGIN_ERROR);
         }
         try {
             return usersBiz.register(phone, password, uuid, codeId, code);
@@ -73,6 +73,20 @@ public class UserController {
     @GetMapping("/getMessage")
     public String getMessage(@CurrentUser Users users){
         return Result.toResult(ResultCode.SUCCESS, JSONObject.toJSON(users))    ;
+    }
+
+    /**
+     * 获取绑定信息
+     * @param users
+     * @return
+     */
+    @GetMapping("/getBindInfo")
+    public String getBindInfo(@CurrentUser Users users){
+        try {
+            return usersBiz.getBindInfo(users);
+        } catch (Exception e) {
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
     }
 
 }

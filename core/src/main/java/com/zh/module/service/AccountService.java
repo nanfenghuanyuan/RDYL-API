@@ -1,6 +1,9 @@
 package com.zh.module.service;
 
 import com.zh.module.entity.Account;
+import com.zh.module.exception.BanlanceNotEnoughException;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -81,4 +84,19 @@ public interface AccountService {
      * @date: 2019-12-20 18:18:17
      **/ 
     int selectCount(Map<Object, Object> param);
+
+    /**
+     * 更新账户并保存流水
+     * @param userId 用户id
+     * @param accountType 账户类型
+     * @param coinType 币种类型
+     * @param availIncrement 可用余额增量
+     * @param frozenIncrement 冻结余额增量
+     * @param operId 操作人id
+     * @param operType 操作类型
+     * @param relateId 关联表id
+     */
+    void updateAccountAndInsertFlow(Integer userId, Integer accountType, Integer coinType,
+                                    BigDecimal availIncrement, BigDecimal frozenIncrement, Integer operId, String operType, Integer relateId) throws BanlanceNotEnoughException;
+
 }

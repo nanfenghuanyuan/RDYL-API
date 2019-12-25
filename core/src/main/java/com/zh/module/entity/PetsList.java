@@ -5,9 +5,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class PetsList implements Serializable {
-    private static final long serialVersionUID = -8109869753101480996L;
+    private static final long serialVersionUID = -4146142334597181862L;
 
     private Integer id;
+
+    private Integer userId;
+
+    private Integer transferUserId;
 
     private Byte level;
 
@@ -41,6 +45,22 @@ public class PetsList implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getTransferUserId() {
+        return transferUserId;
+    }
+
+    public void setTransferUserId(Integer transferUserId) {
+        this.transferUserId = transferUserId;
     }
 
     public Byte getLevel() {
@@ -155,6 +175,8 @@ public class PetsList implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append(", id=").append(id);
+        sb.append(", userId=").append(userId);
+        sb.append(", transferUserId=").append(transferUserId);
         sb.append(", level=").append(level);
         sb.append(", price=").append(price);
         sb.append(", spend=").append(spend);

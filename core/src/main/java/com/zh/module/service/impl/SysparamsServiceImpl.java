@@ -88,4 +88,12 @@ public class SysparamsServiceImpl implements SysparamsService {
             return systemParam;
         }
     }
+    @Override
+    public String getValStringByKey(String key) {
+        Sysparams param = getValByKey(key);
+        if(param == null) {
+            return "";
+        }
+        return param.getKeyval();
+    }
 }

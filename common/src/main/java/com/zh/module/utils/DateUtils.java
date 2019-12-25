@@ -287,8 +287,8 @@ public class DateUtils {
 	}
 
 	public static void main(String[] args) {
-		int start = DateUtils.minBetween("2019-12-24 15:00:00");
-		int end = DateUtils.minBetween("2019-12-24 15:01:00");
+		int start = DateUtils.minBetween("2019-12-25 18:00:00");
+		int end = DateUtils.minBetween("2019-12-25 19:01:00");
 		boolean a =start > -10 &&  end< 0;
 		System.out.println(start);
 		System.out.println(end);

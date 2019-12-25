@@ -5,8 +5,8 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="pet_list_id" jdbcType="TINYINT" property="petListId" />
     <result column="level" jdbcType="TINYINT" property="level" />
-    <result column="buy_user_id" jdbcType="TINYINT" property="buyUserId" />
-    <result column="sale_user_id" jdbcType="TINYINT" property="saleUserId" />
+    <result column="buy_user_id" jdbcType="INTEGER" property="buyUserId" />
+    <result column="sale_user_id" jdbcType="INTEGER" property="saleUserId" />
     <result column="amount" jdbcType="DECIMAL" property="amount" />
     <result column="state" jdbcType="TINYINT" property="state" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -22,8 +22,8 @@
     insert into pets_matching_list (pet_list_id, level, buy_user_id, 
       sale_user_id, amount, state, 
       create_time, update_time)
-    values (#{petListId,jdbcType=TINYINT}, #{level,jdbcType=TINYINT}, #{buyUserId,jdbcType=TINYINT}, 
-      #{saleUserId,jdbcType=TINYINT}, #{amount,jdbcType=DECIMAL}, #{state,jdbcType=TINYINT}, 
+    values (#{petListId,jdbcType=TINYINT}, #{level,jdbcType=TINYINT}, #{buyUserId,jdbcType=INTEGER}, 
+      #{saleUserId,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{state,jdbcType=TINYINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.PetsMatchingList">
@@ -65,10 +65,10 @@
         #{level,jdbcType=TINYINT},
       </if>
       <if test="buyUserId != null">
-        #{buyUserId,jdbcType=TINYINT},
+        #{buyUserId,jdbcType=INTEGER},
       </if>
       <if test="saleUserId != null">
-        #{saleUserId,jdbcType=TINYINT},
+        #{saleUserId,jdbcType=INTEGER},
       </if>
       <if test="amount != null">
         #{amount,jdbcType=DECIMAL},
@@ -88,8 +88,8 @@
     update pets_matching_list
     set pet_list_id = #{petListId,jdbcType=TINYINT},
       level = #{level,jdbcType=TINYINT},
-      buy_user_id = #{buyUserId,jdbcType=TINYINT},
-      sale_user_id = #{saleUserId,jdbcType=TINYINT},
+      buy_user_id = #{buyUserId,jdbcType=INTEGER},
+      sale_user_id = #{saleUserId,jdbcType=INTEGER},
       amount = #{amount,jdbcType=DECIMAL},
       state = #{state,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -106,10 +106,10 @@
         level = #{level,jdbcType=TINYINT},
       </if>
       <if test="buyUserId != null">
-        buy_user_id = #{buyUserId,jdbcType=TINYINT},
+        buy_user_id = #{buyUserId,jdbcType=INTEGER},
       </if>
       <if test="saleUserId != null">
-        sale_user_id = #{saleUserId,jdbcType=TINYINT},
+        sale_user_id = #{saleUserId,jdbcType=INTEGER},
       </if>
       <if test="amount != null">
         amount = #{amount,jdbcType=DECIMAL},
@@ -148,10 +148,10 @@
        and  level = #{level,jdbcType=TINYINT}
     </if>
     <if test="buyUserId != null">
-       and  buy_user_id = #{buyUserId,jdbcType=TINYINT}
+       and  buy_user_id = #{buyUserId,jdbcType=INTEGER}
     </if>
     <if test="saleUserId != null">
-       and  sale_user_id = #{saleUserId,jdbcType=TINYINT}
+       and  sale_user_id = #{saleUserId,jdbcType=INTEGER}
     </if>
     <if test="amount != null">
        and  amount = #{amount,jdbcType=DECIMAL}
@@ -179,10 +179,10 @@
        and  level = #{level,jdbcType=TINYINT}
     </if>
     <if test="buyUserId != null">
-       and  buy_user_id = #{buyUserId,jdbcType=TINYINT}
+       and  buy_user_id = #{buyUserId,jdbcType=INTEGER}
     </if>
     <if test="saleUserId != null">
-       and  sale_user_id = #{saleUserId,jdbcType=TINYINT}
+       and  sale_user_id = #{saleUserId,jdbcType=INTEGER}
     </if>
     <if test="amount != null">
        and  amount = #{amount,jdbcType=DECIMAL}
@@ -209,10 +209,10 @@
        and  level = #{level,jdbcType=TINYINT}
     </if>
     <if test="buyUserId != null">
-       and  buy_user_id = #{buyUserId,jdbcType=TINYINT}
+       and  buy_user_id = #{buyUserId,jdbcType=INTEGER}
     </if>
     <if test="saleUserId != null">
-       and  sale_user_id = #{saleUserId,jdbcType=TINYINT}
+       and  sale_user_id = #{saleUserId,jdbcType=INTEGER}
     </if>
     <if test="amount != null">
        and  amount = #{amount,jdbcType=DECIMAL}

@@ -10,15 +10,9 @@ import com.zh.module.constants.GlobalParams;
 import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
 import com.zh.module.encrypt.MD5;
-import com.zh.module.entity.Account;
-import com.zh.module.entity.SmsRecord;
-import com.zh.module.entity.Sysparams;
-import com.zh.module.entity.Users;
+import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
-import com.zh.module.service.AccountService;
-import com.zh.module.service.SmsRecordService;
-import com.zh.module.service.SysparamsService;
-import com.zh.module.service.UsersService;
+import com.zh.module.service.*;
 import com.zh.module.utils.RedisUtil;
 import com.zh.module.utils.StrUtils;
 import com.zh.module.utils.UUIDs;
@@ -51,6 +45,8 @@ public class UsersBizImpl implements UsersBiz {
     private SmsRecordService smsRecordService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private BindInfoService bindInfoService;
     @Autowired
     private RedisTemplate<String,String> redis;
     @Override
@@ -217,5 +213,11 @@ public class UsersBizImpl implements UsersBiz {
         }else{
             return getUUID();
         }
+    }
+
+    @Override
+    public String getBindInfo(Users users) {
+        List<BindInfo> list = bindInfoService.queryByUser(users.getId());
+        return Result.toResult(ResultCode.SUCCESS, list);
     }
 }
