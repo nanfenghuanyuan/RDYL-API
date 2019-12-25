@@ -48,7 +48,13 @@ public class HomeBizImpl implements HomeBiz {
         Map<Object, Object> param = new HashMap<>();
         param.put("state", GlobalParams.ACTIVE);
         List<Banner> bannerList = bannerService.selectAll(param);
-        result.put("banner", bannerList);
+        List<Map<String, Object>> bannersList = new LinkedList<>();
+        Map<String, Object> banners = new HashMap<>();
+        for(Banner banner : bannerList){
+            banners.put("url", banner.getImgpath());
+            bannersList.add(banners);
+        }
+        result.put("banner", bannersList);
         List<Pets> petsList = petsService.selectAll(param);
         Map<Object, Object> map = new HashMap<>();
         List<PetsModel> models = new LinkedList<>();

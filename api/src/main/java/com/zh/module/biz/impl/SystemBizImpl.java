@@ -12,14 +12,12 @@ import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
 import com.zh.module.encrypt.MD5;
 import com.zh.module.entity.Account;
+import com.zh.module.entity.Notice;
 import com.zh.module.entity.Sysparams;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.model.Configuration;
-import com.zh.module.service.AccountService;
-import com.zh.module.service.SmsRecordService;
-import com.zh.module.service.SysparamsService;
-import com.zh.module.service.UsersService;
+import com.zh.module.service.*;
 import com.zh.module.utils.RedisUtil;
 import com.zh.module.utils.StrUtils;
 import com.zh.module.utils.UUIDs;
@@ -51,13 +49,15 @@ public class SystemBizImpl implements SystemBiz {
     @Autowired
     private SmsRecordService smsRecordService;
     @Autowired
-    private AccountService accountService;
+    private NoticeService noticeService;
     @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
     public String getStartupParam() {
+        Notice notice = noticeService.seletByStart();
         Configuration config = new Configuration();
+        config.setNotice(notice);
         return Result.toResult(ResultCode.SUCCESS, config);
     }
 }

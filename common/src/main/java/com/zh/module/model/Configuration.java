@@ -19,5 +19,7 @@ public class Configuration implements Serializable{
     private  String agreenmentUrl;
     /*帮助文档*/
     private  String helpDocUrl;
+    //弹窗公告
+    private Object notice;
 
 }
