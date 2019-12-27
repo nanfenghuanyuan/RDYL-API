@@ -215,5 +215,53 @@ public class UsersBizImpl implements UsersBiz {
         }
     }
 
+    @Override
+    public String updatePassword(Users user, String oldPassword, String password, String code, Integer codeId) throws Exception {
+        //校验验证码是否正确
+        SmsRecord sms = smsRecordService.getByIdAndPhone(codeId, user.getPhone());
+        if(sms == null || !code.equals(sms.getCode())){
+            if(validateErrorTimesOfSms(codeId)){
+                return Result.toResult(ResultCode.SMS_CHECK_ERROR);
+            }else{
+                return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
+            }
+        }
+        //校验验证码有效期
+        Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
+        int interval = (int) ((System.currentTimeMillis() - sms.getCreatetime().getTime()) / (1000*60));
+        if(timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval>=Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)){
+            return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
+        }
+        if(!user.getPassword().equals(MD5.getMd5(oldPassword))){
+            Result.toResult(ResultCode.USER_OLD_PASSWORD_ERROR);
+        }
+        user.setPassword(MD5.getMd5(password));
+        usersService.updateByPrimaryKeySelective(user);
+        return Result.toResult(ResultCode.SUCCESS);
+    }
 
+    @Override
+    public String updateOrderPassword(Users user, String oldPassword, String password, String code, Integer codeId) throws Exception {
+        //校验验证码是否正确
+        SmsRecord sms = smsRecordService.getByIdAndPhone(codeId, user.getPhone());
+        if(sms == null || !code.equals(sms.getCode())){
+            if(validateErrorTimesOfSms(codeId)){
+                return Result.toResult(ResultCode.SMS_CHECK_ERROR);
+            }else{
+                return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
+            }
+        }
+        //校验验证码有效期
+        Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
+        int interval = (int) ((System.currentTimeMillis() - sms.getCreatetime().getTime()) / (1000*60));
+        if(timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval>=Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)){
+            return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
+        }
+        if(!user.getOrderPwd().equals(MD5.getMd5(oldPassword))){
+            Result.toResult(ResultCode.USER_OLD_PASSWORD_ERROR);
+        }
+        user.setOrderPwd(MD5.getMd5(password));
+        usersService.updateByPrimaryKeySelective(user);
+        return Result.toResult(ResultCode.SUCCESS);
+    }
 }

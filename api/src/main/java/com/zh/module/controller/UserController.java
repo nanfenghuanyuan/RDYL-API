@@ -1,5 +1,6 @@
 package com.zh.module.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zh.module.annotation.CurrentUser;
 import com.zh.module.annotation.UserLoginToken;
@@ -51,7 +52,7 @@ public class UserController {
             return Result.toResult(ResultCode.SMS_CHECK_ERROR);
         }
         if(!PatternUtil.isDigitalAndWord(password)){
-            return Result.toResult(ResultCode.USER_LOGIN_ERROR);
+            return Result.toResult(ResultCode.USER_PWD_TYPE_ERROR);
         }
         try {
             return usersBiz.register(phone, password, uuid, codeId, code);
@@ -65,6 +66,63 @@ public class UserController {
     public Object login(@RequestBody Users user){
         try {
             return usersBiz.login(user);
+        } catch (Exception e) {
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+
+    /**
+     * 修改密码
+     * @param user
+     * @param param
+     * @return
+     */
+    @PostMapping(value = "/updatePassword", produces = { "application/json;charset=UTF-8"})
+    public Object updatePassword(@RequestBody Users user, @RequestBody String param){
+        try {
+            JSONObject params = JSON.parseObject(param);
+            String oldPassword = params.getString("oldPassword");
+            String password = params.getString("password");
+            String code = params.getString("code");
+            Integer codeId = params.getInteger("codeId");
+            if(StrUtils.isBlank(oldPassword) || StrUtils.isBlank(password) || StrUtils.isBlank(code) || codeId == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            if(!PatternUtil.isDigitalAndWord(password)){
+                return Result.toResult(ResultCode.USER_PWD_TYPE_ERROR);
+            }
+            if(!PatternUtil.isVerificationCode(code)){
+                return Result.toResult(ResultCode.SMS_CHECK_ERROR);
+            }
+            return usersBiz.updatePassword(user, oldPassword, password, code, codeId);
+        } catch (Exception e) {
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
+     * 修改交易密码
+     * @param user
+     * @param param
+     * @return
+     */
+    @PostMapping(value = "/updateOrderPassword", produces = { "application/json;charset=UTF-8"})
+    public Object updateOrderPassword(@RequestBody Users user, @RequestBody String param){
+        try {
+            JSONObject params = JSON.parseObject(param);
+            String oldPassword = params.getString("oldPassword");
+            String password = params.getString("password");
+            String code = params.getString("code");
+            Integer codeId = params.getInteger("codeId");
+            if(StrUtils.isBlank(oldPassword) || StrUtils.isBlank(password) || StrUtils.isBlank(code) || codeId == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            if(!PatternUtil.isDigitalAndWord(password)){
+                return Result.toResult(ResultCode.USER_PWD_TYPE_ERROR);
+            }
+            if(!PatternUtil.isVerificationCode(code)){
+                return Result.toResult(ResultCode.SMS_CHECK_ERROR);
+            }
+            return usersBiz.updateOrderPassword(user, oldPassword, password, code, codeId);
         } catch (Exception e) {
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }

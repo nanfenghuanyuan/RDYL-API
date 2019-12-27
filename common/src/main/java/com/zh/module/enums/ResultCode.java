@@ -19,6 +19,8 @@ public enum ResultCode {
     USER_ACCOUNT_LOGOFF(20006, "账号已被注销"),
     USER_NOT_REALNAME(20007, "用户未实名"),
     USER_REALNAME_ERROR(20008, "用户当前实名状态不可用"),
+    USER_PWD_TYPE_ERROR(20009, "密码格式不正确"),
+    USER_OLD_PASSWORD_ERROR(20010, "旧密码错误"),
 
     /* 业务错误：30001-39999 */
     SMS_INTERFACE_ERROR(30001, "短信接口异常"),
