@@ -7,14 +7,14 @@ import java.util.Map;
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-25 18:02:24
+ * @date: 2019-12-28 22:30:45
  **/ 
 public interface PetsMatchingListService {
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-25 18:02:24
+     * @date: 2019-12-28 22:30:45
      **/ 
     int insert(PetsMatchingList record);
 
@@ -22,7 +22,7 @@ public interface PetsMatchingListService {
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-25 18:02:24
+     * @date: 2019-12-28 22:30:45
      **/ 
     int insertSelective(PetsMatchingList record);
 
@@ -30,7 +30,7 @@ public interface PetsMatchingListService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-25 18:02:24
+     * @date: 2019-12-28 22:30:45
      **/ 
     int updateByPrimaryKey(PetsMatchingList record);
 
@@ -38,7 +38,7 @@ public interface PetsMatchingListService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-25 18:02:24
+     * @date: 2019-12-28 22:30:45
      **/ 
     int updateByPrimaryKeySelective(PetsMatchingList record);
 
@@ -46,7 +46,7 @@ public interface PetsMatchingListService {
      * 删除
      * 
      * @author: autogeneration
-     * @date: 2019-12-25 18:02:24
+     * @date: 2019-12-28 22:30:45
      **/ 
     int deleteByPrimaryKey(Integer id);
 
@@ -54,7 +54,7 @@ public interface PetsMatchingListService {
      * 按主键查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-25 18:02:24
+     * @date: 2019-12-28 22:30:45
      **/ 
     PetsMatchingList selectByPrimaryKey(Integer id);
 
@@ -62,7 +62,7 @@ public interface PetsMatchingListService {
      * 条件查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-25 18:02:24
+     * @date: 2019-12-28 22:30:45
      **/ 
     List<PetsMatchingList> selectAll(Map<Object, Object> param);
 
@@ -70,7 +70,7 @@ public interface PetsMatchingListService {
      * 分页查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-25 18:02:24
+     * @date: 2019-12-28 22:30:45
      **/ 
     List<PetsMatchingList> selectPaging(Map<Object, Object> param);
 
@@ -78,7 +78,7 @@ public interface PetsMatchingListService {
      * 统计查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-25 18:02:24
+     * @date: 2019-12-28 22:30:45
      **/ 
     int selectCount(Map<Object, Object> param);
 
@@ -88,4 +88,11 @@ public interface PetsMatchingListService {
      * @return
      */
     List<Map<String, Object>> selectListPaging(Map<Object, Object> param);
+
+    /**
+     * 根据list id查询活动中的预约记录
+     * @param id
+     * @return
+     */
+    PetsMatchingList selectByPetListIdAndActive(Integer id);
 }

@@ -115,7 +115,7 @@
 			<generatedKey column="id" sqlStatement="MySql" identity="true" />
 		</table>
 		-->
-		<table schema="" tableName="bind_info"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+		<table schema="" tableName="pets_matching_list"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
 			<generatedKey column="id" sqlStatement="MySql" identity="true" />
 		</table>
 	</context>

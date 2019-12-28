@@ -66,4 +66,9 @@ public class PetsListServiceImpl implements PetsListService {
     public int selectCount(Map<Object, Object> param) {
         return this.petsListMapper.selectCount(param);
     }
+
+    @Override
+    public List<Map<String, Object>> selectListPaging(Map<Object, Object> param) {
+        return this.petsListMapper.selectListPaging(param);
+    }
 }

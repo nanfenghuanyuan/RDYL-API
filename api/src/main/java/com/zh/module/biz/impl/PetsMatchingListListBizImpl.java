@@ -49,7 +49,6 @@ public class PetsMatchingListListBizImpl implements PetsMatchingListBiz {
         param.put("firstResult", pageModel.getFirstResult());
         param.put("maxResult", pageModel.getMaxResult());
         List<Map<String, Object>> lists = petsMatchingListService.selectListPaging(param);
-        String cancelTime = sysparamsService.getValStringByKey(SystemParams.PETS_MATCHING_CANCEL_TIME);
         List<PetsMatchingListModel> listModels = new LinkedList<>();
         String time;
         BigDecimal price;
@@ -59,10 +58,10 @@ public class PetsMatchingListListBizImpl implements PetsMatchingListBiz {
             petsMatchingListModel.setName(map.get("name").toString());
             price = new BigDecimal(map.get("price").toString());
             petsMatchingListModel.setPrice(price);
-            petsMatchingListModel.setState(state);
-            time = DateUtils.getDateFormate((Date) map.get("update_time"));
+            petsMatchingListModel.setState((Integer) map.get("state"));
+            time = DateUtils.getDateFormate((Date) map.get("start_time"));
             petsMatchingListModel.setTime(time);
-            petsMatchingListModel.setEndTime(DateUtils.getSomeMinutes(Integer.parseInt(cancelTime), (Date) map.get("update_time")));
+            petsMatchingListModel.setEndTime(DateUtils.getDateFormate((Date) map.get("end_time")));
             petsMatchingListModel.setProfited(price.multiply(new BigDecimal(map.get("profit_rate").toString()).setScale(2, BigDecimal.ROUND_HALF_UP)));
             petsMatchingListModel.setProfit(map.get("profit_days").toString() + "天/" + new BigDecimal(map.get("profit_rate").toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             listModels.add(petsMatchingListModel);

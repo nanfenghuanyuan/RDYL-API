@@ -324,6 +324,14 @@
     </if>
      order by id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
   </select>
+  <select id="selectListPaging" parameterType="java.util.Map" resultType="map">
+        SELECT pm.id, p.img_url, p.name, pm.price, pm.profit_days, pm.profit_rate, pm.create_time FROM pets_list pm LEFT JOIN pets p ON p.level = pm.level
+    where 1=1
+    <if test="state != null">
+      and  pm.state = #{state,jdbcType=TINYINT}
+    </if>
+     order by pm.id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
+  </select>
   <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
     select count(*) 
     from pets_list 

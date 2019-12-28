@@ -2,7 +2,11 @@ package com.zh.module;
 
 import com.zh.module.biz.HomeBiz;
 import com.zh.module.biz.PetsBiz;
+import com.zh.module.biz.PetsListBiz;
+import com.zh.module.biz.PetsMatchingListBiz;
+import com.zh.module.entity.PetsMatchingList;
 import com.zh.module.entity.Users;
+import com.zh.module.model.PageModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,10 @@ public class PetsBizTests {
 
     @Autowired
     private PetsBiz petsBiz;
+    @Autowired
+    private PetsMatchingListBiz petsMatchingListBiz;
+    @Autowired
+    private PetsListBiz petsListBiz;
     @Test
     public void buy() {
         Users users = new Users();
@@ -26,6 +34,27 @@ public class PetsBizTests {
         Users users = new Users();
         users.setId(1);
         System.out.println(petsBiz.appointment(users, 2));
+    }
+    @Test
+    public void matchingList() {
+        Users users = new Users();
+        users.setId(1);
+        PageModel pageModel = new PageModel(1, 10);
+        System.out.println(petsMatchingListBiz.list(users, 0, pageModel));
+    }
+    @Test
+    public void list() {
+        Users users = new Users();
+        users.setId(1);
+        PageModel pageModel = new PageModel(1, 10);
+        System.out.println(petsListBiz.list(users, 1, pageModel));
+    }
+
+    @Test
+    public void get() {
+        Users users = new Users();
+        users.setId(1);
+        System.out.println(petsListBiz.get(users, 1));
     }
 
 }

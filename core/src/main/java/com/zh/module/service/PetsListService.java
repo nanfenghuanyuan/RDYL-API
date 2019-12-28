@@ -81,4 +81,7 @@ public interface PetsListService {
      * @date: 2019-12-25 20:50:35
      **/ 
     int selectCount(Map<Object, Object> param);
+
+    List<Map<String, Object>> selectListPaging(Map<Object, Object> param);
+
 }
