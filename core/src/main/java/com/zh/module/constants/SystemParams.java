@@ -53,4 +53,9 @@ public class SystemParams {
 	/*充值*/
     public static final String SYSTEM_RECHARGE_URL="SYSTEM_RECHARGE_URL";
 
+    //金币获取说明
+    public static final String GOLD_HELP_DOC="GOLD_HELP_DOC";
+    //上下级转账是否开启
+    public static final String TRANSFER_ROLE="TRANSFER_ROLE";
+
 }

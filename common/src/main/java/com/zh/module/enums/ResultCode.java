@@ -74,7 +74,8 @@ public enum ResultCode {
     PHONE_TYPE_ERROR(30047, "手机号格式不正确"),
     PETS_HAS_NONE(30048, "来晚一步哦，宠物已经被抢购一空了"),
     PETS_STATE_ERROR(30049, "宠物当前状态不可进行此操作哦"),
-    OPERATOR_NOT_LIMIT(30050, "当前操作仅买家可用"),
+    OPERATOR_NOT_LIMIT(30050, "无权进行当前操作"),
+    TRANS_ROLE(30051, "仅可上下级之间进行转账"),
 
 
     /* 系统错误：40001-49999 */

@@ -10,4 +10,6 @@ import com.zh.module.entity.Users;
  **/
 public interface AccountBiz {
     String init(Users users);
+
+    String transfer(Users users, String phone, String amount, String password);
 }
