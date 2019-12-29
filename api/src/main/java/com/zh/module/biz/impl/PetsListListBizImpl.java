@@ -173,7 +173,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         Users saleUser = usersService.selectByPrimaryKey(petsMatchingList.getSaleUserId());
         if(saleUser != null){
             FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
-            feigeSmsUtils.sendTemplatesSms(saleUser.getPhone(), SmsTemplateCode.SMS_C2C_NOTICE, "");
+            feigeSmsUtils.sendTemplatesSms(saleUser.getPhone(), SmsTemplateCode.SMS_C2C_PAY_NOTICE, "");
         }
         return Result.toResult(ResultCode.SUCCESS);
     }
@@ -216,20 +216,12 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
         petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
 
-        //消费金币
-        Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, users.getId());
-        if(account.getFrozenblance().compareTo(petsMatchingList.getAmount()) < 0){
-           throw new RuntimeException("系统异常，请联系管理员");
-        }
-        account.setFrozenblance(BigDecimalUtils.plusMinus(petsMatchingList.getAmount()));
-        accountService.updateByPrimaryKeySelective(account);
-
         /*短信通知买家*/
         Integer buyUserId = petsMatchingList.getBuyUserId();
         Users buyUser = usersService.selectByPrimaryKey(buyUserId);
         if(buyUser!=null){
             FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
-            feigeSmsUtils.sendTemplatesSms(buyUser.getPhone(), SmsTemplateCode.SMS_C2C_NOTICE, "");
+            feigeSmsUtils.sendTemplatesSms(buyUser.getPhone(), SmsTemplateCode.SMS_C2C_CONFIRM_NOTICE, "");
         }
         return Result.toResult(ResultCode.SUCCESS);
     }

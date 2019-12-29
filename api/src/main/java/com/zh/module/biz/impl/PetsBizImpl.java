@@ -76,7 +76,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
         petsMatchingListService.insertSelective(petsMatchingList);
         //修改账户信息
-        accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), appointmentAmount, userId, "预约消耗", petsMatchingList.getId());
+        accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), BigDecimal.ZERO, userId, "预约消耗", petsMatchingList.getId());
 
         String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
         RedisUtil.addString(redis, redisKey, "-1");
@@ -102,6 +102,16 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         List<PetsList> petsLists = petsListService.selectAll(param);
         //若没有待转让的宠物 返回失败
         if(petsLists.size() == 0){
+            Map<Object, Object> params = new HashMap<>();
+            params.put("level", level);
+            params.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
+            List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(params);
+            if(petsMatchingLists.size() != 0){
+                PetsMatchingList petsMatchingList = petsMatchingLists.get(0);
+                petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_CANCEL);
+                BigDecimal amount = petsMatchingList.getAmount();
+                accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, amount, BigDecimal.ZERO, userId, "预约取消返还", petsMatchingList.getId());
+            }
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }
         PetsList petsList = new PetsList();
