@@ -193,6 +193,10 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         if(petsMatchingList.getState() != GlobalParams.PET_MATCHING_STATE_PAYED){
             return Result.toResult(ResultCode.PETS_STATE_ERROR);
         }
+        //仅卖家可以操作
+        if(!petsMatchingList.getSaleUserId().equals(users.getId())){
+            return Result.toResult(ResultCode.OPERATOR_NOT_LIMIT);
+        }
         /*校验交易密码*/
         if(!StrUtils.isBlank(password)){
             String valiStr = validateOrderPassword(users, password);
