@@ -222,6 +222,9 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         if(buyUser!=null){
             FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
             feigeSmsUtils.sendTemplatesSms(buyUser.getPhone(), SmsTemplateCode.SMS_C2C_CONFIRM_NOTICE, "");
+            //增加用户贡献值
+            buyUser.setContribution(buyUser.getContribution() + 1);
+            usersService.updateByPrimaryKeySelective(buyUser);
         }
         return Result.toResult(ResultCode.SUCCESS);
     }
