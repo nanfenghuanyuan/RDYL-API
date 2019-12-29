@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 
-import com.zh.module.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,7 +135,15 @@ public class AccountServiceImpl implements AccountService {
             flow.setResultAmount(account.getFrozenblance().add(frozenIncrement).toPlainString());
             flowMapper.insert(flow);
         }
+    }
 
-
+    @Override
+    public Account selectByUserIdAndAccountTypeAndType(int accountType, int coinType, Integer userId) {
+        Map<Object, Object> param = new HashMap<>();
+        param.put("accountType", accountType);
+        param.put("coinType", coinType);
+        param.put("userId", userId);
+        List<Account> list = this.accountMapper.selectAll(param);
+        return list.size() == 0 ? null : list.get(0);
     }
 }

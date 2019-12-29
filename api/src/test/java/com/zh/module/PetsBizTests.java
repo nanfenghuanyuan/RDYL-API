@@ -4,10 +4,12 @@ import com.zh.module.biz.HomeBiz;
 import com.zh.module.biz.PetsBiz;
 import com.zh.module.biz.PetsListBiz;
 import com.zh.module.biz.PetsMatchingListBiz;
+import com.zh.module.constants.SmsTemplateCode;
 import com.zh.module.entity.PetsMatchingList;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
 import com.zh.module.service.UsersService;
+import com.zh.module.utils.FeigeSmsUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +65,11 @@ public class PetsBizTests {
     public void confirmPay() {
         Users users = usersService.selectByPrimaryKey(1);
         System.out.println(petsListBiz.confirmPay(users, 1, "123456"));
+    }
+    @Test
+    public void confirmReceipt() {
+        Users users = usersService.selectByPrimaryKey(1);
+        System.out.println(petsListBiz.confirmReceipt(users, 1, "123456"));
     }
 
 }

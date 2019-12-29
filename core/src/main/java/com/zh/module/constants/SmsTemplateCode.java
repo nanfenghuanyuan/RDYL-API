@@ -24,6 +24,6 @@ public class SmsTemplateCode {
 
 	public static final String SMS_C2C_PAY_NOTICE = "101765" ;//C2C买家尽快付款通知
 
-	public static final String RONG_SMS_C2C_NOTICE = "460715" ;//C2C交易通知
+	public static final String RONG_SMS_C2C_NOTICE = "101765" ;//C2C交易通知
 
 }

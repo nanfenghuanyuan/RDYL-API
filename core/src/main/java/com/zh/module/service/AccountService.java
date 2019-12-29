@@ -99,4 +99,5 @@ public interface AccountService {
     void updateAccountAndInsertFlow(Integer userId, Integer accountType, Integer coinType,
                                     BigDecimal availIncrement, BigDecimal frozenIncrement, Integer operId, String operType, Integer relateId) throws BanlanceNotEnoughException;
 
+    Account selectByUserIdAndAccountTypeAndType(int accountType, int coinType, Integer userId);
 }

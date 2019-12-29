@@ -15,4 +15,6 @@ public interface PetsListBiz {
     String get(Users users, Integer id);
 
     String confirmPay(Users users, Integer id, String password);
+
+    String confirmReceipt(Users users, Integer id, String password);
 }

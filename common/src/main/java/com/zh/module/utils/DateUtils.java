@@ -212,7 +212,7 @@ public class DateUtils {
 	 * @日期 2017-8-31
 	 */
 	public static String getSomeDay(int days){
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DATE, days);
 		String date = format.format(calendar.getTime());

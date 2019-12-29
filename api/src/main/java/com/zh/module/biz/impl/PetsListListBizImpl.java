@@ -2,21 +2,17 @@ package com.zh.module.biz.impl;
 
 import com.zh.module.biz.PetsListBiz;
 import com.zh.module.biz.PetsMatchingListBiz;
-import com.zh.module.constants.GlobalParams;
-import com.zh.module.constants.SmsTemplateCode;
-import com.zh.module.constants.SystemParams;
+import com.zh.module.constants.*;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
+import com.zh.module.exception.BanlanceNotEnoughException;
 import com.zh.module.model.PageModel;
 import com.zh.module.model.PayInfoModel;
 import com.zh.module.model.PetsMatchingListModel;
 import com.zh.module.model.PetsOrderModel;
 import com.zh.module.service.*;
-import com.zh.module.utils.DateUtils;
-import com.zh.module.utils.FeigeSmsUtils;
-import com.zh.module.utils.RedisUtil;
-import com.zh.module.utils.StrUtils;
+import com.zh.module.utils.*;
 import com.zh.module.variables.RedisKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -46,6 +42,8 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     private SysparamsService sysparamsService;
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private BindInfoService bindInfoService;
     @Autowired
@@ -180,6 +178,58 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         return Result.toResult(ResultCode.SUCCESS);
     }
 
+    @Override
+    public String confirmReceipt(Users users, Integer id, String password) {
+        //验证用户状态
+        if(!checkUserState(users)){
+            return Result.toResult(ResultCode.USER_STATE_ERROR);
+        }
+        PetsList petsList = petsListService.selectByPrimaryKey(id);
+        PetsMatchingList petsMatchingList = petsMatchingListService.selectByPetListIdAndActive(id);
+        //判断订单状态 仅有转让中和未确认未付款状态可行
+        if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAITING || petsMatchingList == null){
+            return Result.toResult(ResultCode.PETS_STATE_ERROR);
+        }
+        if(petsMatchingList.getState() != GlobalParams.PET_MATCHING_STATE_PAYED){
+            return Result.toResult(ResultCode.PETS_STATE_ERROR);
+        }
+        /*校验交易密码*/
+        if(!StrUtils.isBlank(password)){
+            String valiStr = validateOrderPassword(users, password);
+            if(valiStr != null){
+                return valiStr;
+            }
+        }
+        //修改宠物记录
+        petsList.setUserId(users.getId());
+        petsList.setTransferUserId(-1);
+        petsList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
+        petsList.setStartTime(DateUtils.getCurrentTimeStr());
+        petsList.setEndTime(DateUtils.getSomeDay(petsList.getProfitDays()));
+        petsListService.updateByPrimaryKeySelective(petsList);
+
+        //修改匹配记录
+        petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
+        petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
+
+        //消费金币
+        Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, users.getId());
+        if(account.getFrozenblance().compareTo(petsMatchingList.getAmount()) < 0){
+           throw new RuntimeException("系统异常，请联系管理员");
+        }
+        account.setFrozenblance(BigDecimalUtils.plusMinus(petsMatchingList.getAmount()));
+        accountService.updateByPrimaryKeySelective(account);
+
+        /*短信通知买家*/
+        Integer buyUserId = petsMatchingList.getBuyUserId();
+        Users buyUser = usersService.selectByPrimaryKey(buyUserId);
+        if(buyUser!=null){
+            FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
+            feigeSmsUtils.sendTemplatesSms(buyUser.getPhone(), SmsTemplateCode.SMS_C2C_NOTICE, "");
+        }
+        return Result.toResult(ResultCode.SUCCESS);
+    }
+
     /**
      * 将订单加入到超时队列中， （名称list保存订单队列的key集合，订单队列保存订单集合）
      * @param nameListKey nameList的key
@@ -207,4 +257,6 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         /*订单加入订单队列中*/
         RedisUtil.addListRight(redis, keyName, petsMatchingList);
     }
+
+
 }
