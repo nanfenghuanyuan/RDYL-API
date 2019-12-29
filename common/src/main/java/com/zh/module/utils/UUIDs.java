@@ -58,10 +58,4 @@ public class UUIDs {
     return Integer.parseInt(str.toString());
   }
 
-
-  public static void main(String[] args) {
-    System.out.println( getUUID8());
-  }
-
-
 }

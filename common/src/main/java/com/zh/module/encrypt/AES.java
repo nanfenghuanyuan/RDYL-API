@@ -51,17 +51,4 @@ public class AES {
         }  
         return null;  
     }  
-    
-    
-    public static void main(String[] args) {
-		String str = "{\"deviceNum\":\"ipone11.5\",\"amount\":10,\"price\":100,\"timeStamp\":\"1516783771128\",\"unitCoin\":\"0\",\"syetemType\":2,\"orderCoin\":\"6\",\"password\":\"ss123\"}";
-		String key = "5274e323bb474c36";
-		String enStr = AES.encrypt(str, key);
-		String deStr = AES.decrypt(enStr, key);
-		System.out.println("明文-->"+str);
-		System.out.println("密文-->"+enStr);
-		System.out.println("解密后-->"+deStr);
-	}
-      
-   
 }

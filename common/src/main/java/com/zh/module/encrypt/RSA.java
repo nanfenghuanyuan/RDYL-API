@@ -190,26 +190,4 @@ public class RSA {
 		System.out.println("===================================");
 		System.out.println("*******************************************************");
 	}	
-	
-	public static void main(String[] args) throws Exception {
-		
-		String pk="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDVCvLofPNFRkwOHYMMKs6tHq/coklSNHnG+0JOy65+Azsy7hV7OpjIiLMn7M50Qr47qxjWqGHHyxH27Vx+RrkZ7aLXr3/DnCSqNQOBkBPAuy4y9iUGPTRZNBiTpLHbs4BS8rh/mXchW5d+1X9d0RkL+k0VqYhgO0YjY0oqGbww3wIDAQAB";
-		RSAPublicKey publicKey = RSA.getPublikKey(BASE64.decoderByte(pk));
-		String data = "123weew";
-		String enStr = RSA.encode(data, publicKey);
-		System.out.println("密文-->"+enStr);
-		System.out.println("----------------------");
-		String prk="MIIDlwIBADANBgkqhkiG9w0BAQEFAASCA4EwggN9AgEAAoHBALAP2hFONlnert+Q/Yjhya8UKJnpKw2uSrXJNeLov8BdznIWV6sc8vGtmwtr8wE1NEY473Va+hkElTO5CR4Wd5Va+X/vnHNpQRaYIGiHeSBELLtCfJSEh7Ljpx5FuU+Nd9XhMPUEgMgJxtIiJ8/bjxJOM9UFZKCOjcevDwhVaJUGG6I1IjnHSiWAOlMXFNGeqZUKaEwIk040oPI7oVTTXN1lpCKwLY7yyoVUrsrpUPYQHKXmvto0QjeEwv1BITumCQIDAQABAoHBAJuhp5ZcmNbgbZzawgNZ87p8C1fiMViqlQgUkTm/nKEjSva2oVB1CpxwZfm2ttx+d3MLqUEH5sRutKVAD7s1CQhRnvNkj9vFUu/yEdPUzVGkchYmM5HlhT6w1m2AHMshtSs3G289Z63QxAOVKf0jMwCrZLXdg6BvLzg2qrmMPHDuR4UgB1Xq++UEIaHcKc5y8/tKIxgiVnWWK4vUTzlUYCoufnV0knNzwWqyJxSSjEcUEfpljw9IGOJMFoWprPdh8QJhAP5NPK4agnw/8uFKvxJHGLHouFpcW1SYs6CiAD71VIC/eHWT4bBsR+5cTxvhbrSgDMApSITsPGwZAMF3y4QsYDRu+Qg9dvC6DUCBwipGh78ThA11MoN6or6FALZ8bekFFwJhALE82nW3UkKPQnLuSuAzpqHgAWvopTCD05RrziUZoZZXQDEjpSglP4z99PtMSw2c+lhFy6XtPUVtDbgcJe7BkJ0XXa7geyf+2NCSSxxcJjxgViQRR2GihRJr6gENwtHh3wJgJ2R/idjBbc3aKdwSTRqGUMjkBdtYqnodGTz/HMGUHX2Lg2stAs9DNUFHX+JD6+b/EqVSfoS5t2UIIPAVrpvRK04ldYlP62pmsx9mnHXggVDcm9kTwho1K54exiXwQLBxAmEAhbdHijA4m4bBtzwYuXW+bbo22Fa46hVK91suN8dSpb5F68zcuaEAhTrELSOuLCMWrKpbrl+CLnLMOu7hn3PhyuLqBxnNUKtwoEr+5/KN1ldIJgXzOLIIe5F3Bjx/kyE5AmBnooY+qbVIVx1IvuaxEn4FRAyRf3lkostgzjS1rVBaa9OKuhpFdcQBw6Ciih1IrzufLy5VMpsO4Kvc+W6hlWqihquqG+YSi1RCa+qcOwmeRFHzUsjEBxzBiJCD0CWNYDg=";
-		RSAPrivateKey privateKey = RSA.getPrivateKey(BASE64.decoderByte(prk));
-		String md="fr6Jml5uNHWipljK9+7ywxrOWPDTDgu/uWXCVE7TE1WJRiSIF5l6RaHuTos9ci3GzdaWMoLRRzfN5Bh3S3hCAHBt4iL7kSpho0HryqQUFBG9Di5mtWEY6duO1rE6+Y7WDBc+JgJkiK/eu1VaK1vXrhVx+nOCvk8n8no+RmoMu5UUM9Lrp4tfokSwlAh2O8SdeLe+OHbZI9wQz01GzlcnL8DKxia80Hop5WzOmjDTR3nYKbTmO9uoqNufRYaqSICy";
-		String deStr = RSA.decode(BASE64.decoderByte(md), privateKey);
-		System.out.println("【解密明文】:"+deStr);
-		
-		
-		
-			
-	//	test("123");
-		
-	}
-	
 }

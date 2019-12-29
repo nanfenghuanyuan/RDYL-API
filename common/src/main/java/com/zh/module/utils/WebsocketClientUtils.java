@@ -95,9 +95,4 @@ public class WebsocketClientUtils {
 		}
 	}
 
-	public static void main(String[] args) {
-		sendTextMessage("1235");
-	}
-
-
 }

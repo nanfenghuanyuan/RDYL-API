@@ -7,6 +7,7 @@ import com.zh.module.biz.PetsMatchingListBiz;
 import com.zh.module.entity.PetsMatchingList;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
+import com.zh.module.service.UsersService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class PetsBizTests {
     private PetsMatchingListBiz petsMatchingListBiz;
     @Autowired
     private PetsListBiz petsListBiz;
+    @Autowired
+    private UsersService usersService;
     @Test
     public void buy() {
         Users users = new Users();
@@ -55,6 +58,11 @@ public class PetsBizTests {
         Users users = new Users();
         users.setId(1);
         System.out.println(petsListBiz.get(users, 1));
+    }
+    @Test
+    public void confirmPay() {
+        Users users = usersService.selectByPrimaryKey(1);
+        System.out.println(petsListBiz.confirmPay(users, 1, "123456"));
     }
 
 }

@@ -141,8 +141,4 @@ public class DES {
 		System.out.println("*******************************************************");
     }
     
-    public static void main(String[] args) throws Exception {
-		test(null,null);
-	}
-    	
 }

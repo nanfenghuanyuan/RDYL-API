@@ -23,8 +23,10 @@ public class SystemParams {
 	//领养自动取消时间(分钟)
 	public static final String PETS_MATCHING_CANCEL_TIME = "PETS_MATCHING_CANCEL_TIME";
 
+	//未付款自动取消时间 （分钟）
+	public static final String PETS_MATCHING_NO_PAY_CANCEL_TIME = "PETS_MATCHING_NO_PAY_CANCEL_TIME";
 
-	
+
 	
 	public static final String ORDERPWD_LOCK_INTERVAL = "ORDERPWD_LOCK_INTERVAL";//交易密码锁定时间(分钟)
 	public static final String ORDERPWD_ERROR_INTERVAL = "ORDERPWD_ERROR_INTERVAL";//交易密码错误时间(分钟)

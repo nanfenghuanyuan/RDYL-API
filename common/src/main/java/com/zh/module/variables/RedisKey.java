@@ -21,4 +21,11 @@ public class RedisKey {
 
 	//首页宠物预定用户  宠物 用户id
 	public static final String BUY_APPOINTMENT_USER = "rdyl:petsBuy:appointmentUser:%s:%s";
+
+	//交易超时订单列表名称
+    public static final String MATCHING_NOTCONFIRM_KEY_NAME = "rdyl:matching:notconfirmName";
+    public static final String MATCHING_NOPAY_KEY_NAME = "rdyl:matching:nopayname";
+    //交易超时订单列表:超时分钟数
+	public static final String MATHCHING_NOTCONFIRM = "rdyl:matching:notconfirm:%s";
+	public static final String MATHCHING_NOPAY = "rdyl:matching:nopay:%s";
 }

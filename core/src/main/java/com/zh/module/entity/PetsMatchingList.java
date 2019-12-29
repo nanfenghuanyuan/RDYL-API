@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class PetsMatchingList implements Serializable {
-    private static final long serialVersionUID = 3306509972989301012L;
+    private static final long serialVersionUID = -3597973894031369720L;
 
     private Integer id;
 
@@ -22,6 +22,8 @@ public class PetsMatchingList implements Serializable {
     private Byte state;
 
     private String payTime;
+
+    private Date inactiveTime;
 
     private Date createTime;
 
@@ -91,6 +93,14 @@ public class PetsMatchingList implements Serializable {
         this.payTime = payTime == null ? null : payTime.trim();
     }
 
+    public Date getInactiveTime() {
+        return inactiveTime;
+    }
+
+    public void setInactiveTime(Date inactiveTime) {
+        this.inactiveTime = inactiveTime;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -122,6 +132,7 @@ public class PetsMatchingList implements Serializable {
         sb.append(", amount=").append(amount);
         sb.append(", state=").append(state);
         sb.append(", payTime=").append(payTime);
+        sb.append(", inactiveTime=").append(inactiveTime);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append("]");

@@ -10,12 +10,13 @@
     <result column="amount" jdbcType="DECIMAL" property="amount" />
     <result column="state" jdbcType="TINYINT" property="state" />
     <result column="pay_time" jdbcType="VARCHAR" property="payTime" />
+    <result column="inactive_time" jdbcType="TIMESTAMP" property="inactiveTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, pet_list_id, level, buy_user_id, sale_user_id, amount, state, pay_time, create_time, 
-    update_time
+    id, pet_list_id, level, buy_user_id, sale_user_id, amount, state, pay_time, inactive_time, 
+    create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.PetsMatchingList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -23,12 +24,12 @@
     </selectKey>
     insert into pets_matching_list (pet_list_id, level, buy_user_id, 
       sale_user_id, amount, state, 
-      pay_time, create_time, update_time
-      )
+      pay_time, inactive_time, create_time, 
+      update_time)
     values (#{petListId,jdbcType=TINYINT}, #{level,jdbcType=TINYINT}, #{buyUserId,jdbcType=INTEGER}, 
       #{saleUserId,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{state,jdbcType=TINYINT}, 
-      #{payTime,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{payTime,jdbcType=VARCHAR}, #{inactiveTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.PetsMatchingList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -56,6 +57,9 @@
       </if>
       <if test="payTime != null">
         pay_time,
+      </if>
+      <if test="inactiveTime != null">
+        inactive_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -86,6 +90,9 @@
       <if test="payTime != null">
         #{payTime,jdbcType=VARCHAR},
       </if>
+      <if test="inactiveTime != null">
+        #{inactiveTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -103,6 +110,7 @@
       amount = #{amount,jdbcType=DECIMAL},
       state = #{state,jdbcType=TINYINT},
       pay_time = #{payTime,jdbcType=VARCHAR},
+      inactive_time = #{inactiveTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
@@ -130,6 +138,9 @@
       </if>
       <if test="payTime != null">
         pay_time = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inactiveTime != null">
+        inactive_time = #{inactiveTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -176,6 +187,9 @@
     <if test="payTime != null">
        and  pay_time = #{payTime,jdbcType=VARCHAR}
     </if>
+    <if test="inactiveTime != null">
+       and  inactive_time = #{inactiveTime,jdbcType=TIMESTAMP}
+    </if>
     <if test="createTime != null">
        and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
@@ -210,6 +224,9 @@
     <if test="payTime != null">
        and  pay_time = #{payTime,jdbcType=VARCHAR}
     </if>
+    <if test="inactiveTime != null">
+       and  inactive_time = #{inactiveTime,jdbcType=TIMESTAMP}
+    </if>
     <if test="createTime != null">
        and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
@@ -242,6 +259,9 @@
     </if>
     <if test="payTime != null">
        and  pay_time = #{payTime,jdbcType=VARCHAR}
+    </if>
+    <if test="inactiveTime != null">
+       and  inactive_time = #{inactiveTime,jdbcType=TIMESTAMP}
     </if>
     <if test="createTime != null">
        and  create_time = #{createTime,jdbcType=TIMESTAMP}

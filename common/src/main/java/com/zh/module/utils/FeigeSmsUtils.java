@@ -142,7 +142,7 @@ public class FeigeSmsUtils {
     }
 
     public static void main(String[] args) {
-        sendTemplateSms("18660769100", "5555555555", "101756" );
+        sendTemplateSms("13165373280", "5555555555", "101756" );
     }
 
     public static String getCode(Integer length){

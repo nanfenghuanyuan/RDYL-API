@@ -13,4 +13,6 @@ public interface PetsListBiz {
     String list(Users users, Integer state, PageModel pageModel);
 
     String get(Users users, Integer id);
+
+    String confirmPay(Users users, Integer id, String password);
 }

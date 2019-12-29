@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>MainMaster</name>
     <description>Demo project for Spring Boot</description>
+    <packaging>pom</packaging>
 
     <modules>
         <module>api</module>
@@ -53,6 +54,15 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <fork>true</fork>
+                    <executable>F:\java\jdk\bin\javac</executable>
+                </configuration>
             </plugin>
         </plugins>
     </build>

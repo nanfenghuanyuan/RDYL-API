@@ -10,6 +10,8 @@ import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.exception.BanlanceNotEnoughException;
 import com.zh.module.model.PageModel;
+import com.zh.module.utils.StrUtils;
+import com.zh.module.utils.ValidateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,6 +67,38 @@ public class PetsListController {
                 return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);
             }
             return petsListBiz.get(users, id);
+        } catch (BanlanceNotEnoughException e){
+            e.printStackTrace();
+            return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
+     * 确认付款
+     * @param users
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="confirm-pay",method=RequestMethod.POST,produces="application/json;charset=utf-8")
+    public String confirmPay(@CurrentUser Users users, @RequestBody String param){
+        try {
+            JSONObject json = JSONObject.parseObject(param);
+            Integer id = json.getInteger("id");
+            String password = json.getString("password");
+
+            /*参数校验*/
+            if(id == null || StrUtils.isBlank(password)){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+
+            /*正则校验*/
+            if(!ValidateUtils.isTradePwd(password)){
+                return Result.toResult(ResultCode.PARAM_IS_INVALID);
+            }
+            return petsListBiz.confirmPay(users, id, password);
         } catch (BanlanceNotEnoughException e){
             e.printStackTrace();
             return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);

@@ -2,6 +2,8 @@ package com.zh.module.biz.impl;
 
 import com.zh.module.biz.PetsListBiz;
 import com.zh.module.biz.PetsMatchingListBiz;
+import com.zh.module.constants.GlobalParams;
+import com.zh.module.constants.SmsTemplateCode;
 import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.*;
@@ -12,12 +14,17 @@ import com.zh.module.model.PetsMatchingListModel;
 import com.zh.module.model.PetsOrderModel;
 import com.zh.module.service.*;
 import com.zh.module.utils.DateUtils;
+import com.zh.module.utils.FeigeSmsUtils;
+import com.zh.module.utils.RedisUtil;
+import com.zh.module.utils.StrUtils;
+import com.zh.module.variables.RedisKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -28,7 +35,7 @@ import java.util.*;
  **/
 @Component
 @Transactional
-public class PetsListListBizImpl implements PetsListBiz {
+public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     @Autowired
     private PetsMatchingListService petsMatchingListService;
     @Autowired
@@ -51,12 +58,12 @@ public class PetsListListBizImpl implements PetsListBiz {
         param.put("firstResult", pageModel.getFirstResult());
         param.put("maxResult", pageModel.getMaxResult());
         List<Map<String, Object>> lists = petsListService.selectListPaging(param);
-        String cancelTime = sysparamsService.getValStringByKey(SystemParams.PETS_MATCHING_CANCEL_TIME);
         List<PetsMatchingListModel> listModels = new LinkedList<>();
         String time;
         BigDecimal price;
         for(Map<String, Object> map : lists){
             PetsMatchingListModel petsMatchingListModel = new PetsMatchingListModel();
+            petsMatchingListModel.setId((Integer) map.get("id"));
             petsMatchingListModel.setImgUrl(map.get("img_url").toString());
             petsMatchingListModel.setName(map.get("name").toString());
             price = new BigDecimal(map.get("price").toString());
@@ -119,5 +126,85 @@ public class PetsListListBizImpl implements PetsListBiz {
         petsOrderModel.setTransTime(DateUtils.getDateFormate(petsList.getCreateTime()));
         petsOrderModel.setPayTime(petsMatchingList.getPayTime());
         return Result.toResult(ResultCode.SUCCESS, petsOrderModel);
+    }
+
+    @Override
+    public String confirmPay(Users users, Integer id, String password) {
+        //验证用户状态
+        if(!checkUserState(users)){
+            return Result.toResult(ResultCode.USER_STATE_ERROR);
+        }
+        PetsList petsList = petsListService.selectByPrimaryKey(id);
+        PetsMatchingList petsMatchingList = petsMatchingListService.selectByPetListIdAndActive(id);
+        //判断订单状态 仅有转让中和未确认未付款状态可行
+        if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAITING || petsMatchingList == null){
+            return Result.toResult(ResultCode.PETS_STATE_ERROR);
+        }
+        if(petsMatchingList.getState() != GlobalParams.PET_MATCHING_STATE_NOPAY){
+            return Result.toResult(ResultCode.PETS_STATE_ERROR);
+        }
+        //仅买家可以操作
+        if(!petsMatchingList.getBuyUserId().equals(users.getId())){
+            return Result.toResult(ResultCode.OPERATOR_NOT_LIMIT);
+        }
+        /*校验交易密码*/
+        if(!StrUtils.isBlank(password)){
+            String valiStr = validateOrderPassword(users, password);
+            if(valiStr != null){
+                return valiStr;
+            }
+        }
+        petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_PAYED);
+        petsMatchingList.setPayTime(DateUtils.getCurrentTimeStr());
+
+        /*设置失效时间*/
+        int interval = 10;
+        Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_PAY_CANCEL_TIME);
+        if(param1 != null){
+            interval = Integer.parseInt(param1.getKeyval());
+        }
+        Calendar current = Calendar.getInstance();
+        current.add(Calendar.MINUTE, interval);
+        petsMatchingList.setInactiveTime(new Timestamp(current.getTimeInMillis()));
+        petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
+
+        /*订单加入待确认队列*/
+        addOverTimeQueue(petsMatchingList, RedisKey.MATCHING_NOTCONFIRM_KEY_NAME, RedisKey.MATHCHING_NOTCONFIRM, interval);
+
+        /*短信通知卖家*/
+        Users saleUser = usersService.selectByPrimaryKey(petsMatchingList.getSaleUserId());
+        if(saleUser != null){
+            FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
+            feigeSmsUtils.sendTemplatesSms(saleUser.getPhone(), SmsTemplateCode.SMS_C2C_NOTICE, "");
+        }
+        return Result.toResult(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 将订单加入到超时队列中， （名称list保存订单队列的key集合，订单队列保存订单集合）
+     * @param nameListKey nameList的key
+     * @param queueOrderKey 订单队列的key
+     * @param timeout 超时时间
+     * @return void
+     * @date 2018-3-7
+     * @author lina
+     */
+    public void addOverTimeQueue(PetsMatchingList petsMatchingList ,String nameListKey, String queueOrderKey,int timeout){
+        /*从nameList的最右侧取出最新的queueKey,如果不存在则生成新的queueKey,并添加到nameList中*/
+        String keyName = "";
+        long keySize = RedisUtil.searchListSize(redis, nameListKey);
+        if(keySize == 0){
+            keyName = String.format(queueOrderKey, timeout);
+            RedisUtil.addListRight(redis, nameListKey, keyName);
+        }else{
+            keyName = RedisUtil.searchIndexList(redis,nameListKey,keySize-1);
+            String keyNameNew = String.format(queueOrderKey, timeout);
+            if(!keyName.equals(keyNameNew)){
+                keyName = keyNameNew;
+                RedisUtil.addListRight(redis, nameListKey, keyName);
+            }
+        }
+        /*订单加入订单队列中*/
+        RedisUtil.addListRight(redis, keyName, petsMatchingList);
     }
 }

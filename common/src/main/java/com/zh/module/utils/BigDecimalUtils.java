@@ -245,9 +245,4 @@ public class BigDecimalUtils {
 		nf.setGroupingUsed(false);
 		return nf.format(bigDecimal);
 	}
-	
-	public static void main(String[] args) {
-		BigDecimal zero = new BigDecimal(10.12);
-		System.out.println(toStringInZERO(zero, 4));
-	}
 }

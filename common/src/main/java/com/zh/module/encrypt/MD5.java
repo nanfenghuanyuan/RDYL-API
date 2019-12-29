@@ -57,7 +57,4 @@ public class MD5{
 		System.out.println("*******************************************************");
 	}
 
-	public static void main(String[] args) throws Exception {
-		test(null);
-	}
 }

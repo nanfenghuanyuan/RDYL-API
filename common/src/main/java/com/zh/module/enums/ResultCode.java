@@ -21,6 +21,7 @@ public enum ResultCode {
     USER_REALNAME_ERROR(20008, "用户当前实名状态不可用"),
     USER_PWD_TYPE_ERROR(20009, "密码格式不正确"),
     USER_OLD_PASSWORD_ERROR(20010, "旧密码错误"),
+    USER_STATE_ERROR(20011, "账号当前状态不可用，请先激活"),
 
     /* 业务错误：30001-39999 */
     SMS_INTERFACE_ERROR(30001, "短信接口异常"),
@@ -72,6 +73,8 @@ public enum ResultCode {
     MATCHING_IS_ALIVE(30046, "不要重复预约"),
     PHONE_TYPE_ERROR(30047, "手机号格式不正确"),
     PETS_HAS_NONE(30048, "来晚一步哦，宠物已经被抢购一空了"),
+    PETS_STATE_ERROR(30049, "宠物当前状态不可进行此操作哦"),
+    OPERATOR_NOT_LIMIT(30050, "当前操作仅买家可用"),
 
 
     /* 系统错误：40001-49999 */

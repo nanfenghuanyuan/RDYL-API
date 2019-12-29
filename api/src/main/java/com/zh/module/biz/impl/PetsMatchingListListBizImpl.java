@@ -54,6 +54,7 @@ public class PetsMatchingListListBizImpl implements PetsMatchingListBiz {
         BigDecimal price;
         for(Map<String, Object> map : lists){
             PetsMatchingListModel petsMatchingListModel = new PetsMatchingListModel();
+            petsMatchingListModel.setId((Integer) map.get("id"));
             petsMatchingListModel.setImgUrl(map.get("img_url").toString());
             petsMatchingListModel.setName(map.get("name").toString());
             price = new BigDecimal(map.get("price").toString());

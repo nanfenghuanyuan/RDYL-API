@@ -35,7 +35,7 @@ import java.util.Map;
  **/
 @Component
 @Transactional
-public class PetsBizImpl implements PetsBiz {
+public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     @Autowired
     private PetsMatchingListService petsMatchingListService;
     @Autowired
@@ -49,6 +49,10 @@ public class PetsBizImpl implements PetsBiz {
 
     @Override
     public String appointment(Users users, Integer level) throws BanlanceNotEnoughException {
+        //验证用户状态
+        if(!checkUserState(users)){
+            return Result.toResult(ResultCode.USER_STATE_ERROR);
+        }
         Pets pets = petsService.selectByLevel(level);
         Integer userId = users.getId();
         //是否在允许的时间范围内
@@ -81,6 +85,10 @@ public class PetsBizImpl implements PetsBiz {
 
     @Override
     public String buy(Users users, Integer level) {
+        //验证用户状态
+        if(!checkUserState(users)){
+            return Result.toResult(ResultCode.USER_STATE_ERROR);
+        }
         Pets pets = petsService.selectByLevel(level);
         Integer userId = users.getId();
         //是否在允许的时间范围内

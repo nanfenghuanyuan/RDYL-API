@@ -257,10 +257,4 @@ public class StrUtils {
             }
         }
     }
-	public static void main(String[] args) {
-		
-		String string = "😊好好";
-	    System.out.println(containsEmoji(string));
-	    System.out.println(filterEmoji(string));
-	}
 }

@@ -16,6 +16,7 @@ import java.math.BigDecimal;
  **/
 @Data
 public class PetsMatchingListModel {
+    private Integer id;
     /**
      * 宠物名称
      */
