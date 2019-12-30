@@ -212,11 +212,11 @@ public class DateUtils {
 	 * @日期 2017-8-31
 	 */
 	public static String getSomeDay(int days){
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DATE, days);
 		String date = format.format(calendar.getTime());
-		return date;
+		return date + " 00:00:00";
 	}
 	/**
 	 * @描述 获取N分钟前/后的日期时间<br>
@@ -301,5 +301,4 @@ public class DateUtils {
 		}
 		return weekDays[w];
 	}
-
 }

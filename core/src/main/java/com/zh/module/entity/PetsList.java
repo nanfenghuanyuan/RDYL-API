@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class PetsList implements Serializable {
-    private static final long serialVersionUID = -4146142334597181862L;
+    private static final long serialVersionUID = 6500424694713866417L;
 
     private Integer id;
 
@@ -16,8 +16,6 @@ public class PetsList implements Serializable {
     private Byte level;
 
     private BigDecimal price;
-
-    private BigDecimal spend;
 
     private Integer profitDays;
 
@@ -77,14 +75,6 @@ public class PetsList implements Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public BigDecimal getSpend() {
-        return spend;
-    }
-
-    public void setSpend(BigDecimal spend) {
-        this.spend = spend;
     }
 
     public Integer getProfitDays() {
@@ -179,7 +169,6 @@ public class PetsList implements Serializable {
         sb.append(", transferUserId=").append(transferUserId);
         sb.append(", level=").append(level);
         sb.append(", price=").append(price);
-        sb.append(", spend=").append(spend);
         sb.append(", profitDays=").append(profitDays);
         sb.append(", profitRate=").append(profitRate);
         sb.append(", profitCoin=").append(profitCoin);

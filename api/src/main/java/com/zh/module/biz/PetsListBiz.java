@@ -17,4 +17,9 @@ public interface PetsListBiz {
     String confirmPay(Users users, Integer id, String password);
 
     String confirmReceipt(Users users, Integer id, String password);
+
+    /**
+     * 定时分发收益
+     */
+    void getProfit();
 }

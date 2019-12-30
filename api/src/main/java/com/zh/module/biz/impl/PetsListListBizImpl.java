@@ -47,6 +47,8 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     @Autowired
     private BindInfoService bindInfoService;
     @Autowired
+    private FlowService flowService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -257,5 +259,47 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         RedisUtil.addListRight(redis, keyName, petsMatchingList);
     }
 
+    @Override
+    public void getProfit() {
+        String date = DateUtils.getCurrentTimeStr();
+        Map<Object, Object> param = new HashMap<>();
+        param.put("state", GlobalParams.PET_LIST_STATE_PROFITING);
+        param.put("endTime", date);
+        List<PetsList> petsLists = petsListService.selectDoProfit(param);
+        Pets pets = new Pets();
+        Pets newPets = new Pets();
+        Flow flow = new Flow();
+        BigDecimal profitAmount;
+        BigDecimal priceMax;
+        Account account;
+        for(PetsList petsList : petsLists){
+            pets = petsService.selectByLevel(petsList.getLevel().intValue());
+            profitAmount = petsList.getProfitRate().multiply(petsList.getPrice());
+            priceMax = pets.getPriceMix();
+            //如果收益后价格超出上限，则宠物升级
+            if(petsList.getPrice().add(profitAmount).compareTo(priceMax) > 0){
+                newPets = petsService.selectByLevel(pets.getUpgradeId().intValue());
+                petsList.setLevel(newPets.getLevel());
+                petsList.setProfitCoin(newPets.getProfitCoin());
+                petsList.setProfitCoinRate(newPets.getProfitCoinRate());
+                petsList.setProfitDays(newPets.getProfitDays());
+                petsList.setProfitRate(newPets.getProfitRate());
+            }
+            petsList.setPrice(petsList.getPrice().add(profitAmount));
+            petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAIT);
+            petsListService.updateByPrimaryKeySelective(petsList);
 
+            account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.CNY, petsList.getUserId());
+            //插入收益流水
+            flow.setUserId(petsList.getUserId());
+            flow.setRelateId(petsList.getId());
+            flow.setOperType("合约收益");
+            flow.setOperId(petsList.getUserId());
+            flow.setCoinType(CoinType.CNY);
+            flow.setAccountType(AccountType.ACCOUNT_TYPE_ACTIVE);
+            flow.setAmount(profitAmount);
+            flow.setResultAmount(account.getAvailbalance().add(profitAmount).toPlainString());
+            flowService.insertSelective(flow);
+        }
+    }
 }
