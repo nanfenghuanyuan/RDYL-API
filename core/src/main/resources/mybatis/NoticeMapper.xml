@@ -104,7 +104,7 @@
   <select id="seletByStart"  resultMap="BaseResultMap">
     select n.title, n.content
     from notice n
-    where n.type=0
+    where n.type=0 order by n.id desc limit 0,1
   </select>
   <select id="selectAll" parameterType="java.util.Map" resultMap="BaseResultMap">
     select 
