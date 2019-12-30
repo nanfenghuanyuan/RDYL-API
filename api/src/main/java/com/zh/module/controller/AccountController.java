@@ -67,6 +67,29 @@ public class AccountController {
         }
     }
     /**
+     * 个人/动态收益
+     * @param users
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="appointmentRecord",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String appointmentRecord(@CurrentUser Users users, @RequestBody String param){
+        try {
+            JSONObject params = JSONObject.parseObject(param);
+            Integer rows = params.getInteger("rows");
+            Integer page = params.getInteger("page");
+            if(page == null){
+                page = 0;
+            }
+            page = page + 1;
+            PageModel pageModel = new PageModel(page, rows);
+            return accountBiz.appointmentRecord(users, pageModel);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
      * 转账
      * @param users
      * @return

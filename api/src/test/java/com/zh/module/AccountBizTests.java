@@ -28,5 +28,12 @@ public class AccountBizTests {
         PageModel pageModel = new PageModel(1, 10);
         System.out.println(accountBiz.personProfit(users, 1, pageModel));
     }
+    @Test
+    public void appointment() {
+        Users users = new Users();
+        users.setId(1);
+        PageModel pageModel = new PageModel(1, 10);
+        System.out.println(accountBiz.appointmentRecord(users, pageModel));
+    }
 
 }

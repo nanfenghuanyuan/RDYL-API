@@ -14,5 +14,20 @@ public interface AccountBiz {
 
     String transfer(Users users, String phone, String amount, String password);
 
+    /**
+     * 收益记录 个人/动态
+     * @param users
+     * @param type
+     * @param pageModel
+     * @return
+     */
     String personProfit(Users users, Integer type, PageModel pageModel);
+
+    /**
+     * 预约记录
+     * @param users
+     * @param pageModel
+     * @return
+     */
+    String appointmentRecord(Users users, PageModel pageModel);
 }
