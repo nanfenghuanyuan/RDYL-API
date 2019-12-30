@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MarketSchedule {
+public class ProfitSchedule {
 	
 	@Autowired
 	private PetsListBiz petsListBiz;

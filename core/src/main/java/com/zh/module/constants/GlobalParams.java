@@ -158,6 +158,16 @@ public class GlobalParams {
      */
     public static  final  int PET_LIST_STATE_COMPLETE = 3;
 
+    /**
+     * 个人收益
+     */
+    public static  final  int PROFIT_RECORD_PERSON = 0;
+    /**
+     * 动态收益
+     */
+    public static  final  int PROFIT_RECORD_TEAM = 1;
+
+
 
 
 }

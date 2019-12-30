@@ -1,8 +1,8 @@
 package com.zh.module;
 
 import com.zh.module.biz.AccountBiz;
-import com.zh.module.biz.HomeBiz;
 import com.zh.module.entity.Users;
+import com.zh.module.model.PageModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,13 @@ public class AccountBizTests {
         Users users = new Users();
         users.setId(1);
         System.out.println(accountBiz.init(users));
+    }
+    @Test
+    public void personList() {
+        Users users = new Users();
+        users.setId(1);
+        PageModel pageModel = new PageModel(1, 10);
+        System.out.println(accountBiz.personProfit(users, 1, pageModel));
     }
 
 }
