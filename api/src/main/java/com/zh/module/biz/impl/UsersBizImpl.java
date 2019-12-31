@@ -53,6 +53,9 @@ public class UsersBizImpl implements UsersBiz {
     public String login(Users user) throws Exception {
         JSONObject jsonObject = new JSONObject();
         Users userForBase = usersService.selectByPhone(user.getPhone());
+        if (userForBase == null){
+            return Result.toResult(ResultCode.USER_LOGIN_ERROR);
+        }
         if (!userForBase.getPassword().equals(MD5.getMd5(user.getPassword()))){
             return Result.toResult(ResultCode.USER_LOGIN_ERROR);
         }
