@@ -9,7 +9,9 @@ import com.zh.module.dto.Result;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.exception.BanlanceNotEnoughException;
+import com.zh.module.model.AppoinModel;
 import com.zh.module.model.FlowModel;
+import com.zh.module.model.PageModel;
 import com.zh.module.service.*;
 import com.zh.module.utils.BigDecimalUtils;
 import com.zh.module.utils.DateUtils;
@@ -44,6 +46,10 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     private SysparamsService sysparamsService;
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private ProfitRecordService profitRecordService;
+    @Autowired
+    private AppointmentRecordService appointmentRecordService;
     @Autowired
     private RedisTemplate<String,String> redis;
 
@@ -112,5 +118,48 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         }
 
         return Result.toResult(ResultCode.SUCCESS);
+    }
+
+    @Override
+    public String personProfit(Users users, Integer type, PageModel pageModel) {
+        Integer userId = users.getId();
+        Map<Object, Object> map = new HashMap<>();
+        Map<Object, Object> result = new HashMap<>();
+        map.put("userId", userId);
+        map.put("type", type);
+        map.put("firstResult", pageModel.getFirstResult());
+        map.put("maxResult", pageModel.getMaxResult());
+        List<ProfitRecord> profitRecords = profitRecordService.selectPaging(map);
+        List<FlowModel> flowModels = new LinkedList<>();
+        for(ProfitRecord profitRecord : profitRecords){
+            FlowModel flowModel = new FlowModel();
+            flowModel.setTime(DateUtils.getDateFormate(profitRecord.getCreateTime()));
+            flowModel.setOperaType(profitRecord.getRemark());
+            flowModel.setAmount(profitRecord.getAmount());
+            flowModels.add(flowModel);
+        }
+        String sumAmount = profitRecordService.selectSumAmount(userId, type);
+        result.put("sumAmount", sumAmount);
+        result.put("list", flowModels);
+        return Result.toResult(ResultCode.SUCCESS, result);
+    }
+
+    @Override
+    public String appointmentRecord(Users users, PageModel pageModel) {
+        Integer userId = users.getId();
+        Map<Object, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("firstResult", pageModel.getFirstResult());
+        map.put("maxResult", pageModel.getMaxResult());
+        List<AppointmentRecord> appointmentRecords = appointmentRecordService.selectPaging(map);
+        List<AppoinModel> flowModels = new LinkedList<>();
+        for(AppointmentRecord appointmentRecord : appointmentRecords){
+            AppoinModel appoinModel = new AppoinModel();
+            appoinModel.setTime(DateUtils.getDateFormate(appointmentRecord.getCreateTime()));
+            appoinModel.setName(appointmentRecord.getName());
+            appoinModel.setAmount(appointmentRecord.getSpend());
+            flowModels.add(appoinModel);
+        }
+        return Result.toResult(ResultCode.SUCCESS, flowModels);
     }
 }
