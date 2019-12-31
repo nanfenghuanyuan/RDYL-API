@@ -88,7 +88,15 @@ public class HomeBizImpl implements HomeBiz {
                         //看看用户是否存在已预约订单
                         int count = petsMatchingListService.selectCount(map);
                         if(count != 0){
-                            petsModel.setState(GlobalParams.PET_STATE_2);
+                            map = new HashMap<>();
+                            map.put("transferUserId", users.getId());
+                            map.put("state", GlobalParams.PET_LIST_STATE_WAITING);
+                            count = petsListService.selectCount(map);
+                            if(count != 0){
+                                petsModel.setState(GlobalParams.PET_STATE_3);
+                            }else {
+                                petsModel.setState(GlobalParams.PET_STATE_2);
+                            }
                         }else {
                             petsModel.setState(GlobalParams.PET_STATE_3);
                         }
