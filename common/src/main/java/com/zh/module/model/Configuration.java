@@ -2,6 +2,7 @@ package com.zh.module.model;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -21,5 +22,7 @@ public class Configuration implements Serializable{
     private  String helpDocUrl;
     //弹窗公告
     private Object notice;
+
+    private List<CoinModule> coinList;
 
 }

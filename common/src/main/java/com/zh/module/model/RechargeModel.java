@@ -11,15 +11,19 @@ import java.math.BigDecimal;
  * @create: 2019-12-23 20:03
  **/
 @Data
-public class WithdrawModel {
+public class RechargeModel {
     /**
      * 数量
      */
     private BigDecimal amount;
     /**
-     * 状态 0未通过 1已通过
+     * 状态
      */
     private Integer state;
+    /**
+     * 币种
+     */
+    private Integer coinType;
     /**
      * 时间
      */

@@ -41,7 +41,11 @@ public interface AccountBiz {
      */
     String withdraw(Users users, Integer coinType, String amount, String password);
 
-    String getAvailBalance(Users users, byte coinType, byte accountType);
+    String getAvailBalance(Users users, Integer coinType, byte accountType);
 
-    String withdrawList(Users users, byte coinType, PageModel pageModel);
+    String withdrawList(Users users, Integer coinType, PageModel pageModel);
+
+    String recharge(Users users, Integer coinType, String amount, String address, String password);
+
+    String rechargeList(Users users, Integer coinType, PageModel pageModel);
 }

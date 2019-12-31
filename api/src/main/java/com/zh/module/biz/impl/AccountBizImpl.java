@@ -9,10 +9,7 @@ import com.zh.module.dto.Result;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.exception.BanlanceNotEnoughException;
-import com.zh.module.model.AppoinModel;
-import com.zh.module.model.FlowModel;
-import com.zh.module.model.PageModel;
-import com.zh.module.model.WithdrawModel;
+import com.zh.module.model.*;
 import com.zh.module.service.*;
 import com.zh.module.utils.BigDecimalUtils;
 import com.zh.module.utils.DateUtils;
@@ -53,6 +50,8 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     private AppointmentRecordService appointmentRecordService;
     @Autowired
     private WithdrawService withdrawService;
+    @Autowired
+    private RechargeService rechargeService;
     @Autowired
     private RedisTemplate<String,String> redis;
 
@@ -174,38 +173,29 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         if(amountBig.compareTo(account.getAvailbalance()) > 0){
             return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
         }
+
         //保存记录
         Withdraw withdraw = new Withdraw();
         withdraw.setAmount(amountBig);
         withdraw.setCoinType(coinType.byteValue());
         withdraw.setState((byte) GlobalParams.WITHDRAW_NO_PAY);
         withdraw.setUserId(userId);
-        withdraw.setRemark("提现发起");
         withdrawService.insertSelective(withdraw);
 
-        //插入流水
-        Flow flow = new Flow();
-        flow.setAmount(amountBig);
-        flow.setAccountType(AccountType.ACCOUNT_TYPE_ACTIVE);
-        flow.setCoinType(coinType);
-        flow.setResultAmount(account.getAvailbalance().toPlainString());
-        flow.setOperId(userId);
-        flow.setUserId(userId);
-        flow.setOperType("提现发起");
-        flow.setRelateId(withdraw.getId());
-        flowService.insertSelective(flow);
+        accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, coinType, BigDecimalUtils.plusMinus(amountBig), BigDecimal.ZERO, userId, "提现发起", withdraw.getId());
+
         return Result.toResult(ResultCode.SUCCESS);
     }
 
     @Override
-    public String getAvailBalance(Users users, byte coinType, byte accountType) {
+    public String getAvailBalance(Users users, Integer coinType, byte accountType) {
         Integer userId = users.getId();
         Account account = accountService.selectByUserIdAndAccountTypeAndType(accountType, coinType, userId);
         return Result.toResult(ResultCode.SUCCESS, account.getAvailbalance());
     }
 
     @Override
-    public String withdrawList(Users users, byte coinType, PageModel pageModel) {
+    public String withdrawList(Users users, Integer coinType, PageModel pageModel) {
         Map<Object, Object> map = new HashMap<>();
         map.put("userId", users.getId());
         map.put("coinType", coinType);
@@ -216,9 +206,42 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         for(Withdraw withdraw : withdraws){
             WithdrawModel withdrawModel = new WithdrawModel();
             withdrawModel.setAmount(withdraw.getAmount());
-            withdrawModel.setRemark(withdraw.getRemark());
+            withdrawModel.setState(withdraw.getState().intValue());
             withdrawModel.setTime(DateUtils.getDateFormate(withdraw.getCreateTime()));
             list.add(withdrawModel);
+        }
+        return Result.toResult(ResultCode.SUCCESS, list);
+    }
+
+    @Override
+    public String recharge(Users users, Integer coinType, String amount, String address, String password) {
+        BigDecimal amountBig = new BigDecimal(amount);
+        Recharge recharge = new Recharge();
+        recharge.setAmount(amountBig);
+        recharge.setCoinType(coinType.byteValue());
+        recharge.setState((byte) GlobalParams.RECHARGE_STATE_NEW);
+        recharge.setUserId(users.getId());
+        recharge.setAddress(address);
+        rechargeService.insertSelective(recharge);
+        return Result.toResult(ResultCode.SUCCESS);
+    }
+
+    @Override
+    public String rechargeList(Users users, Integer coinType, PageModel pageModel) {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("userId", users.getId());
+        map.put("coinType", coinType);
+        map.put("firstResult", pageModel.getFirstResult());
+        map.put("maxResult", pageModel.getMaxResult());
+        List<Recharge> recharges = rechargeService.selectPaging(map);
+        List<RechargeModel> list = new LinkedList<>();
+        for(Recharge recharge : recharges){
+            RechargeModel rechargeModel = new RechargeModel();
+            rechargeModel.setAmount(recharge.getAmount());
+            rechargeModel.setState(recharge.getState().intValue());
+            rechargeModel.setCoinType(recharge.getCoinType().intValue());
+            rechargeModel.setTime(DateUtils.getDateFormate(recharge.getCreateTime()));
+            list.add(rechargeModel);
         }
         return Result.toResult(ResultCode.SUCCESS, list);
     }

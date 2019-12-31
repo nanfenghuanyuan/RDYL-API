@@ -88,9 +88,6 @@ public class GlobalParams {
     public static  final  int USER_STATE_FREEZING = 2;//用户冻结
     public static  final  int USER_STATE_CANCEL = 3;//用户注销
 
-    public static  final  int WITHDRAW_STATE_FINISH = 1; //提现完成
-    public static  final  int WITHDRAW_STATE_CANCEL = 2;//提现撤销
-
     public static  final  int RECHARGE_STATE_NEW = 0;//充值未处理
     public static  final  int RECHARGE_STATE_FINISH = 1;//充值完成
     public static  final  int RECHARGE_STATE_CANCEL = 2;//充值撤销

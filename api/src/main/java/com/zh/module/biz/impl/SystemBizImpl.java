@@ -11,11 +11,9 @@ import com.zh.module.constants.GlobalParams;
 import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
 import com.zh.module.encrypt.MD5;
-import com.zh.module.entity.Account;
-import com.zh.module.entity.Notice;
-import com.zh.module.entity.Sysparams;
-import com.zh.module.entity.Users;
+import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
+import com.zh.module.model.CoinModule;
 import com.zh.module.model.Configuration;
 import com.zh.module.service.*;
 import com.zh.module.utils.RedisUtil;
@@ -51,13 +49,32 @@ public class SystemBizImpl implements SystemBiz {
     @Autowired
     private NoticeService noticeService;
     @Autowired
+    private CoinManagerService coinManagerService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
     public String getStartupParam() {
         Notice notice = noticeService.seletByStart();
+        List<CoinManager> coinManagers = coinManagerService.selectAll(new HashMap<>());
+        List<CoinModule> coinModules = new LinkedList<>();
+        for(CoinManager coinManager : coinManagers){
+            CoinModule coinModule = new CoinModule();
+            coinModule.setAddress(coinManager.getAddress());
+            coinModule.setRechargeUrl(coinManager.getRechargeUrl());
+            coinModule.setRechargeFee(coinManager.getRechargeFee());
+            coinModule.setWithdrawFee(coinManager.getWithdrawFee());
+            coinModule.setId(coinManager.getId());
+            coinModule.setName(coinManager.getName());
+            coinModule.setRechargeAmountMin(coinManager.getRechargeAmountMin());
+            coinModule.setWithdrawAmountMin(coinManager.getWithdrawAmountMin());
+            coinModule.setWithdrawDoc(coinManager.getWithdrawDoc());
+            coinModule.setRechargeDoc(coinModule.getRechargeDoc());
+            coinModules.add(coinModule);
+        }
         Configuration config = new Configuration();
         config.setNotice(notice);
+        config.setCoinList(coinModules);
         return Result.toResult(ResultCode.SUCCESS, config);
     }
 

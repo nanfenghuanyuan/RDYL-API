@@ -125,8 +125,8 @@ public class AccountController {
             JSONObject json = JSONObject.parseObject(param);
             String amount = json.getString("amount");
             String password = json.getString("password");
-            Integer coinType = CoinType.OS;
-            if(StrUtils.isBlank(amount) || StrUtils.isBlank(password)){
+            Integer coinType = json.getInteger("coinType");
+            if(StrUtils.isBlank(amount) || StrUtils.isBlank(password) || coinType == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             return accountBiz.withdraw(users, coinType, amount, password);
@@ -147,7 +147,10 @@ public class AccountController {
             JSONObject params = JSONObject.parseObject(param);
             Integer rows = params.getInteger("rows");
             Integer page = params.getInteger("page");
-            byte coinType = CoinType.OS;
+            Integer coinType = params.getInteger("coinType");
+            if(coinType == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
             if(page == null){
                 page = 0;
             }
@@ -166,11 +169,65 @@ public class AccountController {
      */
     @ResponseBody
     @RequestMapping(value="getAvailBalance",method=RequestMethod.POST,produces="application/json;charset=utf-8")
-    public String getAvailBalance(@CurrentUser Users users){
+    public String getAvailBalance(@CurrentUser Users users, @RequestBody String param){
         try {
+            JSONObject params = JSONObject.parseObject(param);
             byte accountType = AccountType.ACCOUNT_TYPE_ACTIVE;
-            byte coinType = CoinType.OS;
+            Integer coinType = params.getInteger("coinType");
+            if(coinType == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
             return accountBiz.getAvailBalance(users, coinType, accountType);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
+     * 充值
+     * @param users
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="recharge",method=RequestMethod.POST,produces="application/json;charset=utf-8")
+    public String recharge(@CurrentUser Users users, @RequestBody String param){
+        try {
+            JSONObject json = JSONObject.parseObject(param);
+            Integer coinType = json.getInteger("coinType");
+            String amount = json.getString("amount");
+            String password = json.getString("password");
+            String address = json.getString("address");
+            if(StrUtils.isBlank(amount) || StrUtils.isBlank(password)|| StrUtils.isBlank(address) || coinType == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            return accountBiz.recharge(users, coinType, amount, address, password);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
+     * 充值列表
+     * @param users
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="recharge/list",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String rechargeList(@CurrentUser Users users, @RequestBody String param){
+        try {
+            JSONObject params = JSONObject.parseObject(param);
+            Integer rows = params.getInteger("rows");
+            Integer page = params.getInteger("page");
+            Integer coinType = params.getInteger("coinType");
+            if(coinType == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            if(page == null){
+                page = 0;
+            }
+            page = page + 1;
+            PageModel pageModel = new PageModel(page, rows);
+            return accountBiz.rechargeList(users, coinType, pageModel);
         }catch (Exception e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);

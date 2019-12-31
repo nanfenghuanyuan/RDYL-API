@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zh.module.dao.CoinManagerMapper">
+  <resultMap id="BaseResultMap" type="com.zh.module.entity.CoinManager">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="recharge_url" jdbcType="VARCHAR" property="rechargeUrl" />
+    <result column="withdraw_fee" jdbcType="DECIMAL" property="withdrawFee" />
+    <result column="recharge_fee" jdbcType="DECIMAL" property="rechargeFee" />
+    <result column="recharge_amount_min" jdbcType="DECIMAL" property="rechargeAmountMin" />
+    <result column="withdraw_amount_min" jdbcType="DECIMAL" property="withdrawAmountMin" />
+    <result column="recharge_doc" jdbcType="VARCHAR" property="rechargeDoc" />
+    <result column="withdraw_doc" jdbcType="VARCHAR" property="withdrawDoc" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, address, recharge_url, withdraw_fee, recharge_fee, recharge_amount_min, 
+    withdraw_amount_min, recharge_doc, withdraw_doc, create_time, update_time
+  </sql>
+  <insert id="insert" parameterType="com.zh.module.entity.CoinManager">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into coin_manager (name, address, recharge_url, 
+      withdraw_fee, recharge_fee, recharge_amount_min, 
+      withdraw_amount_min, recharge_doc, withdraw_doc, 
+      create_time, update_time)
+    values (#{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{rechargeUrl,jdbcType=VARCHAR}, 
+      #{withdrawFee,jdbcType=DECIMAL}, #{rechargeFee,jdbcType=DECIMAL}, #{rechargeAmountMin,jdbcType=DECIMAL}, 
+      #{withdrawAmountMin,jdbcType=DECIMAL}, #{rechargeDoc,jdbcType=VARCHAR}, #{withdrawDoc,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zh.module.entity.CoinManager">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into coin_manager
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="rechargeUrl != null">
+        recharge_url,
+      </if>
+      <if test="withdrawFee != null">
+        withdraw_fee,
+      </if>
+      <if test="rechargeFee != null">
+        recharge_fee,
+      </if>
+      <if test="rechargeAmountMin != null">
+        recharge_amount_min,
+      </if>
+      <if test="withdrawAmountMin != null">
+        withdraw_amount_min,
+      </if>
+      <if test="rechargeDoc != null">
+        recharge_doc,
+      </if>
+      <if test="withdrawDoc != null">
+        withdraw_doc,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeUrl != null">
+        #{rechargeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="withdrawFee != null">
+        #{withdrawFee,jdbcType=DECIMAL},
+      </if>
+      <if test="rechargeFee != null">
+        #{rechargeFee,jdbcType=DECIMAL},
+      </if>
+      <if test="rechargeAmountMin != null">
+        #{rechargeAmountMin,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawAmountMin != null">
+        #{withdrawAmountMin,jdbcType=DECIMAL},
+      </if>
+      <if test="rechargeDoc != null">
+        #{rechargeDoc,jdbcType=VARCHAR},
+      </if>
+      <if test="withdrawDoc != null">
+        #{withdrawDoc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.zh.module.entity.CoinManager">
+    update coin_manager
+    set name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      recharge_url = #{rechargeUrl,jdbcType=VARCHAR},
+      withdraw_fee = #{withdrawFee,jdbcType=DECIMAL},
+      recharge_fee = #{rechargeFee,jdbcType=DECIMAL},
+      recharge_amount_min = #{rechargeAmountMin,jdbcType=DECIMAL},
+      withdraw_amount_min = #{withdrawAmountMin,jdbcType=DECIMAL},
+      recharge_doc = #{rechargeDoc,jdbcType=VARCHAR},
+      withdraw_doc = #{withdrawDoc,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zh.module.entity.CoinManager">
+    update coin_manager
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeUrl != null">
+        recharge_url = #{rechargeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="withdrawFee != null">
+        withdraw_fee = #{withdrawFee,jdbcType=DECIMAL},
+      </if>
+      <if test="rechargeFee != null">
+        recharge_fee = #{rechargeFee,jdbcType=DECIMAL},
+      </if>
+      <if test="rechargeAmountMin != null">
+        recharge_amount_min = #{rechargeAmountMin,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawAmountMin != null">
+        withdraw_amount_min = #{withdrawAmountMin,jdbcType=DECIMAL},
+      </if>
+      <if test="rechargeDoc != null">
+        recharge_doc = #{rechargeDoc,jdbcType=VARCHAR},
+      </if>
+      <if test="withdrawDoc != null">
+        withdraw_doc = #{withdrawDoc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from coin_manager
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from coin_manager
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from coin_manager
+    where 1=1 
+    <if test="name != null">
+       and  name = #{name,jdbcType=VARCHAR}
+    </if>
+    <if test="address != null">
+       and  address = #{address,jdbcType=VARCHAR}
+    </if>
+    <if test="rechargeUrl != null">
+       and  recharge_url = #{rechargeUrl,jdbcType=VARCHAR}
+    </if>
+    <if test="withdrawFee != null">
+       and  withdraw_fee = #{withdrawFee,jdbcType=DECIMAL}
+    </if>
+    <if test="rechargeFee != null">
+       and  recharge_fee = #{rechargeFee,jdbcType=DECIMAL}
+    </if>
+    <if test="rechargeAmountMin != null">
+       and  recharge_amount_min = #{rechargeAmountMin,jdbcType=DECIMAL}
+    </if>
+    <if test="withdrawAmountMin != null">
+       and  withdraw_amount_min = #{withdrawAmountMin,jdbcType=DECIMAL}
+    </if>
+    <if test="rechargeDoc != null">
+       and  recharge_doc = #{rechargeDoc,jdbcType=VARCHAR}
+    </if>
+    <if test="withdrawDoc != null">
+       and  withdraw_doc = #{withdrawDoc,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
+    </if>
+     order by id desc 
+  </select>
+  <select id="selectPaging" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from coin_manager
+    where 1=1 
+    <if test="name != null">
+       and  name = #{name,jdbcType=VARCHAR}
+    </if>
+    <if test="address != null">
+       and  address = #{address,jdbcType=VARCHAR}
+    </if>
+    <if test="rechargeUrl != null">
+       and  recharge_url = #{rechargeUrl,jdbcType=VARCHAR}
+    </if>
+    <if test="withdrawFee != null">
+       and  withdraw_fee = #{withdrawFee,jdbcType=DECIMAL}
+    </if>
+    <if test="rechargeFee != null">
+       and  recharge_fee = #{rechargeFee,jdbcType=DECIMAL}
+    </if>
+    <if test="rechargeAmountMin != null">
+       and  recharge_amount_min = #{rechargeAmountMin,jdbcType=DECIMAL}
+    </if>
+    <if test="withdrawAmountMin != null">
+       and  withdraw_amount_min = #{withdrawAmountMin,jdbcType=DECIMAL}
+    </if>
+    <if test="rechargeDoc != null">
+       and  recharge_doc = #{rechargeDoc,jdbcType=VARCHAR}
+    </if>
+    <if test="withdrawDoc != null">
+       and  withdraw_doc = #{withdrawDoc,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
+    </if>
+     order by id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(*) 
+    from coin_manager 
+    where 1=1 
+    <if test="name != null">
+       and  name = #{name,jdbcType=VARCHAR}
+    </if>
+    <if test="address != null">
+       and  address = #{address,jdbcType=VARCHAR}
+    </if>
+    <if test="rechargeUrl != null">
+       and  recharge_url = #{rechargeUrl,jdbcType=VARCHAR}
+    </if>
+    <if test="withdrawFee != null">
+       and  withdraw_fee = #{withdrawFee,jdbcType=DECIMAL}
+    </if>
+    <if test="rechargeFee != null">
+       and  recharge_fee = #{rechargeFee,jdbcType=DECIMAL}
+    </if>
+    <if test="rechargeAmountMin != null">
+       and  recharge_amount_min = #{rechargeAmountMin,jdbcType=DECIMAL}
+    </if>
+    <if test="withdrawAmountMin != null">
+       and  withdraw_amount_min = #{withdrawAmountMin,jdbcType=DECIMAL}
+    </if>
+    <if test="rechargeDoc != null">
+       and  recharge_doc = #{rechargeDoc,jdbcType=VARCHAR}
+    </if>
+    <if test="withdrawDoc != null">
+       and  withdraw_doc = #{withdrawDoc,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+</mapper>
