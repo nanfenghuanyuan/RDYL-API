@@ -10,6 +10,7 @@ import lombok.Data;
  **/
 @Data
 public class PetsModel {
+    private Integer level;
     /**
      * 宠物名称
      */

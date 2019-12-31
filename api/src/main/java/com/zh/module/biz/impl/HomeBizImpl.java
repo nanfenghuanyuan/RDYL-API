@@ -61,6 +61,7 @@ public class HomeBizImpl implements HomeBiz {
         String today = DateUtils.getCurrentTimeStr();
         for(Pets pets : petsList){
             PetsModel petsModel = new PetsModel();
+            petsModel.setLevel(pets.getLevel().intValue());
             petsModel.setImgUrl(pets.getImgUrl());
             petsModel.setName(pets.getName());
             petsModel.setPayPrice(pets.getPriceMin() + "-" + pets.getPriceMix());
