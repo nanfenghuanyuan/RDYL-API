@@ -12,6 +12,7 @@ import com.zh.module.exception.BanlanceNotEnoughException;
 import com.zh.module.model.AppoinModel;
 import com.zh.module.model.FlowModel;
 import com.zh.module.model.PageModel;
+import com.zh.module.model.WithdrawModel;
 import com.zh.module.service.*;
 import com.zh.module.utils.BigDecimalUtils;
 import com.zh.module.utils.DateUtils;
@@ -50,6 +51,8 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     private ProfitRecordService profitRecordService;
     @Autowired
     private AppointmentRecordService appointmentRecordService;
+    @Autowired
+    private WithdrawService withdrawService;
     @Autowired
     private RedisTemplate<String,String> redis;
 
@@ -161,5 +164,62 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
             flowModels.add(appoinModel);
         }
         return Result.toResult(ResultCode.SUCCESS, flowModels);
+    }
+
+    @Override
+    public String withdraw(Users users, Integer coinType, String amount, String password) {
+        Integer userId = users.getId();
+        BigDecimal amountBig = new BigDecimal(amount);
+        Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, coinType, userId);
+        if(amountBig.compareTo(account.getAvailbalance()) > 0){
+            return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
+        }
+        //保存记录
+        Withdraw withdraw = new Withdraw();
+        withdraw.setAmount(amountBig);
+        withdraw.setCoinType(coinType.byteValue());
+        withdraw.setState((byte) GlobalParams.WITHDRAW_NO_PAY);
+        withdraw.setUserId(userId);
+        withdraw.setRemark("提现发起");
+        withdrawService.insertSelective(withdraw);
+
+        //插入流水
+        Flow flow = new Flow();
+        flow.setAmount(amountBig);
+        flow.setAccountType(AccountType.ACCOUNT_TYPE_ACTIVE);
+        flow.setCoinType(coinType);
+        flow.setResultAmount(account.getAvailbalance().toPlainString());
+        flow.setOperId(userId);
+        flow.setUserId(userId);
+        flow.setOperType("提现发起");
+        flow.setRelateId(withdraw.getId());
+        flowService.insertSelective(flow);
+        return Result.toResult(ResultCode.SUCCESS);
+    }
+
+    @Override
+    public String getAvailBalance(Users users, byte coinType, byte accountType) {
+        Integer userId = users.getId();
+        Account account = accountService.selectByUserIdAndAccountTypeAndType(accountType, coinType, userId);
+        return Result.toResult(ResultCode.SUCCESS, account.getAvailbalance());
+    }
+
+    @Override
+    public String withdrawList(Users users, byte coinType, PageModel pageModel) {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("userId", users.getId());
+        map.put("coinType", coinType);
+        map.put("firstResult", pageModel.getFirstResult());
+        map.put("maxResult", pageModel.getMaxResult());
+        List<Withdraw> withdraws = withdrawService.selectPaging(map);
+        List<WithdrawModel> list = new LinkedList<>();
+        for(Withdraw withdraw : withdraws){
+            WithdrawModel withdrawModel = new WithdrawModel();
+            withdrawModel.setAmount(withdraw.getAmount());
+            withdrawModel.setRemark(withdraw.getRemark());
+            withdrawModel.setTime(DateUtils.getDateFormate(withdraw.getCreateTime()));
+            list.add(withdrawModel);
+        }
+        return Result.toResult(ResultCode.SUCCESS, list);
     }
 }

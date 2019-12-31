@@ -12,8 +12,8 @@ public class GlobalParams {
     public static final int FORBIDDEN = 2; //冻结
     public static final int LOGOFF = 3; //注销
 
-    public static final int PAY_COMMON = 0;//提现到pc钱包
-    public static final int PAY_SPOT = 1;//提现到现货账户
+    public static final int WITHDRAW_NO_PAY = 0;//提现未处理
+    public static final int WITHDRAW_PAY = 1;//提现已处理
 
     public static final int ORDER_STATE_UNTREATED = 0;//正在处理
     public static final int ORDER_STATE_TREATED = 1;//已成功

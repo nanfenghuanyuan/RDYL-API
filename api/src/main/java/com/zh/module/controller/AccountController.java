@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.zh.module.annotation.CurrentUser;
 import com.zh.module.biz.AccountBiz;
 import com.zh.module.biz.HomeBiz;
+import com.zh.module.constants.AccountType;
+import com.zh.module.constants.CoinType;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
@@ -106,6 +108,69 @@ public class AccountController {
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             return accountBiz.transfer(users, phone, amount, password);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
+     * 提现
+     * @param users
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="withdraw",method=RequestMethod.POST,produces="application/json;charset=utf-8")
+    public String withdraw(@CurrentUser Users users, @RequestBody String param){
+        try {
+            JSONObject json = JSONObject.parseObject(param);
+            String amount = json.getString("amount");
+            String password = json.getString("password");
+            Integer coinType = CoinType.OS;
+            if(StrUtils.isBlank(amount) || StrUtils.isBlank(password)){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            return accountBiz.withdraw(users, coinType, amount, password);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
+     * 提现列表
+     * @param users
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="withdraw/list",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String withdrawList(@CurrentUser Users users, @RequestBody String param){
+        try {
+            JSONObject params = JSONObject.parseObject(param);
+            Integer rows = params.getInteger("rows");
+            Integer page = params.getInteger("page");
+            byte coinType = CoinType.OS;
+            if(page == null){
+                page = 0;
+            }
+            page = page + 1;
+            PageModel pageModel = new PageModel(page, rows);
+            return accountBiz.withdrawList(users, coinType, pageModel);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
+     * 获取余额
+     * @param users
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="getAvailBalance",method=RequestMethod.POST,produces="application/json;charset=utf-8")
+    public String getAvailBalance(@CurrentUser Users users){
+        try {
+            byte accountType = AccountType.ACCOUNT_TYPE_ACTIVE;
+            byte coinType = CoinType.OS;
+            return accountBiz.getAvailBalance(users, coinType, accountType);
         }catch (Exception e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);

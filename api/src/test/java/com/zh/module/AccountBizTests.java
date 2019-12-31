@@ -35,5 +35,28 @@ public class AccountBizTests {
         PageModel pageModel = new PageModel(1, 10);
         System.out.println(accountBiz.appointmentRecord(users, pageModel));
     }
+    @Test
+    public void withdraw() {
+        Users users = new Users();
+        users.setId(1);
+        PageModel pageModel = new PageModel(1, 10);
+        System.out.println(accountBiz.withdraw(users, 1, "10", "940916"));
+    }
+    @Test
+    public void withdrawList() {
+        Users users = new Users();
+        users.setId(1);
+        PageModel pageModel = new PageModel(1, 10);
+        byte coinType = 1;
+        System.out.println(accountBiz.withdrawList(users, coinType, pageModel));
+    }
+    @Test
+    public void get() {
+        Users users = new Users();
+        users.setId(1);
+        byte accountType = 0;
+        byte coinType = 1;
+        System.out.println(accountBiz.getAvailBalance(users,coinType,accountType));
+    }
 
 }
