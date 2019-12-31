@@ -75,4 +75,9 @@ public class PetsListServiceImpl implements PetsListService {
     public List<PetsList> selectDoProfit(Map<Object, Object> param) {
         return this.petsListMapper.selectDoProfit(param);
     }
+
+    @Override
+    public String selectSumAmountByUser(Integer id) {
+        return this.petsListMapper.selectSumAmountByUser(id);
+    }
 }

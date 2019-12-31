@@ -100,4 +100,6 @@ public interface AccountService {
                                     BigDecimal availIncrement, BigDecimal frozenIncrement, Integer operId, String operType, Integer relateId) throws BanlanceNotEnoughException;
 
     Account selectByUserIdAndAccountTypeAndType(int accountType, int coinType, Integer userId);
+
+    String selectSumAmountByAccountTypeAndCoinType(Integer id, int accountType, int coinType);
 }

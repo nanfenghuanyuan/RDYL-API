@@ -146,4 +146,9 @@ public class AccountServiceImpl implements AccountService {
         List<Account> list = this.accountMapper.selectAll(param);
         return list.size() == 0 ? null : list.get(0);
     }
+
+    @Override
+    public String selectSumAmountByAccountTypeAndCoinType(Integer id, int accountType, int coinType) {
+        return this.accountMapper.selectSumAmountByAccountTypeAndCoinType(id, accountType, coinType);
+    }
 }

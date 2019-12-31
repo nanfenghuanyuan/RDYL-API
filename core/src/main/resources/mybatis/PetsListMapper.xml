@@ -207,6 +207,11 @@
     from pets_list
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectSumAmountByUser" parameterType="java.lang.Integer" resultType="string">
+    select sum(price) sumAmount
+    from pets_list
+    where user_id = #{id}
+  </select>
   <select id="selectAll" parameterType="java.util.Map" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

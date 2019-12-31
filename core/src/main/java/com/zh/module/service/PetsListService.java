@@ -83,6 +83,13 @@ public interface PetsListService {
     int selectCount(Map<Object, Object> param);
 
     List<PetsList> selectDoProfit(Map<Object, Object> param);
-    public List<Map<String, Object>> selectListPaging(Map<Object, Object> param);
 
-    }
+    List<Map<String, Object>> selectListPaging(Map<Object, Object> param);
+
+    /**
+     * 统计用户名下总资产
+     * @param id
+     * @return
+     */
+    String selectSumAmountByUser(Integer id);
+}

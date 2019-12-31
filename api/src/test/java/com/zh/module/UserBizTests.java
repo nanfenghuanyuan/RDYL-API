@@ -16,9 +16,12 @@ public class UserBizTests {
     @Autowired
     private UsersBiz usersBiz;
     @Test
-    public void init() {
+    public void init() throws Exception {
         Users users = new Users();
         users.setId(1);
+        users.setPassword("qq940916");
+        users.setPhone("13165373280");
+        System.out.println(usersBiz.login(users));
     }
 
 }

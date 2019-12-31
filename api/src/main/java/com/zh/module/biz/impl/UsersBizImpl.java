@@ -12,6 +12,7 @@ import com.zh.module.dto.Result;
 import com.zh.module.encrypt.MD5;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
+import com.zh.module.model.UsersModel;
 import com.zh.module.service.*;
 import com.zh.module.utils.RedisUtil;
 import com.zh.module.utils.StrUtils;
@@ -46,7 +47,7 @@ public class UsersBizImpl implements UsersBiz {
     @Autowired
     private AccountService accountService;
     @Autowired
-    private BindInfoService bindInfoService;
+    private PetsListService petsListService;
     @Autowired
     private RedisTemplate<String,String> redis;
     @Override
@@ -66,9 +67,21 @@ public class UsersBizImpl implements UsersBiz {
         if(userForBase.getState() == GlobalParams.LOGOFF){
             return Result.toResult(ResultCode.USER_ACCOUNT_LOGOFF);
         }
+        UsersModel usersModel = new UsersModel();
+        usersModel.setAccount(userForBase.getAccount());
+        usersModel.setContribution(userForBase.getContribution());
+        usersModel.setId(userForBase.getId());
+        usersModel.setNickName(userForBase.getNickName());
+        usersModel.setPhone(userForBase.getPhone());
+        usersModel.setState(userForBase.getState().intValue());
+        usersModel.setUuid(userForBase.getUuid());
         String token = getToken(userForBase);
         jsonObject.put("token", token);
-        jsonObject.put("user", userForBase);
+        jsonObject.put("user", usersModel);
+        String goldAmount = accountService.selectSumAmountByAccountTypeAndCoinType(user.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS);
+        jsonObject.put("goldAmount", new BigDecimal(goldAmount).setScale(0, BigDecimal.ROUND_HALF_UP));
+        String holdAssets = petsListService.selectSumAmountByUser(user.getId());
+        jsonObject.put("holdAssets", new BigDecimal(holdAssets).setScale(0, BigDecimal.ROUND_HALF_UP));
         return Result.toResult(ResultCode.SUCCESS, jsonObject);
     }
 

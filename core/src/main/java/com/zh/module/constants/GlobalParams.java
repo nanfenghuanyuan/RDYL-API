@@ -153,10 +153,6 @@ public class GlobalParams {
      * 宠物信息 转让中
      */
     public static  final  int PET_LIST_STATE_WAITING = 2;
-    /**
-     * 宠物信息 已转让
-     */
-    public static  final  int PET_LIST_STATE_COMPLETE = 3;
 
     /**
      * 个人收益
