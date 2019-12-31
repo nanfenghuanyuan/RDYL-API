@@ -121,7 +121,7 @@ public class AccountServiceImpl implements AccountService {
             flow.setRelateId(relateId);
             flow.setAmount(availIncrement);
             flow.setResultAmount(account.getAvailbalance().add(availIncrement).toPlainString());
-            flowMapper.insert(flow);
+            flowMapper.insertSelective(flow);
         }else
         if (frozenIncrement.compareTo(BigDecimal.ZERO) != 0) {
             Flow flow = new Flow();
@@ -133,7 +133,7 @@ public class AccountServiceImpl implements AccountService {
             flow.setRelateId(relateId);
             flow.setAmount(frozenIncrement);
             flow.setResultAmount(account.getFrozenblance().add(frozenIncrement).toPlainString());
-            flowMapper.insert(flow);
+            flowMapper.insertSelective(flow);
         }
     }
 
