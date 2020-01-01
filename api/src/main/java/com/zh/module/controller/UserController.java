@@ -78,14 +78,13 @@ public class UserController {
      * @return
      */
     @PostMapping(value = "/updatePassword", produces = { "application/json;charset=UTF-8"})
-    public Object updatePassword(@RequestBody Users user, @RequestBody String param){
+    public Object updatePassword(@CurrentUser Users user, @RequestBody String param){
         try {
             JSONObject params = JSON.parseObject(param);
-            String oldPassword = params.getString("oldPassword");
             String password = params.getString("password");
             String code = params.getString("code");
             Integer codeId = params.getInteger("codeId");
-            if(StrUtils.isBlank(oldPassword) || StrUtils.isBlank(password) || StrUtils.isBlank(code) || codeId == null){
+            if(StrUtils.isBlank(password) || StrUtils.isBlank(code) || codeId == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             if(!PatternUtil.isDigitalAndWord(password)){
@@ -94,7 +93,7 @@ public class UserController {
             if(!PatternUtil.isVerificationCode(code)){
                 return Result.toResult(ResultCode.SMS_CHECK_ERROR);
             }
-            return usersBiz.updatePassword(user, oldPassword, password, code, codeId);
+            return usersBiz.updatePassword(user, password, code, codeId);
         } catch (Exception e) {
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }
@@ -106,14 +105,13 @@ public class UserController {
      * @return
      */
     @PostMapping(value = "/updateOrderPassword", produces = { "application/json;charset=UTF-8"})
-    public Object updateOrderPassword(@RequestBody Users user, @RequestBody String param){
+    public Object updateOrderPassword(@CurrentUser Users user, @RequestBody String param){
         try {
             JSONObject params = JSON.parseObject(param);
-            String oldPassword = params.getString("oldPassword");
             String password = params.getString("password");
             String code = params.getString("code");
             Integer codeId = params.getInteger("codeId");
-            if(StrUtils.isBlank(oldPassword) || StrUtils.isBlank(password) || StrUtils.isBlank(code) || codeId == null){
+            if(StrUtils.isBlank(password) || StrUtils.isBlank(code) || codeId == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             if(!PatternUtil.isDigitalAndWord(password)){
@@ -122,7 +120,7 @@ public class UserController {
             if(!PatternUtil.isVerificationCode(code)){
                 return Result.toResult(ResultCode.SMS_CHECK_ERROR);
             }
-            return usersBiz.updateOrderPassword(user, oldPassword, password, code, codeId);
+            return usersBiz.updateOrderPassword(user, password, code, codeId);
         } catch (Exception e) {
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }

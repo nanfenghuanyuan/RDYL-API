@@ -166,8 +166,15 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     }
 
     @Override
-    public String withdraw(Users users, Integer coinType, String amount, String password) {
+    public String withdraw(Users users, Integer coinType, String amount, String password){
         Integer userId = users.getId();
+        /*校验交易密码*/
+        if(!StrUtils.isBlank(password)){
+            String valiStr = validateOrderPassword(users, password);
+            if(valiStr!=null){
+                return valiStr;
+            }
+        }
         BigDecimal amountBig = new BigDecimal(amount);
         Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, coinType, userId);
         if(amountBig.compareTo(account.getAvailbalance()) > 0){
@@ -215,6 +222,13 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
 
     @Override
     public String recharge(Users users, Integer coinType, String amount, String address, String password) {
+        /*校验交易密码*/
+        if(!StrUtils.isBlank(password)){
+            String valiStr = validateOrderPassword(users, password);
+            if(valiStr!=null){
+                return valiStr;
+            }
+        }
         BigDecimal amountBig = new BigDecimal(amount);
         Recharge recharge = new Recharge();
         recharge.setAmount(amountBig);

@@ -13,7 +13,7 @@ public interface UsersBiz {
 
     String register(String phone, String password, String uuid, Integer codeId, String code) throws Exception;
 
-    String updatePassword(Users user, String oldPassword, String password, String code, Integer codeId) throws Exception;
+    String updatePassword(Users user, String password, String code, Integer codeId) throws Exception;
 
-    String updateOrderPassword(Users user, String oldPassword, String password, String code, Integer codeId) throws Exception;
+    String updateOrderPassword(Users user, String password, String code, Integer codeId) throws Exception;
 }

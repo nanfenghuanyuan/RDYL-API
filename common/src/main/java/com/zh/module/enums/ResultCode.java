@@ -6,8 +6,8 @@ public enum ResultCode {
     SUCCESS(10000, "成功"),
 
     /* 参数错误：10001-19999 */
-    PARAM_IS_INVALID(10001, "参数无效"),
-    PARAM_IS_BLANK(10002, "参数为空"),
+    PARAM_IS_INVALID(10001, "输入的数据有误，请重新输入"),
+    PARAM_IS_BLANK(10002, "请把信息填写完整"),
     PARAM_TYPE_BIND_ERROR(10003, "参数类型错误"),
 
     /* 用户错误：20001-29999*/

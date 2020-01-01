@@ -97,7 +97,7 @@ public class AccountController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="transfer",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    @RequestMapping(value="transfer",method=RequestMethod.POST,produces="application/json;charset=utf-8")
     public String transfer(@CurrentUser Users users, @RequestBody String param){
         try {
             JSONObject json = JSONObject.parseObject(param);

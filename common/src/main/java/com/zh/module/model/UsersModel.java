@@ -35,4 +35,9 @@ public class UsersModel {
      * 贡献值
      */
     private Integer contribution;
+
+    /**
+     * 是否設置交易密碼
+     */
+    private boolean orderPasswordStatus;
 }

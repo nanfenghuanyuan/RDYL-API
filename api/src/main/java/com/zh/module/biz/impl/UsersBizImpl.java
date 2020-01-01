@@ -74,13 +74,17 @@ public class UsersBizImpl implements UsersBiz {
         usersModel.setNickName(userForBase.getNickName());
         usersModel.setPhone(userForBase.getPhone());
         usersModel.setState(userForBase.getState().intValue());
+        boolean orderPasswordStatus = StrUtils.isBlank(userForBase.getOrderPwd());
         usersModel.setUuid(userForBase.getUuid());
+        usersModel.setOrderPasswordStatus(!orderPasswordStatus);
         String token = getToken(userForBase);
         jsonObject.put("token", token);
         jsonObject.put("user", usersModel);
         String goldAmount = accountService.selectSumAmountByAccountTypeAndCoinType(user.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS);
+        goldAmount = StrUtils.isBlank(goldAmount) ? "0" : goldAmount;
         jsonObject.put("goldAmount", new BigDecimal(goldAmount).setScale(0, BigDecimal.ROUND_HALF_UP));
         String holdAssets = petsListService.selectSumAmountByUser(user.getId());
+        holdAssets = StrUtils.isBlank(holdAssets) ? "0" : holdAssets;
         jsonObject.put("holdAssets", new BigDecimal(holdAssets).setScale(0, BigDecimal.ROUND_HALF_UP));
         return Result.toResult(ResultCode.SUCCESS, jsonObject);
     }
@@ -232,9 +236,9 @@ public class UsersBizImpl implements UsersBiz {
     }
 
     @Override
-    public String updatePassword(Users user, String oldPassword, String password, String code, Integer codeId) throws Exception {
+    public String updatePassword(Users user, String password, String code, Integer codeId) throws Exception {
         //校验验证码是否正确
-        SmsRecord sms = smsRecordService.getByIdAndPhone(codeId, user.getPhone());
+        /*SmsRecord sms = smsRecordService.getByIdAndPhone(codeId, user.getPhone());
         if(sms == null || !code.equals(sms.getCode())){
             if(validateErrorTimesOfSms(codeId)){
                 return Result.toResult(ResultCode.SMS_CHECK_ERROR);
@@ -247,19 +251,16 @@ public class UsersBizImpl implements UsersBiz {
         int interval = (int) ((System.currentTimeMillis() - sms.getCreatetime().getTime()) / (1000*60));
         if(timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval>=Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)){
             return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
-        }
-        if(!user.getPassword().equals(MD5.getMd5(oldPassword))){
-            Result.toResult(ResultCode.USER_OLD_PASSWORD_ERROR);
-        }
+        }*/
         user.setPassword(MD5.getMd5(password));
         usersService.updateByPrimaryKeySelective(user);
         return Result.toResult(ResultCode.SUCCESS);
     }
 
     @Override
-    public String updateOrderPassword(Users user, String oldPassword, String password, String code, Integer codeId) throws Exception {
+    public String updateOrderPassword(Users user, String password, String code, Integer codeId) throws Exception {
         //校验验证码是否正确
-        SmsRecord sms = smsRecordService.getByIdAndPhone(codeId, user.getPhone());
+        /*SmsRecord sms = smsRecordService.getByIdAndPhone(codeId, user.getPhone());
         if(sms == null || !code.equals(sms.getCode())){
             if(validateErrorTimesOfSms(codeId)){
                 return Result.toResult(ResultCode.SMS_CHECK_ERROR);
@@ -272,10 +273,7 @@ public class UsersBizImpl implements UsersBiz {
         int interval = (int) ((System.currentTimeMillis() - sms.getCreatetime().getTime()) / (1000*60));
         if(timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval>=Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)){
             return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
-        }
-        if(!user.getOrderPwd().equals(MD5.getMd5(oldPassword))){
-            Result.toResult(ResultCode.USER_OLD_PASSWORD_ERROR);
-        }
+        }*/
         user.setOrderPwd(MD5.getMd5(password));
         usersService.updateByPrimaryKeySelective(user);
         return Result.toResult(ResultCode.SUCCESS);
