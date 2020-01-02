@@ -50,7 +50,9 @@ public class PetsMatchingListListBizImpl implements PetsMatchingListBiz {
         param.put("maxResult", pageModel.getMaxResult());
         List<Map<String, Object>> lists = petsMatchingListService.selectListPaging(param);
         List<PetsMatchingListModel> listModels = new LinkedList<>();
-        String time;
+        String appointmentTime;
+        String appStartTime;
+        String appEndTime;
         BigDecimal price;
         for(Map<String, Object> map : lists){
             PetsMatchingListModel petsMatchingListModel = new PetsMatchingListModel();
@@ -60,10 +62,16 @@ public class PetsMatchingListListBizImpl implements PetsMatchingListBiz {
             price = new BigDecimal(map.get("price").toString());
             petsMatchingListModel.setPrice(price);
             petsMatchingListModel.setState((Integer) map.get("state"));
-            time =map.get("start_time").toString();
-            petsMatchingListModel.setTime(time);
-            petsMatchingListModel.setEndTime(map.get("end_time").toString());
-            petsMatchingListModel.setProfited(price.multiply(new BigDecimal(map.get("profit_rate").toString()).setScale(2, BigDecimal.ROUND_HALF_UP)));
+            if(state == GlobalParams.PET_MATCHING_STATE_APPOINTMENTING){
+                appStartTime =map.get("appointment_start_time").toString();
+                petsMatchingListModel.setAppointmentStartTime(appStartTime);
+                appEndTime =map.get("appointment_end_time").toString();
+                petsMatchingListModel.setAppointmentEndTime(appEndTime);
+            }else{
+                appointmentTime =map.get("start_time").toString();
+                petsMatchingListModel.setAppointmentTime(appointmentTime);
+                petsMatchingListModel.setProfited(price.multiply(new BigDecimal(map.get("profit_rate").toString()).setScale(2, BigDecimal.ROUND_HALF_UP)));
+            }
             petsMatchingListModel.setProfit(map.get("profit_days").toString() + "天/" + new BigDecimal(map.get("profit_rate").toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             listModels.add(petsMatchingListModel);
         }

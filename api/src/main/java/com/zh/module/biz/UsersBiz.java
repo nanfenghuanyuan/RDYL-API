@@ -16,4 +16,13 @@ public interface UsersBiz {
     String updatePassword(Users user, String password, String code, Integer codeId) throws Exception;
 
     String updateOrderPassword(Users user, String password, String code, Integer codeId) throws Exception;
+
+    /**
+     * 实名认证获取token
+     * @param user
+     * @return
+     */
+    String getToken(Users user);
+
+    String getStatus(Users user, String taskId);
 }

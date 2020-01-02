@@ -1,7 +1,6 @@
 package com.zh.module.service.impl;
 
 import com.zh.module.dao.UsersMapper;
-import com.zh.module.encrypt.MD5;
 import com.zh.module.entity.Users;
 import com.zh.module.service.UsersService;
 
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-21 20:10:57
+ * @date: 2020-01-02 11:02:00
  **/ 
 @Service("usersService")
 public class UsersServiceImpl implements UsersService {

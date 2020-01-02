@@ -45,14 +45,14 @@ public class PetsBizTests {
         Users users = new Users();
         users.setId(1);
         PageModel pageModel = new PageModel(1, 10);
-        System.out.println(petsMatchingListBiz.list(users, 0, pageModel));
+        System.out.println(petsMatchingListBiz.list(users, 1, pageModel));
     }
     @Test
     public void list() {
         Users users = new Users();
         users.setId(1);
         PageModel pageModel = new PageModel(1, 10);
-        System.out.println(petsListBiz.list(users, 1, pageModel));
+        System.out.println(petsListBiz.list(users, 2, pageModel));
     }
 
     @Test

@@ -26,10 +26,24 @@ public class PetsMatchingListModel {
      */
     private BigDecimal price;
     /**
-     * 时间
+     * 领养时间
      */
-    private String time;
-    private String endTime;
+    private String appointmentTime;
+
+    /**
+     * 领养开始时间
+     */
+    private String appointmentStartTime;
+    /**
+     * 领养结束时间
+     */
+    private String appointmentEndTime;
+
+    /**
+     * 转让时间
+     */
+    private String transferTime;
+
     /**
      * 图片url
      */

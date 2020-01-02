@@ -3,6 +3,9 @@ package com.zh.module.biz.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.zh.module.aliyun.AliyunRPBasicAuthenticate;
+import com.zh.module.aliyun.MaterialModel;
+import com.zh.module.biz.IdCardValidateBiz;
 import com.zh.module.biz.UsersBiz;
 import com.zh.module.constants.AccountType;
 import com.zh.module.constants.CoinType;
@@ -14,20 +17,23 @@ import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.model.UsersModel;
 import com.zh.module.service.*;
-import com.zh.module.utils.RedisUtil;
-import com.zh.module.utils.StrUtils;
-import com.zh.module.utils.UUIDs;
+import com.zh.module.utils.*;
 import com.zh.module.variables.RedisKey;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @program: R.D.Y.LMain
@@ -37,6 +43,7 @@ import java.util.Map;
  **/
 @Component
 @Transactional
+@Slf4j
 public class UsersBizImpl implements UsersBiz {
     @Autowired
     private UsersService usersService;
@@ -48,6 +55,10 @@ public class UsersBizImpl implements UsersBiz {
     private AccountService accountService;
     @Autowired
     private PetsListService petsListService;
+    @Autowired
+    private IdCardValidateBiz idcardValidateBiz;
+    @Resource
+    private AliyunRPBasicAuthenticate aliyunRPBasicAuthenticate;
     @Autowired
     private RedisTemplate<String,String> redis;
     @Override
@@ -78,7 +89,7 @@ public class UsersBizImpl implements UsersBiz {
         boolean orderPasswordStatus = StrUtils.isBlank(userForBase.getOrderPwd());
         usersModel.setUuid(userForBase.getUuid());
         usersModel.setOrderPasswordStatus(!orderPasswordStatus);
-        String token = getToken(userForBase);
+        String token = getTokens(userForBase);
         jsonObject.put("token", token);
         jsonObject.put("user", usersModel);
         String goldAmount = accountService.selectSumAmountByAccountTypeAndCoinType(user.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS);
@@ -171,7 +182,7 @@ public class UsersBizImpl implements UsersBiz {
      * @param user
      * @return
      */
-    private String getToken(Users user) {
+    private String getTokens(Users user) {
         String token = "";
         // 将 user id 保存到 token 里面
         token= JWT.create().withAudience(user.getId().toString())
@@ -278,5 +289,129 @@ public class UsersBizImpl implements UsersBiz {
         user.setOrderPwd(MD5.getMd5(password));
         usersService.updateByPrimaryKeySelective(user);
         return Result.toResult(ResultCode.SUCCESS);
+    }
+    @Override
+    public String getToken(Users user) {
+        /*判断功能是否关闭*/
+        Sysparams systemParam = sysparamsService.getValByKey(SystemParams.REAL_NAME_ONOFF);
+        if(systemParam==null||systemParam.getKeyval().equals("-1")){
+            return Result.toResult(ResultCode.PERMISSION_NO_ACCESS);
+        }
+        if(user.getIdStatus() != GlobalParams.REALNAME_NEW_STATE_NO){
+            return Result.toResult(ResultCode.USER_REALNAME_ERROR);
+        }
+
+        /*判断验证次数*/
+        Map<String, Object> countMap = idcardValidateBiz.queryValidateTimes(user.getId(),3);
+        Sysparams timesLimit = sysparamsService.getValByKey(SystemParams.IDCARD_VALIDATE_TIMES_LIMIT);
+        if(timesLimit==null){
+            return Result.toResult(ResultCode.SYSTEM_PARAM_ERROR);
+        }
+        int times = Integer.parseInt(timesLimit.getKeyval());
+        if(countMap!=null&&times>0){
+            //当日认证次数
+            BigInteger dateCount = (BigInteger)countMap.get(DateUtils.getCurrentDateStr());
+            if(dateCount!=null&&dateCount.intValue()>=times){
+                return Result.toResult(ResultCode.REAL_NAME_LIMIT);
+            }
+
+            //连续两天次数限制
+            BigInteger dateCount1 = (BigInteger)countMap.get(DateUtils.getSomeDay(-1));
+            BigInteger dateCount2 = (BigInteger)countMap.get(DateUtils.getSomeDay(-2));
+            BigInteger dateCount3 = (BigInteger)countMap.get(DateUtils.getSomeDay(-3));
+            if((dateCount1!=null&&dateCount1.intValue()>=times&&dateCount2!=null&&dateCount2.intValue()>=times)
+                    ||(dateCount2!=null&&dateCount2.intValue()>=times&&dateCount3!=null&&dateCount3.intValue()>=times)){
+                return Result.toResult(ResultCode.REAL_NAME_LIMIT);
+            }
+        }
+        String ticketId = UuidUtil.get32UUID();
+        String token = aliyunRPBasicAuthenticate.getVerifyToken(ticketId);
+        if(token == null){
+            return Result.toResult(ResultCode.REAL_NAME_INIT_FAIL);
+        }
+        Map<String, Object>  map = new HashMap<String, Object>();
+        map.put("token", token);
+        map.put("taskId", ticketId);
+
+        return Result.toResult(ResultCode.SUCCESS, map);
+    }
+
+    @Override
+    public String getStatus(Users user, String taskId) {
+        /*用户是否已经实名*/
+        if(user.getIdStatus() != GlobalParams.REALNAME_NEW_STATE_NO){
+            return Result.toResult(ResultCode.USER_REALNAME_ERROR);
+        }
+
+        int status = aliyunRPBasicAuthenticate.getStatus(taskId);
+        //认证记录不存在，直接返回
+        if(status == GlobalParams.REALNAME_STATE_NOT_EXIST){
+            return Result.toResult(ResultCode.REAL_NAME_TASK_NOT_EXIST);
+        }
+        //认证中，等待两秒继续请求一次
+        if(status == GlobalParams.REALNAME_STATE_ING){
+            try {
+                TimeUnit.SECONDS.sleep(2);
+                status = aliyunRPBasicAuthenticate.getStatus(taskId);
+            } catch (InterruptedException e) {
+                log.info("实人认证等待被打断---");
+                e.printStackTrace();
+            }
+        }
+        HashMap<String, Object> map = new HashMap<>();
+
+        IdcardValidate iv = new IdcardValidate();
+        ResultCode code = ResultCode.REAL_NAME_FAIL;
+        if(status == GlobalParams.REALNAME_STATE_SUCCESS || status == GlobalParams.REALNAME_STATE_FAIL){
+            MaterialModel mate = aliyunRPBasicAuthenticate.getMaterials(taskId, status);
+            BeanUtils.copyProperties(mate, iv);
+            iv.setState(status);
+            iv.setName(mate.getName());
+            iv.setAddress(mate.getAddress());
+            iv.setFacepic(mate.getFacePic());
+            iv.setIdcardbackpic(mate.getIdCardBackPic());
+            iv.setIdcardexpiry(mate.getIdCardExpiry());
+            iv.setIdcardfrontpic(mate.getIdCardFrontPic());
+            iv.setSex(mate.getSex());
+            iv.setIdcardtype(mate.getIdCardType());
+            iv.setTaskid(taskId);
+            iv.setUserid(user.getId());
+            iv.setIdentificationnumber(mate.getIdentificationNumber());
+        }
+
+        if(status == GlobalParams.REALNAME_STATE_SUCCESS){
+            Integer oldUserId = idcardValidateBiz.getByUserByIdcard(iv.getIdentificationnumber());
+            if(oldUserId != null && !oldUserId.equals(user.getId())){
+                iv.setState(GlobalParams.REALNAME_STATE_IDCARD_EXIST);
+                code = ResultCode.REAL_NAME_IDCARD_EXIST;
+            }else{
+                user.setIdStatus((byte) GlobalParams.ACTIVE);
+                usersService.updateByPrimaryKeySelective(user);
+                code = ResultCode.SUCCESS;
+                map.put("name", iv.getName());
+            }
+        }
+        idcardValidateBiz.insert(iv);
+
+        if(code == ResultCode.SUCCESS){
+            /*推荐人奖励等级提升*/
+            referLevelAward(user.getReferId());
+        }
+        return Result.toResult(code, map);
+    }
+
+    private void referLevelAward(String uuid) {
+        Users referUser = usersService.selectByUUID(uuid);
+        Map<Object, Object> params = new HashMap<>();
+        params.put("referId", uuid);
+        int count = usersService.selectCount(params);
+        if(count != 0) {
+            if (count == 1) {
+                referUser.setPersonLevel((byte) GlobalParams.PERSON_LEVEL_1);
+            } else if (count > 1) {
+                referUser.setPersonLevel((byte) GlobalParams.PERSON_LEVEL_2);
+            }
+            usersService.updateByPrimaryKeySelective(referUser);
+        }
     }
 }

@@ -14,12 +14,13 @@
     <result column="uuid" jdbcType="VARCHAR" property="uuid" />
     <result column="refer_id" jdbcType="VARCHAR" property="referId" />
     <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="id_status" jdbcType="TINYINT" property="idStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     id, account, phone, password, nick_name, order_pwd, contribution, team_level, person_level, 
-    uuid, refer_id, state, create_time, update_time
+    uuid, refer_id, state, id_status, create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.Users">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -28,13 +29,13 @@
     insert into users (account, phone, password, 
       nick_name, order_pwd, contribution, 
       team_level, person_level, uuid, 
-      refer_id, state, create_time, 
-      update_time)
+      refer_id, state, id_status, 
+      create_time, update_time)
     values (#{account,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{nickName,jdbcType=VARCHAR}, #{orderPwd,jdbcType=VARCHAR}, #{contribution,jdbcType=INTEGER}, 
       #{teamLevel,jdbcType=TINYINT}, #{personLevel,jdbcType=TINYINT}, #{uuid,jdbcType=VARCHAR}, 
-      #{referId,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{referId,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, #{idStatus,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.Users">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -74,6 +75,9 @@
       </if>
       <if test="state != null">
         state,
+      </if>
+      <if test="idStatus != null">
+        id_status,
       </if>
       <if test="createTime != null">
         create_time,
@@ -116,6 +120,9 @@
       <if test="state != null">
         #{state,jdbcType=TINYINT},
       </if>
+      <if test="idStatus != null">
+        #{idStatus,jdbcType=TINYINT},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -137,6 +144,7 @@
       uuid = #{uuid,jdbcType=VARCHAR},
       refer_id = #{referId,jdbcType=VARCHAR},
       state = #{state,jdbcType=TINYINT},
+      id_status = #{idStatus,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
@@ -176,6 +184,9 @@
       </if>
       <if test="state != null">
         state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="idStatus != null">
+        id_status = #{idStatus,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -234,6 +245,9 @@
     <if test="state != null">
        and  state = #{state,jdbcType=TINYINT}
     </if>
+    <if test="idStatus != null">
+       and  id_status = #{idStatus,jdbcType=TINYINT}
+    </if>
     <if test="createTime != null">
        and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
@@ -280,6 +294,9 @@
     <if test="state != null">
        and  state = #{state,jdbcType=TINYINT}
     </if>
+    <if test="idStatus != null">
+       and  id_status = #{idStatus,jdbcType=TINYINT}
+    </if>
     <if test="createTime != null">
        and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
@@ -324,6 +341,9 @@
     </if>
     <if test="state != null">
        and  state = #{state,jdbcType=TINYINT}
+    </if>
+    <if test="idStatus != null">
+       and  id_status = #{idStatus,jdbcType=TINYINT}
     </if>
     <if test="createTime != null">
        and  create_time = #{createTime,jdbcType=TIMESTAMP}

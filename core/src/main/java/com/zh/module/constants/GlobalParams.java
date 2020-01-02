@@ -56,17 +56,11 @@ public class GlobalParams {
     public static final int REALNAME_STATE_IDCARD_EXIST = 4;//身份证号已存在
 
     public static final int REALNAME_NEW_STATE_NO = 0;//未实名
-    public static final int REALNAME_NEW_STATE_ONE = 1;//一级
-    public static final int REALNAME_NEW_STATE_TWO = 2;//二级
-    public static final int REALNAME_NEW_STATE_THREE = 3;//三级
+    public static final int REALNAME_NEW_STATE_TRUE = 1;//已通过
 
     public static final int REALNAME_STATE_FALSE = 0;//失败
     public static final int REALNAME_STATE_SUCCESSS = 1;//成功
     public static final int REALNAME_STATE_WAIT = 2;//待验证
-
-    public static final int C2C_USER_TAKER = 0;//普通角色
-    public static final int C2C_USER_MAKER = 1;//商家角色
-
 
 
     public static final int COMMISSION_TYPE_LOGIN = 0;//登录奖励
@@ -164,7 +158,12 @@ public class GlobalParams {
      */
     public static  final  int PROFIT_RECORD_TEAM = 1;
 
-
+    /**
+     * 个人推荐等级
+     */
+    public static final int PERSON_LEVEL_0 = 0;
+    public static final int PERSON_LEVEL_1 = 1;
+    public static final int PERSON_LEVEL_2 = 2;
 
 
 }
