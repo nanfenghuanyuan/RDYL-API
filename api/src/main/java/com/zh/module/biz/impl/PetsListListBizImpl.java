@@ -129,6 +129,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         petsOrderModel.setProfit(petsList.getProfitDays() + "天/" + new BigDecimal(petsList.getProfitRate().toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         petsOrderModel.setTransTime(DateUtils.getDateFormate(petsList.getCreateTime()));
         petsOrderModel.setPayTime(petsMatchingList.getPayTime());
+        petsOrderModel.setState(petsMatchingList.getState().intValue());
         return Result.toResult(ResultCode.SUCCESS, petsOrderModel);
     }
 
