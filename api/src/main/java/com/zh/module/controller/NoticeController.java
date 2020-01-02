@@ -26,25 +26,21 @@ public class NoticeController {
 
     /**
      * 公告、帮助列表
-     * @param users
-     * @param param type 0弹窗 1公告 2帮助
+     * @param
+     * @param  type 0弹窗 1公告 2帮助
      * @return
      */
     @ResponseBody
     @RequestMapping(value="list",method=RequestMethod.GET,produces="application/json;charset=utf-8")
-    public String list(@RequestBody String param){
+    public String list(Integer rows, Integer page, Integer type){
         try {
-            JSONObject params = JSONObject.parseObject(param);
-            Integer rows = params.getInteger("rows");
-            Integer page = params.getInteger("page");
-            Integer type = params.getInteger("type");
             if(type == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             if(page == null){
                 page = 0;
             }
-            page = page + 1;
+
             PageModel pageModel = new PageModel(page, rows);
             return noticeBiz.list(type, pageModel);
         }catch (Exception e) {

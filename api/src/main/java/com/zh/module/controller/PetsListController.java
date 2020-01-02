@@ -29,12 +29,8 @@ public class PetsListController {
 
     @ResponseBody
     @RequestMapping(value="list",method=RequestMethod.GET,produces="application/json;charset=utf-8")
-    public String init(@CurrentUser Users users, @RequestBody String param){
+    public String init(@CurrentUser Users users, Integer rows, Integer page, Integer state){
         try {
-            JSONObject params = JSONObject.parseObject(param);
-            Integer state = params.getInteger("state");
-            Integer rows = params.getInteger("rows");
-            Integer page = params.getInteger("page");
             //状态 1待转让 2转让中 3已完成
             if(state == null){
                 state = 1;
@@ -42,7 +38,7 @@ public class PetsListController {
             if(page == null){
                 page = 0;
             }
-            page = page + 1;
+
             PageModel pageModel = new PageModel(page, rows);
             return petsListBiz.list(users, state, pageModel);
         }catch (Exception e) {

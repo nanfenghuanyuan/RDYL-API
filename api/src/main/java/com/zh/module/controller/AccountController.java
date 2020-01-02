@@ -48,19 +48,14 @@ public class AccountController {
      */
     @ResponseBody
     @RequestMapping(value="profit",method=RequestMethod.GET,produces="application/json;charset=utf-8")
-    public String personProfit(@CurrentUser Users users, @RequestBody String param){
+    public String personProfit(@CurrentUser Users users, Integer rows, Integer page, Integer type){
         try {
-            JSONObject params = JSONObject.parseObject(param);
-            Integer rows = params.getInteger("rows");
-            Integer page = params.getInteger("page");
-            Integer type = params.getInteger("type");
             if(type == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             if(page == null){
                 page = 0;
             }
-            page = page + 1;
             PageModel pageModel = new PageModel(page, rows);
             return accountBiz.personProfit(users, type, pageModel);
         }catch (Exception e) {
@@ -69,21 +64,17 @@ public class AccountController {
         }
     }
     /**
-     * 个人/动态收益
+     * 预约记录
      * @param users
      * @return
      */
     @ResponseBody
     @RequestMapping(value="appointmentRecord",method=RequestMethod.GET,produces="application/json;charset=utf-8")
-    public String appointmentRecord(@CurrentUser Users users, @RequestBody String param){
+    public String appointmentRecord(@CurrentUser Users users, Integer rows, Integer page, Integer coinType){
         try {
-            JSONObject params = JSONObject.parseObject(param);
-            Integer rows = params.getInteger("rows");
-            Integer page = params.getInteger("page");
             if(page == null){
                 page = 0;
             }
-            page = page + 1;
             PageModel pageModel = new PageModel(page, rows);
             return accountBiz.appointmentRecord(users, pageModel);
         }catch (Exception e) {
@@ -142,19 +133,14 @@ public class AccountController {
      */
     @ResponseBody
     @RequestMapping(value="withdraw/list",method=RequestMethod.GET,produces="application/json;charset=utf-8")
-    public String withdrawList(@CurrentUser Users users, @RequestBody String param){
+    public String withdrawList(@CurrentUser Users users, Integer rows, Integer page, Integer coinType){
         try {
-            JSONObject params = JSONObject.parseObject(param);
-            Integer rows = params.getInteger("rows");
-            Integer page = params.getInteger("page");
-            Integer coinType = params.getInteger("coinType");
             if(coinType == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             if(page == null){
                 page = 0;
             }
-            page = page + 1;
             PageModel pageModel = new PageModel(page, rows);
             return accountBiz.withdrawList(users, coinType, pageModel);
         }catch (Exception e) {
@@ -213,19 +199,14 @@ public class AccountController {
      */
     @ResponseBody
     @RequestMapping(value="recharge/list",method=RequestMethod.GET,produces="application/json;charset=utf-8")
-    public String rechargeList(@CurrentUser Users users, @RequestBody String param){
+    public String rechargeList(@CurrentUser Users users, Integer rows, Integer page, Integer coinType){
         try {
-            JSONObject params = JSONObject.parseObject(param);
-            Integer rows = params.getInteger("rows");
-            Integer page = params.getInteger("page");
-            Integer coinType = params.getInteger("coinType");
             if(coinType == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             if(page == null){
                 page = 0;
             }
-            page = page + 1;
             PageModel pageModel = new PageModel(page, rows);
             return accountBiz.rechargeList(users, coinType, pageModel);
         }catch (Exception e) {
