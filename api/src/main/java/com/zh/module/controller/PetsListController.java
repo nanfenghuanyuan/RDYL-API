@@ -52,16 +52,13 @@ public class PetsListController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="",method=RequestMethod.POST,produces="application/json;charset=utf-8")
-    public String getId(@CurrentUser Users users, @PathVariable Integer id){
+    @RequestMapping(value="/{id}",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String getId(@CurrentUser Users users, @PathVariable("id") Integer id){
         try {
             if(id == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
-            //只有转让中可查看详情
-            if(id != GlobalParams.PET_LIST_STATE_WAITING){
-                return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);
-            }
+
             return petsListBiz.get(users, id);
         } catch (BanlanceNotEnoughException e){
             e.printStackTrace();
