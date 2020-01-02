@@ -116,6 +116,10 @@ public class GlobalParams {
      * 首页宠物状态 成长中
      */
     public static  final  int PET_STATE_5 = 5;
+    /**
+     * 停用
+     */
+    public static  final  int PET_STATE_6 = 6;
 
     /**
      * 宠物匹配状态 已预约

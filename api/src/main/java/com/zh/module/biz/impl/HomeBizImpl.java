@@ -55,7 +55,7 @@ public class HomeBizImpl implements HomeBiz {
             bannersList.add(banners);
         }
         result.put("banner", bannersList);
-        List<Pets> petsList = petsService.selectAll(param);
+        List<Pets> petsList = petsService.selectAll(new HashMap<>());
         Map<Object, Object> map = new HashMap<>();
         List<PetsModel> models = new LinkedList<>();
         String today = DateUtils.getCurrentTimeStr();
@@ -72,6 +72,9 @@ public class HomeBizImpl implements HomeBiz {
             String endTime = pets.getEndTime();
             startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
             endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
+            if(pets.getState() == GlobalParams.INACTIVE){
+                petsModel.setState(GlobalParams.PET_STATE_6);
+            }else
             //抢购前10分钟把状态设为可预约状态
             if(DateUtils.minBetween(startTime) > -10 && DateUtils.minBetween(endTime) < 0){
                 //查看用户是否预约
