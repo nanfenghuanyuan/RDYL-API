@@ -74,6 +74,7 @@ public class UsersBizImpl implements UsersBiz {
         usersModel.setNickName(userForBase.getNickName());
         usersModel.setPhone(userForBase.getPhone());
         usersModel.setState(userForBase.getState().intValue());
+        usersModel.setTeamLevel(userForBase.getTeamLevel().intValue());
         boolean orderPasswordStatus = StrUtils.isBlank(userForBase.getOrderPwd());
         usersModel.setUuid(userForBase.getUuid());
         usersModel.setOrderPasswordStatus(!orderPasswordStatus);

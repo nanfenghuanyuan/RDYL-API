@@ -40,4 +40,8 @@ public class UsersModel {
      * 是否設置交易密碼
      */
     private boolean orderPasswordStatus;
+    /**
+     * 团队等级
+     */
+    private Integer teamLevel;
 }
