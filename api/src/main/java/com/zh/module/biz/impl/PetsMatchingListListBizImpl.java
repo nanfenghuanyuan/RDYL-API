@@ -60,9 +60,9 @@ public class PetsMatchingListListBizImpl implements PetsMatchingListBiz {
             price = new BigDecimal(map.get("price").toString());
             petsMatchingListModel.setPrice(price);
             petsMatchingListModel.setState((Integer) map.get("state"));
-            time = DateUtils.getDateFormate((Date) map.get("start_time"));
+            time =map.get("start_time").toString();
             petsMatchingListModel.setTime(time);
-            petsMatchingListModel.setEndTime(DateUtils.getDateFormate((Date) map.get("end_time")));
+            petsMatchingListModel.setEndTime(map.get("end_time").toString());
             petsMatchingListModel.setProfited(price.multiply(new BigDecimal(map.get("profit_rate").toString()).setScale(2, BigDecimal.ROUND_HALF_UP)));
             petsMatchingListModel.setProfit(map.get("profit_days").toString() + "天/" + new BigDecimal(map.get("profit_rate").toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             listModels.add(petsMatchingListModel);
