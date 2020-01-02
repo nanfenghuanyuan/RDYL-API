@@ -50,4 +50,13 @@ public class PetsOrderModel {
     private String saleName;
 
     private List<PayInfoModel> payInfoModels;
+
+    /**
+     * 按钮类型 0我已付款 1确认收款 2等待对方确认
+     */
+    private Integer btnType;
+    /**
+     * 取消按钮
+     */
+    private boolean cancelBtn;
 }

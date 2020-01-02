@@ -165,5 +165,12 @@ public class GlobalParams {
     public static final int PERSON_LEVEL_1 = 1;
     public static final int PERSON_LEVEL_2 = 2;
 
+    /**
+     * 订单按钮
+     */
+    public static final int ORDER_BTN_TYPE_NOPAY = 0;
+    public static final int ORDER_BTN_TYPE_CONFIRM = 1;
+    public static final int ORDER_BTN_TYPE_WAIT_CONFIRM = 2;
+
 
 }

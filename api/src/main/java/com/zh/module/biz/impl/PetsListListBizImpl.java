@@ -98,6 +98,10 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
 
         List<BindInfo> bindInfos = new ArrayList<>();
         List<PayInfoModel> payInfoModels = new ArrayList<>();
+        //1未付款 2未确认
+        int state = petsMatchingList.getState().intValue();
+        int btnType;
+        boolean cancelBtn = false;
         if(isBuyer) {
             Users saleUser = usersService.selectByPrimaryKey(petsMatchingList.getSaleUserId());
             petsOrderModel.setBuyName(users.getNickName());
@@ -105,6 +109,12 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             petsOrderModel.setSaleName(saleUser.getNickName());
             petsOrderModel.setSalePhone(saleUser.getPhone());
             bindInfos = bindInfoService.queryByUser(petsMatchingList.getSaleUserId());
+            if(state == 1){
+                btnType = GlobalParams.ORDER_BTN_TYPE_NOPAY;
+            }else{
+                btnType = GlobalParams.ORDER_BTN_TYPE_WAIT_CONFIRM;
+            }
+            cancelBtn = true;
         }else{
             Users saleUser = usersService.selectByPrimaryKey(petsMatchingList.getBuyUserId());
             petsOrderModel.setBuyName(saleUser.getNickName());
@@ -112,6 +122,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             petsOrderModel.setSaleName(users.getNickName());
             petsOrderModel.setSalePhone(users.getPhone());
             bindInfos = bindInfoService.queryByUser(users.getId());
+            btnType = GlobalParams.ORDER_BTN_TYPE_CONFIRM;
         }
         for(BindInfo bindInfo : bindInfos){
             PayInfoModel payInfoModel = new PayInfoModel();
@@ -123,13 +134,15 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             payInfoModel.setBranchName(bindInfo.getBranchName());
             payInfoModels.add(payInfoModel);
         }
+        petsOrderModel.setBtnType(btnType);
+        petsOrderModel.setCancelBtn(cancelBtn);
         petsOrderModel.setPayInfoModels(payInfoModels);
         petsOrderModel.setName(pets.getName());
         petsOrderModel.setPrice(petsList.getPrice());
         petsOrderModel.setProfit(petsList.getProfitDays() + "天/" + new BigDecimal(petsList.getProfitRate().toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         petsOrderModel.setTransTime(DateUtils.getDateFormate(petsList.getCreateTime()));
         petsOrderModel.setPayTime(petsMatchingList.getPayTime());
-        petsOrderModel.setState(petsMatchingList.getState().intValue());
+        petsOrderModel.setState(state);
         return Result.toResult(ResultCode.SUCCESS, petsOrderModel);
     }
 
