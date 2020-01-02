@@ -87,10 +87,6 @@ public class PetsListController {
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
 
-            /*正则校验*/
-            if(!ValidateUtils.isTradePwd(password)){
-                return Result.toResult(ResultCode.PARAM_IS_INVALID);
-            }
             return petsListBiz.confirmPay(users, id, password);
         } catch (BanlanceNotEnoughException e){
             e.printStackTrace();
@@ -119,10 +115,6 @@ public class PetsListController {
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
 
-            /*正则校验*/
-            if(!ValidateUtils.isTradePwd(password)){
-                return Result.toResult(ResultCode.PARAM_IS_INVALID);
-            }
             return petsListBiz.confirmReceipt(users, id, password);
         } catch (BanlanceNotEnoughException e){
             e.printStackTrace();
