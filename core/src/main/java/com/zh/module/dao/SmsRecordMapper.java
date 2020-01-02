@@ -22,4 +22,6 @@ public interface SmsRecordMapper {
     List<SmsRecord> selectPaging(Map<Object, Object> param);
 
     int selectCount(Map<Object, Object> param);
+
+    List<SmsRecord> queryListByTimeLimit(Map map);
 }

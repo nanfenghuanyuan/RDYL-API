@@ -207,4 +207,12 @@
        and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
     </if>
   </select>
+  <select id="queryListByTimeLimit"  resultMap="BaseResultMap" parameterType="java.util.Map">
+    select
+    <include refid="Base_Column_List" />
+    FROM sms_record WHERE createTime &gt; DATE_SUB(NOW(),INTERVAL 1 MINUTE)
+    <if test="phone != null">
+      and  phone = #{phone,jdbcType=CHAR}
+    </if>
+  </select>
 </mapper>

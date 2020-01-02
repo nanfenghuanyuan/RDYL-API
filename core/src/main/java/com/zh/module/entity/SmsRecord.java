@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class SmsRecord implements Serializable {
-    private static final long serialVersionUID = -7453047232268893597L;
+    private static final long serialVersionUID = -9015890016641896058L;
 
     private Integer id;
 
