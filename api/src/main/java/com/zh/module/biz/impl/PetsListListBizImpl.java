@@ -177,7 +177,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
 
         /*设置失效时间*/
         int interval = 10;
-        Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_PAY_CANCEL_TIME);
+        Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_CONFIRM_CANCEL_TIME);
         if(param1 != null){
             interval = Integer.parseInt(param1.getKeyval());
         }

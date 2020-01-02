@@ -25,6 +25,8 @@ public class SystemParams {
 
 	//未付款自动取消时间 （分钟）
 	public static final String PETS_MATCHING_NO_PAY_CANCEL_TIME = "PETS_MATCHING_NO_PAY_CANCEL_TIME";
+	//未确认自动确认时间 （分钟）
+	public static final String PETS_MATCHING_NO_CONFIRM_CANCEL_TIME = "PETS_MATCHING_NO_CONFIRM_CANCEL_TIME";
 
 
 	

@@ -5,16 +5,14 @@ import com.zh.module.biz.PetsBiz;
 import com.zh.module.constants.AccountType;
 import com.zh.module.constants.CoinType;
 import com.zh.module.constants.GlobalParams;
+import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.exception.BanlanceNotEnoughException;
 import com.zh.module.model.PetsModel;
 import com.zh.module.service.*;
-import com.zh.module.utils.BigDecimalUtils;
-import com.zh.module.utils.DateUtils;
-import com.zh.module.utils.RedisUtil;
-import com.zh.module.utils.StrUtils;
+import com.zh.module.utils.*;
 import com.zh.module.variables.RedisKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,10 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * @program: R.D.Y.LMain
@@ -44,6 +40,8 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     private PetsListService petsListService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private SysparamsService sysparamsService;
     @Autowired
     private RedisTemplate<String,String> redis;
 
@@ -74,6 +72,17 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         petsMatchingList.setPetListId((byte) GlobalParams.DEFAULT_PETS_ID);
         petsMatchingList.setSaleUserId(GlobalParams.DEFAULT_PETS_ID);
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
+        petsMatchingList.setAppointmentStartTime(DateUtils.getCurrentTimeStr());
+        /*设置失效时间*/
+        int interval = 10;
+        Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_PAY_CANCEL_TIME);
+        if(param1 != null){
+            interval = Integer.parseInt(param1.getKeyval());
+        }
+        Calendar current = Calendar.getInstance();
+        current.add(Calendar.MINUTE, interval);
+        petsMatchingList.setAppointmentEndTime(DateUtils.getDateFormate(new Timestamp(current.getTimeInMillis())));
+        petsMatchingList.setInactiveTime(new Timestamp(current.getTimeInMillis()));
         petsMatchingListService.insertSelective(petsMatchingList);
         //修改账户信息
         accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), BigDecimal.ZERO, userId, "预约消耗", petsMatchingList.getId());
