@@ -6,6 +6,7 @@ import com.zh.module.constants.*;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
+import com.zh.module.enums.RewardType;
 import com.zh.module.exception.BanlanceNotEnoughException;
 import com.zh.module.model.PageModel;
 import com.zh.module.model.PayInfoModel;
@@ -48,6 +49,10 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     private BindInfoService bindInfoService;
     @Autowired
     private FlowService flowService;
+    @Autowired
+    private TeamRecordService teamRecordService;
+    @Autowired
+    private TeamAwardRecordService teamAwardRecordService;
     @Autowired
     private RedisTemplate<String,String> redis;
 
@@ -239,27 +244,71 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         /*短信通知买家*/
         Integer buyUserId = petsMatchingList.getBuyUserId();
         Users buyUser = usersService.selectByPrimaryKey(buyUserId);
-        if(buyUser!=null){
+        if(buyUser != null){
             FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
             feigeSmsUtils.sendTemplatesSms(buyUser.getPhone(), SmsTemplateCode.SMS_C2C_CONFIRM_NOTICE, "");
             //增加用户贡献值
             buyUser.setContribution(buyUser.getContribution() + 1);
             usersService.updateByPrimaryKeySelective(buyUser);
+            //团队奖励
+            String profit = sysparamsService.getValStringByKey(SystemParams.PERSON_AWARD_ONE);
+            int cursor = 1;
+            referLevelAward(buyUser, petsList.getPrice(), new BigDecimal(profit), cursor);
         }
         return Result.toResult(ResultCode.SUCCESS);
     }
-    private void referLevelAward(Users buyUser) {
-        Map<Object, Object> params = new HashMap<>();
-        params.put("referId", buyUser.getUuid());
-        int count = usersService.selectCount(params);
-        if(count != 0) {
-            if (count == 1) {
-                buyUser.setPersonLevel((byte) GlobalParams.PERSON_LEVEL_1);
-            } else if (count > 1) {
-                buyUser.setPersonLevel((byte) GlobalParams.PERSON_LEVEL_2);
-            }
-            usersService.updateByPrimaryKeySelective(buyUser);
+
+    /**
+     * 推荐奖励
+     * @param users
+     * @param amount 订单价格
+     * @param rate
+     * @param cursor
+     */
+    private void referLevelAward(Users users, BigDecimal amount, BigDecimal rate, Integer cursor) {
+        if(users == null){
+            return;
         }
+        //奖励金额
+        BigDecimal newAmount = amount.multiply(rate);
+
+        TeamRecord teamRecord = new TeamRecord();
+        teamRecord.setAmount(newAmount);
+        teamRecord.setType(cursor.byteValue());
+        teamRecord.setReferId(Integer.valueOf(users.getReferId()));
+        teamRecord.setUserId(users.getId());
+        teamRecordService.insertSelective(teamRecord);
+
+        //团队奖励记录累计金额
+        if(cursor > 2) {
+            teamReward(users.getId(), newAmount);
+        }
+
+        users = usersService.selectByUUID(users.getReferId());
+        if(cursor > 5){
+            cursor = 5;
+        }else{
+            cursor ++;
+        }
+        String price = sysparamsService.getValStringByKey(RewardType.getMessage(cursor));
+        referLevelAward(users, amount, new BigDecimal(price), cursor);
+    }
+
+    /**
+     * 团队奖励记录累计金额
+     * @param userId 用户id
+     * @param amount 奖励金额
+     */
+    private void teamReward(Integer userId, BigDecimal amount){
+        TeamAwardRecord teamAwardRecord = teamAwardRecordService.selectByUserId(userId);
+        if(teamAwardRecord == null){
+            teamAwardRecord = new TeamAwardRecord();
+            teamAwardRecord.setUserId(userId);
+            teamAwardRecord.setAmount(amount);
+        }else{
+            teamAwardRecord.setAmount(teamAwardRecord.getAmount().add(amount));
+        }
+        teamAwardRecordService.updateOrInsert(teamAwardRecord);
     }
 
     /**

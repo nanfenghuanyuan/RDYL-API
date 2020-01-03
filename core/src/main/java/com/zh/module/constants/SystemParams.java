@@ -60,4 +60,13 @@ public class SystemParams {
     //上下级转账是否开启
     public static final String TRANSFER_ROLE="TRANSFER_ROLE";
 
+    //个人直推收益
+    public static final String PERSON_AWARD_ONE="PERSON_AWARD_ONE";
+    public static final String PERSON_AWARD_TWO="PERSON_AWARD_TWO";
+
+    //团队收益
+    public static final String TEAM_AWARD_ONE="TEAM_AWARD_ONE";
+    public static final String TEAM_AWARD_TWO="PERSON_AWARD_TWO";
+    public static final String TEAM_AWARD_THREE="TEAM_AWARD_THREE";
+
 }
