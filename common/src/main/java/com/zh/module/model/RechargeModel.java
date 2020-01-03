@@ -17,9 +17,9 @@ public class RechargeModel {
      */
     private BigDecimal amount;
     /**
-     * 状态
+     * 状态 0未处理 1成功 2失败
      */
-    private Integer state;
+    private String state;
     /**
      * 币种
      */
@@ -28,4 +28,13 @@ public class RechargeModel {
      * 时间
      */
     private String time;
+
+    public String getStates(Integer state){
+        switch (state){
+            case 0 : return "未处理";
+            case 1 : return "成功";
+            case 2 : return "驳回";
+            default: return "系统异常";
+        }
+    }
 }

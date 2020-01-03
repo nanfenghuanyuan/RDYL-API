@@ -46,8 +46,9 @@ public class AccountBizTests {
     public void recharge() {
         Users users = new Users();
         users.setId(1);
+        users.setOrderPwd("e10adc3949ba59abbe56e057f20f883e");
         PageModel pageModel = new PageModel(1, 10);
-        System.out.println(accountBiz.recharge(users, 1, "10", "521313","940916"));
+        System.out.println(accountBiz.recharge(users, 1, "10", "521313","123456"));
     }
     @Test
     public void withdrawList() {

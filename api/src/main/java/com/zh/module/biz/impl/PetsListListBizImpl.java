@@ -248,6 +248,19 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         }
         return Result.toResult(ResultCode.SUCCESS);
     }
+    private void referLevelAward(Users buyUser) {
+        Map<Object, Object> params = new HashMap<>();
+        params.put("referId", buyUser.getUuid());
+        int count = usersService.selectCount(params);
+        if(count != 0) {
+            if (count == 1) {
+                buyUser.setPersonLevel((byte) GlobalParams.PERSON_LEVEL_1);
+            } else if (count > 1) {
+                buyUser.setPersonLevel((byte) GlobalParams.PERSON_LEVEL_2);
+            }
+            usersService.updateByPrimaryKeySelective(buyUser);
+        }
+    }
 
     /**
      * 将订单加入到超时队列中， （名称list保存订单队列的key集合，订单队列保存订单集合）

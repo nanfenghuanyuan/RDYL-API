@@ -392,26 +392,7 @@ public class UsersBizImpl implements UsersBiz {
             }
         }
         idcardValidateBiz.insert(iv);
-
-        if(code == ResultCode.SUCCESS){
-            /*推荐人奖励等级提升*/
-            referLevelAward(user.getReferId());
-        }
         return Result.toResult(code, map);
     }
 
-    private void referLevelAward(String uuid) {
-        Users referUser = usersService.selectByUUID(uuid);
-        Map<Object, Object> params = new HashMap<>();
-        params.put("referId", uuid);
-        int count = usersService.selectCount(params);
-        if(count != 0) {
-            if (count == 1) {
-                referUser.setPersonLevel((byte) GlobalParams.PERSON_LEVEL_1);
-            } else if (count > 1) {
-                referUser.setPersonLevel((byte) GlobalParams.PERSON_LEVEL_2);
-            }
-            usersService.updateByPrimaryKeySelective(referUser);
-        }
-    }
 }

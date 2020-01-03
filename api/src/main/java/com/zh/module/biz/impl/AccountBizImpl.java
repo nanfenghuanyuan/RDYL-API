@@ -213,7 +213,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         for(Withdraw withdraw : withdraws){
             WithdrawModel withdrawModel = new WithdrawModel();
             withdrawModel.setAmount(withdraw.getAmount());
-            withdrawModel.setState(withdraw.getState().intValue());
+            withdrawModel.setState(WithdrawModel.getStates(withdraw.getState().intValue()));
             withdrawModel.setTime(DateUtils.getDateFormate(withdraw.getCreateTime()));
             list.add(withdrawModel);
         }
@@ -252,7 +252,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         for(Recharge recharge : recharges){
             RechargeModel rechargeModel = new RechargeModel();
             rechargeModel.setAmount(recharge.getAmount());
-            rechargeModel.setState(recharge.getState().intValue());
+            rechargeModel.setState(rechargeModel.getStates(recharge.getState().intValue()));
             rechargeModel.setCoinType(recharge.getCoinType().intValue());
             rechargeModel.setTime(DateUtils.getDateFormate(recharge.getCreateTime()));
             list.add(rechargeModel);
