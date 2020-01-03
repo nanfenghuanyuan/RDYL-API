@@ -53,8 +53,8 @@ public class NoticeController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="",method=RequestMethod.GET,produces="application/json;charset=utf-8")
-    public String list(@PathVariable Integer id){
+    @RequestMapping(value="{id}",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String list(@PathVariable("id") Integer id){
         try {
 
             return noticeBiz.get(id);
