@@ -342,7 +342,7 @@ public class UsersBizImpl implements UsersBiz {
 
         JSONObject jsonObject = h5RpBasic.getStatus(taskId);
         System.out.println(jsonObject.toJSONString());
-        int status = 0;
+        int status = -1;
         //认证记录不存在，直接返回
         if(status == GlobalParams.REALNAME_STATE_NOT_EXIST){
             return Result.toResult(ResultCode.REAL_NAME_TASK_NOT_EXIST);
