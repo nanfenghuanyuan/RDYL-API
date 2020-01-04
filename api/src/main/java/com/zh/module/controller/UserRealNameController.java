@@ -33,10 +33,10 @@ public class UserRealNameController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="init",method=RequestMethod.GET,produces="application/json;charset=utf-8")
-	public String initRealName(@CurrentUser Users user ){
+	public String initRealName(@CurrentUser Users user, String name, String idCard){
 		try {
 
-			return userBiz.getToken(user);
+			return userBiz.getToken(user, name, idCard);
 		}catch (NumberFormatException e) {
 			e.printStackTrace();
 			return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);

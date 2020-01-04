@@ -3,7 +3,7 @@ package com.zh.module.biz.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.zh.module.aliyun.AliyunRPBasicAuthenticate;
+import com.zh.module.aliyun.H5RpBasic;
 import com.zh.module.aliyun.MaterialModel;
 import com.zh.module.biz.IdCardValidateBiz;
 import com.zh.module.biz.UsersBiz;
@@ -50,6 +50,8 @@ public class UsersBizImpl implements UsersBiz {
     @Autowired
     private SysparamsService sysparamsService;
     @Autowired
+    private H5RpBasic h5RpBasic;
+    @Autowired
     private SmsRecordService smsRecordService;
     @Autowired
     private AccountService accountService;
@@ -58,8 +60,6 @@ public class UsersBizImpl implements UsersBiz {
     @Autowired
     private IdCardValidateBiz idcardValidateBiz;
     @Resource
-    private AliyunRPBasicAuthenticate aliyunRPBasicAuthenticate;
-    @Autowired
     private RedisTemplate<String,String> redis;
     @Override
     public String login(Users user) throws Exception {
@@ -291,7 +291,7 @@ public class UsersBizImpl implements UsersBiz {
         return Result.toResult(ResultCode.SUCCESS);
     }
     @Override
-    public String getToken(Users user) {
+    public String getToken(Users user, String name, String idCard) {
         /*判断功能是否关闭*/
         Sysparams systemParam = sysparamsService.getValByKey(SystemParams.REAL_NAME_ONOFF);
         if(systemParam==null||systemParam.getKeyval().equals("-1")){
@@ -324,14 +324,11 @@ public class UsersBizImpl implements UsersBiz {
                 return Result.toResult(ResultCode.REAL_NAME_LIMIT);
             }
         }
-        String ticketId = UuidUtil.get32UUID();
-        String token = aliyunRPBasicAuthenticate.getVerifyToken(ticketId);
-        if(token == null){
-            return Result.toResult(ResultCode.REAL_NAME_INIT_FAIL);
-        }
+        JSONObject jsonObject = h5RpBasic.init(name, idCard);
         Map<String, Object>  map = new HashMap<String, Object>();
-        map.put("token", token);
-        map.put("taskId", ticketId);
+        map.put("token", jsonObject.getString("token"));
+        map.put("taskId", jsonObject.getString("ticketId"));
+        map.put("url", jsonObject.getString("url"));
 
         return Result.toResult(ResultCode.SUCCESS, map);
     }
@@ -343,7 +340,9 @@ public class UsersBizImpl implements UsersBiz {
             return Result.toResult(ResultCode.USER_REALNAME_ERROR);
         }
 
-        int status = aliyunRPBasicAuthenticate.getStatus(taskId);
+        JSONObject jsonObject = h5RpBasic.getStatus(taskId);
+        System.out.println(jsonObject.toJSONString());
+        int status = 0;
         //认证记录不存在，直接返回
         if(status == GlobalParams.REALNAME_STATE_NOT_EXIST){
             return Result.toResult(ResultCode.REAL_NAME_TASK_NOT_EXIST);
@@ -352,7 +351,7 @@ public class UsersBizImpl implements UsersBiz {
         if(status == GlobalParams.REALNAME_STATE_ING){
             try {
                 TimeUnit.SECONDS.sleep(2);
-                status = aliyunRPBasicAuthenticate.getStatus(taskId);
+                status = 0;
             } catch (InterruptedException e) {
                 log.info("实人认证等待被打断---");
                 e.printStackTrace();
@@ -363,7 +362,7 @@ public class UsersBizImpl implements UsersBiz {
         IdcardValidate iv = new IdcardValidate();
         ResultCode code = ResultCode.REAL_NAME_FAIL;
         if(status == GlobalParams.REALNAME_STATE_SUCCESS || status == GlobalParams.REALNAME_STATE_FAIL){
-            MaterialModel mate = aliyunRPBasicAuthenticate.getMaterials(taskId, status);
+            MaterialModel mate = new MaterialModel();
             BeanUtils.copyProperties(mate, iv);
             iv.setState(status);
             iv.setName(mate.getName());
