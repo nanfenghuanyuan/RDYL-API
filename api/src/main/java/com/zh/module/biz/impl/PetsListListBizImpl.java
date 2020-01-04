@@ -280,12 +280,12 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         teamRecordService.insertSelective(teamRecord);
 
         //团队奖励记录累计金额
-        if(cursor > 2) {
+        if(cursor > RewardType.PERSON_AWARD_TWO.code()) {
             teamReward(users.getId(), newAmount);
         }
 
         users = usersService.selectByUUID(users.getReferId());
-        if(cursor > 5){
+        if(cursor > RewardType.TEAM_AWARD_THREE.code()){
             cursor = 5;
         }else{
             cursor ++;
