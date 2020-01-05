@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2020-01-02 11:02:00
+ * @date: 2020-01-05 22:31:57
  **/ 
 @Service("usersService")
 public class UsersServiceImpl implements UsersService {
@@ -68,6 +68,7 @@ public class UsersServiceImpl implements UsersService {
     public int selectCount(Map<Object, Object> param) {
         return this.usersMapper.selectCount(param);
     }
+
     @Override
     public Users selectByUUID(String uuid) {
         Map<Object, Object> map = new HashMap();

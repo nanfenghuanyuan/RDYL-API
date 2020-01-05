@@ -1,14 +1,13 @@
 package com.zh.module.biz.impl;
 
 import com.zh.module.biz.TeamBiz;
+import com.zh.module.constants.GlobalParams;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
+import com.zh.module.model.PageModel;
 import com.zh.module.model.TeamListModel;
-import com.zh.module.service.BannerService;
-import com.zh.module.service.PetsListService;
-import com.zh.module.service.PetsMatchingListService;
-import com.zh.module.service.PetsService;
+import com.zh.module.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -30,33 +29,61 @@ import java.util.Map;
 @Transactional
 public class TeamBizImpl implements TeamBiz {
     @Autowired
-    private PetsMatchingListService petsMatchingListService;
+    private UsersService usersService;
     @Autowired
-    private PetsService petsService;
-    @Autowired
-    private PetsListService petsListService;
-    @Autowired
-    private BannerService bannerService;
+    private ProfitRecordService profitRecordService;
     @Autowired
     private RedisTemplate<String,String> redis;
 
 
     @Override
-    public String init(Users users, Integer type) {
+    public String init(Users users, Integer type, PageModel pageModel) {
         Map<String, Object> result = new HashMap<>();
-        result.put("personAmount", 10);
-        result.put("effectiveAmount", 9);
-        result.put("profit", 200);
+        Map<Object, Object> param = new HashMap<>();
+        param.put("referId", users.getUuid());
+        //直推人数
+        int personAmount = usersService.selectCount(param);
+        result.put("personAmount", personAmount);
+        //有效人数
+        param.put("effective", GlobalParams.ACTIVE);
+        personAmount = usersService.selectCount(param);
+        result.put("effectiveAmount", personAmount);
+        String profit = profitRecordService.selectSumAmount(users.getId(), GlobalParams.PROFIT_RECORD_TEAM);
+        result.put("profit", profit);
         List<TeamListModel> models = new LinkedList<>();
-        TeamListModel teamListModel = new TeamListModel();
-        teamListModel.setAmount(new BigDecimal(20));
-        teamListModel.setIdStatus(1);
-        teamListModel.setPhone("133****3333");
-        teamListModel.setLevel(2);
-        models.add(teamListModel);
-        models.add(teamListModel);
-        models.add(teamListModel);
-        models.add(teamListModel);
+        param = new HashMap<>();
+        param.put("referId", users.getUuid());
+        param.put("firstResult", pageModel.getFirstResult());
+        param.put("maxResult", pageModel.getMaxResult());
+        List<Users> usersList = usersService.selectPaging(param);
+        if(type == 1){
+            for(Users user : usersList){
+                TeamListModel teamListModel = new TeamListModel();
+                teamListModel.setPhone(user.getPhone());
+                teamListModel.setIdStatus(user.getIdStatus().intValue());
+                teamListModel.setLevel(user.getTeamLevel().intValue());
+                profit = profitRecordService.selectSumAmount(user.getId(), GlobalParams.PROFIT_RECORD_TEAM);
+                teamListModel.setAmount(profit);
+                models.add(teamListModel);
+            }
+        }else if(type == 2){
+            for(Users user : usersList){
+                param = new HashMap<>();
+                param.put("referId", user.getUuid());
+                List<Users> referUserList = usersService.selectAll(param);
+                for(Users referUser : referUserList) {
+                    TeamListModel teamListModel = new TeamListModel();
+                    teamListModel.setPhone(referUser.getPhone());
+                    teamListModel.setIdStatus(referUser.getIdStatus().intValue());
+                    teamListModel.setLevel(referUser.getTeamLevel().intValue());
+                    profit = profitRecordService.selectSumAmount(referUser.getId(), GlobalParams.PROFIT_RECORD_TEAM);
+                    teamListModel.setAmount(profit);
+                    models.add(teamListModel);
+                }
+            }
+        }else{
+            return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);
+        }
         result.put("list", models);
         return Result.toResult(ResultCode.SUCCESS, result);
     }

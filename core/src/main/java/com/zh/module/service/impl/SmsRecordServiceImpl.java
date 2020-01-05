@@ -3,6 +3,8 @@ package com.zh.module.service.impl;
 import com.zh.module.dao.SmsRecordMapper;
 import com.zh.module.entity.SmsRecord;
 import com.zh.module.service.SmsRecordService;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -70,5 +72,14 @@ public class SmsRecordServiceImpl implements SmsRecordService {
     @Override
     public List<SmsRecord> queryListByTimeLimit(Map map) {
         return this.smsRecordMapper.queryListByTimeLimit(map);
+    }
+
+    @Override
+    public SmsRecord getByIdAndPhone(Integer codeId, String phone) {
+        Map<Object, Object> params = new HashMap<>();
+        params.put("id", codeId);
+        params.put("phone", phone);
+        List<SmsRecord> list = selectAll(params);
+        return list == null || list.isEmpty() ? null:list.get(0);
     }
 }

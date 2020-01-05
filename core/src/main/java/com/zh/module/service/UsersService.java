@@ -7,14 +7,14 @@ import java.util.Map;
 /**
  * 
  * @author: autogeneration
- * @date: 2020-01-02 11:02:00
+ * @date: 2020-01-05 22:31:57
  **/ 
 public interface UsersService {
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2020-01-02 11:02:00
+     * @date: 2020-01-05 22:31:57
      **/ 
     int insert(Users record);
 
@@ -22,7 +22,7 @@ public interface UsersService {
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2020-01-02 11:02:00
+     * @date: 2020-01-05 22:31:57
      **/ 
     int insertSelective(Users record);
 
@@ -30,7 +30,7 @@ public interface UsersService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2020-01-02 11:02:00
+     * @date: 2020-01-05 22:31:57
      **/ 
     int updateByPrimaryKey(Users record);
 
@@ -38,7 +38,7 @@ public interface UsersService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2020-01-02 11:02:00
+     * @date: 2020-01-05 22:31:57
      **/ 
     int updateByPrimaryKeySelective(Users record);
 
@@ -46,7 +46,7 @@ public interface UsersService {
      * 删除
      * 
      * @author: autogeneration
-     * @date: 2020-01-02 11:02:00
+     * @date: 2020-01-05 22:31:57
      **/ 
     int deleteByPrimaryKey(Integer id);
 
@@ -54,7 +54,7 @@ public interface UsersService {
      * 按主键查询
      * 
      * @author: autogeneration
-     * @date: 2020-01-02 11:02:00
+     * @date: 2020-01-05 22:31:57
      **/ 
     Users selectByPrimaryKey(Integer id);
 
@@ -62,7 +62,7 @@ public interface UsersService {
      * 条件查询
      * 
      * @author: autogeneration
-     * @date: 2020-01-02 11:02:00
+     * @date: 2020-01-05 22:31:57
      **/ 
     List<Users> selectAll(Map<Object, Object> param);
 
@@ -70,7 +70,7 @@ public interface UsersService {
      * 分页查询
      * 
      * @author: autogeneration
-     * @date: 2020-01-02 11:02:00
+     * @date: 2020-01-05 22:31:57
      **/ 
     List<Users> selectPaging(Map<Object, Object> param);
 
@@ -78,10 +78,11 @@ public interface UsersService {
      * 统计查询
      * 
      * @author: autogeneration
-     * @date: 2020-01-02 11:02:00
+     * @date: 2020-01-05 22:31:57
      **/ 
     int selectCount(Map<Object, Object> param);
+
     Users selectByPhone(String phone);
 
-    Users selectByUUID(String uuid);
+    Users selectByUUID(String toString);
 }

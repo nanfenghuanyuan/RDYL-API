@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Users implements Serializable {
-    private static final long serialVersionUID = -1174544025270626886L;
+    private static final long serialVersionUID = -2094706037865333813L;
 
     private Integer id;
 
@@ -31,6 +31,8 @@ public class Users implements Serializable {
     private Byte state;
 
     private Byte idStatus;
+
+    private Byte effective;
 
     private Date createTime;
 
@@ -140,6 +142,14 @@ public class Users implements Serializable {
         this.idStatus = idStatus;
     }
 
+    public Byte getEffective() {
+        return effective;
+    }
+
+    public void setEffective(Byte effective) {
+        this.effective = effective;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -176,6 +186,7 @@ public class Users implements Serializable {
         sb.append(", referId=").append(referId);
         sb.append(", state=").append(state);
         sb.append(", idStatus=").append(idStatus);
+        sb.append(", effective=").append(effective);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append("]");

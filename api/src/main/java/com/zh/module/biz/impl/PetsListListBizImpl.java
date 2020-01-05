@@ -249,6 +249,8 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             feigeSmsUtils.sendTemplatesSms(buyUser.getPhone(), SmsTemplateCode.SMS_C2C_CONFIRM_NOTICE, "");
             //增加用户贡献值
             buyUser.setContribution(buyUser.getContribution() + 1);
+            //设为用户为有效的
+            buyUser.setEffective((byte) GlobalParams.ACTIVE);
             usersService.updateByPrimaryKeySelective(buyUser);
             //团队奖励
             String profit = sysparamsService.getValStringByKey(SystemParams.PERSON_AWARD_ONE);

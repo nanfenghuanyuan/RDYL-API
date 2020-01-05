@@ -83,4 +83,6 @@ public interface SmsRecordService {
     int selectCount(Map<Object, Object> param);
 
     List<SmsRecord> queryListByTimeLimit(Map map);
+
+    SmsRecord getByIdAndPhone(Integer codeId, String phone);
 }

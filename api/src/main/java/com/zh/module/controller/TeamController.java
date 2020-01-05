@@ -37,7 +37,7 @@ public class TeamController {
             }
 
             PageModel pageModel = new PageModel(page, rows);
-            return teamBiz.init(users, type);
+            return teamBiz.init(users, type, pageModel);
         }catch (Exception e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
