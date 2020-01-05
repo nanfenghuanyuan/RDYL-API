@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.zh.module.entity.TeamRecord">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="refer_id" jdbcType="INTEGER" property="referId" />
+    <result column="refer_id" jdbcType="VARCHAR" property="referId" />
     <result column="amount" jdbcType="DECIMAL" property="amount" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -20,7 +20,7 @@
     insert into team_record (user_id, refer_id, amount, 
       type, create_time, update_time
       )
-    values (#{userId,jdbcType=INTEGER}, #{referId,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, 
+    values (#{userId,jdbcType=INTEGER}, #{referId,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
       #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -54,7 +54,7 @@
         #{userId,jdbcType=INTEGER},
       </if>
       <if test="referId != null">
-        #{referId,jdbcType=INTEGER},
+        #{referId,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
         #{amount,jdbcType=DECIMAL},
@@ -73,7 +73,7 @@
   <update id="updateByPrimaryKey" parameterType="com.zh.module.entity.TeamRecord">
     update team_record
     set user_id = #{userId,jdbcType=INTEGER},
-      refer_id = #{referId,jdbcType=INTEGER},
+      refer_id = #{referId,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=DECIMAL},
       type = #{type,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -87,7 +87,7 @@
         user_id = #{userId,jdbcType=INTEGER},
       </if>
       <if test="referId != null">
-        refer_id = #{referId,jdbcType=INTEGER},
+        refer_id = #{referId,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
         amount = #{amount,jdbcType=DECIMAL},
@@ -123,7 +123,7 @@
        and  user_id = #{userId,jdbcType=INTEGER}
     </if>
     <if test="referId != null">
-       and  refer_id = #{referId,jdbcType=INTEGER}
+       and  refer_id = #{referId,jdbcType=VARCHAR}
     </if>
     <if test="amount != null">
        and  amount = #{amount,jdbcType=DECIMAL}
@@ -148,7 +148,7 @@
        and  user_id = #{userId,jdbcType=INTEGER}
     </if>
     <if test="referId != null">
-       and  refer_id = #{referId,jdbcType=INTEGER}
+       and  refer_id = #{referId,jdbcType=VARCHAR}
     </if>
     <if test="amount != null">
        and  amount = #{amount,jdbcType=DECIMAL}
@@ -172,7 +172,7 @@
        and  user_id = #{userId,jdbcType=INTEGER}
     </if>
     <if test="referId != null">
-       and  refer_id = #{referId,jdbcType=INTEGER}
+       and  refer_id = #{referId,jdbcType=VARCHAR}
     </if>
     <if test="amount != null">
        and  amount = #{amount,jdbcType=DECIMAL}

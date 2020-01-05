@@ -232,7 +232,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         //修改宠物记录
         petsList.setUserId(users.getId());
         petsList.setTransferUserId(-1);
-        petsList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
+        petsList.setState((byte) GlobalParams.PET_LIST_STATE_PROFITING);
         petsList.setStartTime(DateUtils.getCurrentTimeStr());
         petsList.setEndTime(DateUtils.getSomeDay(petsList.getProfitDays()));
         petsListService.updateByPrimaryKeySelective(petsList);
@@ -252,8 +252,12 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             usersService.updateByPrimaryKeySelective(buyUser);
             //团队奖励
             String profit = sysparamsService.getValStringByKey(SystemParams.PERSON_AWARD_ONE);
+            //推荐代数
             int cursor = 1;
-            referLevelAward(buyUser, petsList.getPrice(), new BigDecimal(profit), cursor);
+            //团队累计奖励
+            BigDecimal awardTotal = BigDecimal.ZERO;
+            users = usersService.selectByUUID(buyUser.getReferId());
+            referLevelAward(users, petsList.getPrice(), new BigDecimal(profit), cursor, awardTotal);
         }
         return Result.toResult(ResultCode.SUCCESS);
     }
@@ -265,33 +269,43 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
      * @param rate
      * @param cursor
      */
-    private void referLevelAward(Users users, BigDecimal amount, BigDecimal rate, Integer cursor) {
+    private void referLevelAward(Users users, BigDecimal amount, BigDecimal rate, Integer cursor, BigDecimal awardTotal) {
         if(users == null){
             return;
         }
-        //奖励金额
-        BigDecimal newAmount = amount.multiply(rate);
+        //用户状态可用时才有收益
+        if(users.getState() == GlobalParams.ACTIVE && users.getIdStatus() == GlobalParams.ACTIVE) {
+            //团队 大于等于同级别拿团队1%  小于等级拿之差
+            if (cursor > RewardType.PERSON_AWARD_TWO.code()) {
+                rate = rate.subtract(awardTotal);
+                if (rate.compareTo(BigDecimal.ZERO) <= 0) {
+                    rate = new BigDecimal(0.01);
+                }
+                awardTotal = awardTotal.add(rate);
+            }
+            //奖励金额
+            BigDecimal newAmount = amount.multiply(rate);
 
-        TeamRecord teamRecord = new TeamRecord();
-        teamRecord.setAmount(newAmount);
-        teamRecord.setType(cursor.byteValue());
-        teamRecord.setReferId(Integer.valueOf(users.getReferId()));
-        teamRecord.setUserId(users.getId());
-        teamRecordService.insertSelective(teamRecord);
-
-        //团队奖励记录累计金额
-        if(cursor > RewardType.PERSON_AWARD_TWO.code()) {
-            teamReward(users.getId(), newAmount);
+            TeamRecord teamRecord = new TeamRecord();
+            teamRecord.setAmount(newAmount);
+            teamRecord.setType(cursor.byteValue());
+            teamRecord.setReferId(users.getReferId());
+            teamRecord.setUserId(users.getId());
+            teamRecordService.insertSelective(teamRecord);
+            //团队奖励记录累计金额
+            if (cursor > RewardType.PERSON_AWARD_TWO.code()) {
+                teamReward(users.getId(), newAmount);
+            }
         }
+            users = usersService.selectByUUID(users.getReferId());
+            if (cursor > RewardType.TEAM_AWARD_TWO.code()) {
+                cursor = 5;
+            } else {
+                cursor++;
+            }
+            String price = sysparamsService.getValStringByKey(RewardType.getMessage(cursor));
+            referLevelAward(users, amount, new BigDecimal(price), cursor, awardTotal);
 
-        users = usersService.selectByUUID(users.getReferId());
-        if(cursor > RewardType.TEAM_AWARD_THREE.code()){
-            cursor = 5;
-        }else{
-            cursor ++;
-        }
-        String price = sysparamsService.getValStringByKey(RewardType.getMessage(cursor));
-        referLevelAward(users, amount, new BigDecimal(price), cursor);
     }
 
     /**

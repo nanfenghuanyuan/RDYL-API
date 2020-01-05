@@ -5,13 +5,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class TeamRecord implements Serializable {
-    private static final long serialVersionUID = -1821760466932068718L;
+    private static final long serialVersionUID = 113035268581007361L;
 
     private Integer id;
 
     private Integer userId;
 
-    private Integer referId;
+    private String referId;
 
     private BigDecimal amount;
 
@@ -37,12 +37,12 @@ public class TeamRecord implements Serializable {
         this.userId = userId;
     }
 
-    public Integer getReferId() {
+    public String getReferId() {
         return referId;
     }
 
-    public void setReferId(Integer referId) {
-        this.referId = referId;
+    public void setReferId(String referId) {
+        this.referId = referId == null ? null : referId.trim();
     }
 
     public BigDecimal getAmount() {
