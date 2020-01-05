@@ -20,9 +20,11 @@ public interface UsersBiz {
     /**
      * 实名认证获取token
      * @param user
+     * @param name
+     * @param idCard
      * @return
      */
-    String getToken(Users user);
+    String getToken(Users user, String name, String idCard);
 
     String getStatus(Users user, String taskId);
 }

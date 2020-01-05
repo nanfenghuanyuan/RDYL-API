@@ -25,7 +25,7 @@ public class IdCardValidateBizImpl implements IdCardValidateBiz {
     @Override
     public Map<String, Object> queryValidateTimes(Integer userId,Integer dateMis) {
         String currDate = DateUtils.getCurrentTimeStr();
-        String  startDate = DateUtils.getSomeDay(-dateMis)+" 00:00:00";
+        String  startDate = DateUtils.getSomeDay(-dateMis);
         String sql = "SELECT COUNT(*) as counts, DATE_FORMAT(createTime, '%Y-%m-%d') as valiDate  FROM t_idcard_validate WHERE userId=:userId and createTime between :startDate and :currDate GROUP BY  valiDate";
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);
