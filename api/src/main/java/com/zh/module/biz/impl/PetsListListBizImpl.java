@@ -286,25 +286,31 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             //奖励金额
             BigDecimal newAmount = amount.multiply(rate);
 
+            //保存收益记录
             TeamRecord teamRecord = new TeamRecord();
             teamRecord.setAmount(newAmount);
             teamRecord.setType(cursor.byteValue());
             teamRecord.setReferId(users.getReferId());
             teamRecord.setUserId(users.getId());
             teamRecordService.insertSelective(teamRecord);
+            //插入流水
+            accountService.updateAccountAndInsertFlow(users.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.CNY, newAmount, BigDecimal.ZERO, users.getId(), "推荐收益", teamRecord.getId());
             //团队奖励记录累计金额
             if (cursor > RewardType.PERSON_AWARD_TWO.code()) {
                 teamReward(users.getId(), newAmount);
             }
         }
-            users = usersService.selectByUUID(users.getReferId());
-            if (cursor > RewardType.TEAM_AWARD_TWO.code()) {
-                cursor = 5;
-            } else {
-                cursor++;
-            }
-            String price = sysparamsService.getValStringByKey(RewardType.getMessage(cursor));
-            referLevelAward(users, amount, new BigDecimal(price), cursor, awardTotal);
+        //用户上级推荐人
+        users = usersService.selectByUUID(users.getReferId());
+        if (cursor > RewardType.TEAM_AWARD_TWO.code()) {
+            cursor = 5;
+        } else {
+            cursor++;
+        }
+        //当前推荐等级收益率
+        String price = sysparamsService.getValStringByKey(RewardType.getMessage(cursor));
+        //递归调用
+        referLevelAward(users, amount, new BigDecimal(price), cursor, awardTotal);
 
     }
 
