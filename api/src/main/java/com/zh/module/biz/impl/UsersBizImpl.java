@@ -92,10 +92,10 @@ public class UsersBizImpl implements UsersBiz {
         String token = getTokens(userForBase);
         jsonObject.put("token", token);
         jsonObject.put("user", usersModel);
-        String goldAmount = accountService.selectSumAmountByAccountTypeAndCoinType(user.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS);
+        String goldAmount = accountService.selectSumAmountByAccountTypeAndCoinType(userForBase.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS);
         goldAmount = StrUtils.isBlank(goldAmount) ? "0" : goldAmount;
         jsonObject.put("goldAmount", new BigDecimal(goldAmount).setScale(0, BigDecimal.ROUND_HALF_UP));
-        String holdAssets = petsListService.selectSumAmountByUser(user.getId());
+        String holdAssets = petsListService.selectSumAmountByUser(userForBase.getId());
         holdAssets = StrUtils.isBlank(holdAssets) ? "0" : holdAssets;
         jsonObject.put("holdAssets", new BigDecimal(holdAssets).setScale(0, BigDecimal.ROUND_HALF_UP));
         return Result.toResult(ResultCode.SUCCESS, jsonObject);
