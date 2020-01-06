@@ -32,7 +32,14 @@ public class UserBizTests {
     }
     @Test
     public void regiester() throws Exception {
-        System.out.println(usersBiz.register("13666666667", "123456", "45071379", 6, "616917"));
+        System.out.println(usersBiz.register("13666666667", "123456", "19216441", 1, "303894"));
+    }
+    @Test
+    public void login() throws Exception {
+        Users users = new Users();
+        users.setPhone("13666666667");
+        users.setPassword("123456");
+        System.out.println(usersBiz.login(users));
     }
     @Test
     public void realName1() throws Exception {

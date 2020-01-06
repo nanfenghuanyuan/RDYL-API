@@ -119,11 +119,11 @@ public class UsersBizImpl implements UsersBiz {
             }
         }
         /*校验验证码有效期*/
-        Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
+        /*Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
         int interval = (int) ((System.currentTimeMillis() - sms.getCreateTime().getTime()) / (1000*60));
         if(timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval>=Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)){
             return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
-        }
+        }*/
         /*手机号是否存在*/
         Map<Object, Object> param = new HashMap<>();
         param.put("phone", phone);
