@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2020-01-02 21:44:50
+ * @date: 2020-01-06 15:21:46
  **/ 
 @Service("smsRecordService")
 public class SmsRecordServiceImpl implements SmsRecordService {
@@ -68,7 +68,6 @@ public class SmsRecordServiceImpl implements SmsRecordService {
     public int selectCount(Map<Object, Object> param) {
         return this.smsRecordMapper.selectCount(param);
     }
-
     @Override
     public List<SmsRecord> queryListByTimeLimit(Map map) {
         return this.smsRecordMapper.queryListByTimeLimit(map);

@@ -11,20 +11,19 @@ import com.zh.module.utils.RedisUtil;
 import com.zh.module.variables.RedisKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-20 16:04:55
+ * @date: 2020-01-06 15:27:03
  **/ 
 @Service("sysparamsService")
 public class SysparamsServiceImpl implements SysparamsService {
     @Resource
     private SysparamsMapper sysparamsMapper;
-    @Autowired
+    @Resource
     private RedisTemplate<String, String> redis;
 
     private static final Logger logger = LoggerFactory.getLogger(SysparamsServiceImpl.class);
@@ -73,7 +72,6 @@ public class SysparamsServiceImpl implements SysparamsService {
     public int selectCount(Map<Object, Object> param) {
         return this.sysparamsMapper.selectCount(param);
     }
-
     @Override
     public Sysparams getValByKey(String key) {
         String redisKey = String.format(RedisKey.SYSTEM_PARAM, key);
@@ -96,4 +94,5 @@ public class SysparamsServiceImpl implements SysparamsService {
         }
         return param.getKeyval();
     }
+
 }

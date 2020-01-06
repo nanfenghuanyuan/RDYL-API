@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2020-01-02 11:05:33
+ * @date: 2020-01-06 15:17:34
  **/ 
 @Service("idcardValidateService")
 public class IdcardValidateServiceImpl implements IdcardValidateService {

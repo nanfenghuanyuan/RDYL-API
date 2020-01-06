@@ -3,7 +3,7 @@
 <mapper namespace="com.zh.module.dao.IdcardValidateMapper">
   <resultMap id="BaseResultMap" type="com.zh.module.entity.IdcardValidate">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="identificationnumber" jdbcType="VARCHAR" property="identificationnumber" />
     <result column="idcardtype" jdbcType="VARCHAR" property="idcardtype" />
@@ -14,28 +14,28 @@
     <result column="idcardbackpic" jdbcType="VARCHAR" property="idcardbackpic" />
     <result column="facepic" jdbcType="VARCHAR" property="facepic" />
     <result column="state" jdbcType="INTEGER" property="state" />
-    <result column="taskid" jdbcType="VARCHAR" property="taskid" />
-    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, userid, name, identificationnumber, idcardtype, idcardexpiry, address, sex, idcardfrontpic, 
-    idcardbackpic, facepic, state, taskid, createtime, updatetime
+    id, user_id, name, identificationnumber, idcardtype, idcardexpiry, address, sex, 
+    idcardfrontpic, idcardbackpic, facepic, state, task_id, create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.IdcardValidate">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into idcard_validate (userid, name, identificationnumber, 
+    insert into idcard_validate (user_id, name, identificationnumber, 
       idcardtype, idcardexpiry, address, 
       sex, idcardfrontpic, idcardbackpic, 
-      facepic, state, taskid, 
-      createtime, updatetime)
-    values (#{userid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{identificationnumber,jdbcType=VARCHAR}, 
+      facepic, state, task_id, 
+      create_time, update_time)
+    values (#{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{identificationnumber,jdbcType=VARCHAR}, 
       #{idcardtype,jdbcType=VARCHAR}, #{idcardexpiry,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
       #{sex,jdbcType=VARCHAR}, #{idcardfrontpic,jdbcType=VARCHAR}, #{idcardbackpic,jdbcType=VARCHAR}, 
-      #{facepic,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{taskid,jdbcType=VARCHAR}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+      #{facepic,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{taskId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.IdcardValidate">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -43,8 +43,8 @@
     </selectKey>
     insert into idcard_validate
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userid != null">
-        userid,
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="name != null">
         name,
@@ -76,19 +76,19 @@
       <if test="state != null">
         state,
       </if>
-      <if test="taskid != null">
-        taskid,
+      <if test="taskId != null">
+        task_id,
       </if>
-      <if test="createtime != null">
-        createtime,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="updatetime != null">
-        updatetime,
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userid != null">
-        #{userid,jdbcType=INTEGER},
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -120,20 +120,20 @@
       <if test="state != null">
         #{state,jdbcType=INTEGER},
       </if>
-      <if test="taskid != null">
-        #{taskid,jdbcType=VARCHAR},
+      <if test="taskId != null">
+        #{taskId,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.zh.module.entity.IdcardValidate">
     update idcard_validate
-    set userid = #{userid,jdbcType=INTEGER},
+    set user_id = #{userId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       identificationnumber = #{identificationnumber,jdbcType=VARCHAR},
       idcardtype = #{idcardtype,jdbcType=VARCHAR},
@@ -144,16 +144,16 @@
       idcardbackpic = #{idcardbackpic,jdbcType=VARCHAR},
       facepic = #{facepic,jdbcType=VARCHAR},
       state = #{state,jdbcType=INTEGER},
-      taskid = #{taskid,jdbcType=VARCHAR},
-      createtime = #{createtime,jdbcType=TIMESTAMP},
-      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+      task_id = #{taskId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.zh.module.entity.IdcardValidate">
     update idcard_validate
     <set>
-      <if test="userid != null">
-        userid = #{userid,jdbcType=INTEGER},
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -185,14 +185,14 @@
       <if test="state != null">
         state = #{state,jdbcType=INTEGER},
       </if>
-      <if test="taskid != null">
-        taskid = #{taskid,jdbcType=VARCHAR},
+      <if test="taskId != null">
+        task_id = #{taskId,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null">
-        createtime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -212,8 +212,8 @@
     <include refid="Base_Column_List" />
     from idcard_validate
     where 1=1 
-    <if test="userid != null">
-       and  userid = #{userid,jdbcType=INTEGER}
+    <if test="userId != null">
+       and  user_id = #{userId,jdbcType=INTEGER}
     </if>
     <if test="name != null">
        and  name = #{name,jdbcType=VARCHAR}
@@ -245,14 +245,14 @@
     <if test="state != null">
        and  state = #{state,jdbcType=INTEGER}
     </if>
-    <if test="taskid != null">
-       and  taskid = #{taskid,jdbcType=VARCHAR}
+    <if test="taskId != null">
+       and  task_id = #{taskId,jdbcType=VARCHAR}
     </if>
-    <if test="createtime != null">
-       and  createtime = #{createtime,jdbcType=TIMESTAMP}
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="updatetime != null">
-       and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
      order by id desc 
   </select>
@@ -261,8 +261,8 @@
     <include refid="Base_Column_List" />
     from idcard_validate
     where 1=1 
-    <if test="userid != null">
-       and  userid = #{userid,jdbcType=INTEGER}
+    <if test="userId != null">
+       and  user_id = #{userId,jdbcType=INTEGER}
     </if>
     <if test="name != null">
        and  name = #{name,jdbcType=VARCHAR}
@@ -294,14 +294,14 @@
     <if test="state != null">
        and  state = #{state,jdbcType=INTEGER}
     </if>
-    <if test="taskid != null">
-       and  taskid = #{taskid,jdbcType=VARCHAR}
+    <if test="taskId != null">
+       and  task_id = #{taskId,jdbcType=VARCHAR}
     </if>
-    <if test="createtime != null">
-       and  createtime = #{createtime,jdbcType=TIMESTAMP}
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="updatetime != null">
-       and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
      order by id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
   </select>
@@ -309,8 +309,8 @@
     select count(*) 
     from idcard_validate 
     where 1=1 
-    <if test="userid != null">
-       and  userid = #{userid,jdbcType=INTEGER}
+    <if test="userId != null">
+       and  user_id = #{userId,jdbcType=INTEGER}
     </if>
     <if test="name != null">
        and  name = #{name,jdbcType=VARCHAR}
@@ -342,19 +342,19 @@
     <if test="state != null">
        and  state = #{state,jdbcType=INTEGER}
     </if>
-    <if test="taskid != null">
-       and  taskid = #{taskid,jdbcType=VARCHAR}
+    <if test="taskId != null">
+       and  task_id = #{taskId,jdbcType=VARCHAR}
     </if>
-    <if test="createtime != null">
-       and  createtime = #{createtime,jdbcType=TIMESTAMP}
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="updatetime != null">
-       and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
   </select>
   <select id="queryValidateTimes" parameterType="java.util.Map" resultType="map">
-    SELECT COUNT(*) as counts, DATE_FORMAT(createTime, '%Y-%m-%d') as valiDate  FROM idcard_validate
-     WHERE userId=#{userid,jdbcType=INTEGER} and createTime between #{startDate,jdbcType=VARCHAR} and #{currDate,jdbcType=VARCHAR} GROUP BY  valiDate
+    SELECT COUNT(*) as counts, DATE_FORMAT(create_time, '%Y-%m-%d') as valiDate  FROM idcard_validate
+     WHERE userId=#{userId,jdbcType=INTEGER} and createTime between #{startDate,jdbcType=VARCHAR} and #{currDate,jdbcType=VARCHAR} GROUP BY  valiDate
   </select>
   <select id="selectConditionPaging" parameterType="java.util.Map" resultType="java.util.Map">
     select iv.*,u.phone from idcard_validate iv left join user u on iv.userId=u.id
@@ -377,5 +377,4 @@
       and iv.state = #{state,jdbcType=TINYINT}
     </if>
   </select>
-
 </mapper>

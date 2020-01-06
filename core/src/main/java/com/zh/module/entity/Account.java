@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class Account implements Serializable {
-    private static final long serialVersionUID = -2471566361291811948L;
+    private static final long serialVersionUID = 3469185435834123359L;
 
     private Integer id;
 
@@ -15,13 +15,13 @@ public class Account implements Serializable {
 
     private BigDecimal frozenblance;
 
-    private Integer accountType;
+    private Byte accountType;
 
-    private Integer coinType;
+    private Byte coinType;
 
-    private Date createtime;
+    private Date createTime;
 
-    private Date updatetime;
+    private Date updateTime;
 
     public Integer getId() {
         return id;
@@ -55,36 +55,36 @@ public class Account implements Serializable {
         this.frozenblance = frozenblance;
     }
 
-    public Integer getAccountType() {
+    public Byte getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(Integer accountType) {
+    public void setAccountType(Byte accountType) {
         this.accountType = accountType;
     }
 
-    public Integer getCoinType() {
+    public Byte getCoinType() {
         return coinType;
     }
 
-    public void setCoinType(Integer coinType) {
+    public void setCoinType(Byte coinType) {
         this.coinType = coinType;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override
@@ -100,8 +100,8 @@ public class Account implements Serializable {
         sb.append(", frozenblance=").append(frozenblance);
         sb.append(", accountType=").append(accountType);
         sb.append(", coinType=").append(coinType);
-        sb.append(", createtime=").append(createtime);
-        sb.append(", updatetime=").append(updatetime);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
         sb.append("]");
         return sb.toString();
     }

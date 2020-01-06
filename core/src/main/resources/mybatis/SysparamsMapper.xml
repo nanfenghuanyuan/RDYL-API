@@ -6,20 +6,20 @@
     <result column="keyname" jdbcType="VARCHAR" property="keyname" />
     <result column="keyval" jdbcType="VARCHAR" property="keyval" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, keyname, keyval, remark, createtime, updatetime
+    id, keyname, keyval, remark, create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.Sysparams">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into sysparams (keyname, keyval, remark, 
-      createtime, updatetime)
+      create_time, update_time)
     values (#{keyname,jdbcType=VARCHAR}, #{keyval,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.Sysparams">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -36,11 +36,11 @@
       <if test="remark != null">
         remark,
       </if>
-      <if test="createtime != null">
-        createtime,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="updatetime != null">
-        updatetime,
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -53,11 +53,11 @@
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -66,8 +66,8 @@
     set keyname = #{keyname,jdbcType=VARCHAR},
       keyval = #{keyval,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      createtime = #{createtime,jdbcType=TIMESTAMP},
-      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.zh.module.entity.Sysparams">
@@ -82,11 +82,11 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null">
-        createtime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -115,11 +115,11 @@
     <if test="remark != null">
        and  remark = #{remark,jdbcType=VARCHAR}
     </if>
-    <if test="createtime != null">
-       and  createtime = #{createtime,jdbcType=TIMESTAMP}
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="updatetime != null">
-       and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
      order by id desc 
   </select>
@@ -137,11 +137,11 @@
     <if test="remark != null">
        and  remark = #{remark,jdbcType=VARCHAR}
     </if>
-    <if test="createtime != null">
-       and  createtime = #{createtime,jdbcType=TIMESTAMP}
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="updatetime != null">
-       and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
      order by id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
   </select>
@@ -158,11 +158,11 @@
     <if test="remark != null">
        and  remark = #{remark,jdbcType=VARCHAR}
     </if>
-    <if test="createtime != null">
-       and  createtime = #{createtime,jdbcType=TIMESTAMP}
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="updatetime != null">
-       and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
   </select>
   <select id="selectByKey" parameterType="java.lang.String" resultMap="BaseResultMap">

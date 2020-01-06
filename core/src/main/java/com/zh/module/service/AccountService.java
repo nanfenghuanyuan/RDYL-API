@@ -1,7 +1,6 @@
 package com.zh.module.service;
 
 import com.zh.module.entity.Account;
-import com.zh.module.exception.BanlanceNotEnoughException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -10,14 +9,14 @@ import java.util.Map;
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-20 18:18:17
+ * @date: 2020-01-06 15:13:49
  **/ 
 public interface AccountService {
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 18:18:17
+     * @date: 2020-01-06 15:13:49
      **/ 
     int insert(Account record);
 
@@ -25,7 +24,7 @@ public interface AccountService {
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 18:18:17
+     * @date: 2020-01-06 15:13:49
      **/ 
     int insertSelective(Account record);
 
@@ -33,7 +32,7 @@ public interface AccountService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 18:18:17
+     * @date: 2020-01-06 15:13:49
      **/ 
     int updateByPrimaryKey(Account record);
 
@@ -41,7 +40,7 @@ public interface AccountService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 18:18:17
+     * @date: 2020-01-06 15:13:49
      **/ 
     int updateByPrimaryKeySelective(Account record);
 
@@ -49,7 +48,7 @@ public interface AccountService {
      * 删除
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 18:18:17
+     * @date: 2020-01-06 15:13:49
      **/ 
     int deleteByPrimaryKey(Integer id);
 
@@ -57,7 +56,7 @@ public interface AccountService {
      * 按主键查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 18:18:17
+     * @date: 2020-01-06 15:13:49
      **/ 
     Account selectByPrimaryKey(Integer id);
 
@@ -65,7 +64,7 @@ public interface AccountService {
      * 条件查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 18:18:17
+     * @date: 2020-01-06 15:13:49
      **/ 
     List<Account> selectAll(Map<Object, Object> param);
 
@@ -73,7 +72,7 @@ public interface AccountService {
      * 分页查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 18:18:17
+     * @date: 2020-01-06 15:13:49
      **/ 
     List<Account> selectPaging(Map<Object, Object> param);
 
@@ -81,25 +80,13 @@ public interface AccountService {
      * 统计查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 18:18:17
+     * @date: 2020-01-06 15:13:49
      **/ 
     int selectCount(Map<Object, Object> param);
 
-    /**
-     * 更新账户并保存流水
-     * @param userId 用户id
-     * @param accountType 账户类型
-     * @param coinType 币种类型
-     * @param availIncrement 可用余额增量
-     * @param frozenIncrement 冻结余额增量
-     * @param operId 操作人id
-     * @param operType 操作类型
-     * @param relateId 关联表id
-     */
+    Account selectByUserIdAndAccountTypeAndType(int accountTypeActive, int os, Integer id);
+
     void updateAccountAndInsertFlow(Integer userId, Integer accountType, Integer coinType,
-                                    BigDecimal availIncrement, BigDecimal frozenIncrement, Integer operId, String operType, Integer relateId) throws BanlanceNotEnoughException;
-
-    Account selectByUserIdAndAccountTypeAndType(int accountType, int coinType, Integer userId);
-
+                                    BigDecimal availIncrement, BigDecimal frozenIncrement, Integer operId, String operType, Integer relateId);
     String selectSumAmountByAccountTypeAndCoinType(Integer id, int accountType, int coinType);
 }

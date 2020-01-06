@@ -55,7 +55,7 @@ public class IdCardValidateBizImpl implements IdCardValidateBiz {
            return null;
         }
         IdcardValidate idcardValidate = idcardValidates.get(0);
-        return idcardValidate.getUserid();
+        return idcardValidate.getUserId();
     }
 
     @Override

@@ -120,7 +120,7 @@ public class UsersBizImpl implements UsersBiz {
         }
         /*校验验证码有效期*/
         Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
-        int interval = (int) ((System.currentTimeMillis() - sms.getCreatetime().getTime()) / (1000*60));
+        int interval = (int) ((System.currentTimeMillis() - sms.getCreateTime().getTime()) / (1000*60));
         if(timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval>=Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)){
             return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
         }
@@ -166,11 +166,11 @@ public class UsersBizImpl implements UsersBiz {
         coinList.add(CoinType.OS);
         for (Integer coinType : coinList) {
             Account account = new Account();
-            account.setAccountType(AccountType.ACCOUNT_TYPE_ACTIVE);
+            account.setAccountType((byte) AccountType.ACCOUNT_TYPE_ACTIVE);
             account.setUserId(users.getId());
             account.setAvailbalance(BigDecimal.ZERO);
             account.setFrozenblance(BigDecimal.ZERO);
-            account.setCoinType(coinType);
+            account.setCoinType(coinType.byteValue());
             accountService.insertSelective(account);
         }
         return Result.toResult(ResultCode.SUCCESS);
@@ -259,7 +259,7 @@ public class UsersBizImpl implements UsersBiz {
         }
         //校验验证码有效期
         Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
-        int interval = (int) ((System.currentTimeMillis() - sms.getCreatetime().getTime()) / (1000*60));
+        int interval = (int) ((System.currentTimeMillis() - sms.getCreateTime().getTime()) / (1000*60));
         if(timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval>=Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)){
             return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
         }
@@ -281,7 +281,7 @@ public class UsersBizImpl implements UsersBiz {
         }
         //校验验证码有效期
         Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
-        int interval = (int) ((System.currentTimeMillis() - sms.getCreatetime().getTime()) / (1000*60));
+        int interval = (int) ((System.currentTimeMillis() - sms.getCreateTime().getTime()) / (1000*60));
         if(timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval>=Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)){
             return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
         }
@@ -372,8 +372,8 @@ public class UsersBizImpl implements UsersBiz {
             iv.setIdcardfrontpic(mate.getIdCardFrontPic());
             iv.setSex(mate.getSex());
             iv.setIdcardtype(mate.getIdCardType());
-            iv.setTaskid(taskId);
-            iv.setUserid(user.getId());
+            iv.setTaskId(taskId);
+            iv.setUserId(user.getId());
             iv.setIdentificationnumber(mate.getIdentificationNumber());
         }
 

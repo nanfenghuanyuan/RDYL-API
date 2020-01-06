@@ -1,8 +1,6 @@
 package com.zh.module.dao;
 
 import com.zh.module.entity.Account;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
 
@@ -27,5 +25,5 @@ public interface AccountMapper {
 
     int updateBalance(Account account);
 
-    String selectSumAmountByAccountTypeAndCoinType(@Param("userId") Integer id, @Param("accountType") int accountType, @Param("coinType") int coinType);
+    String selectSumAmountByAccountTypeAndCoinType(Integer id, int accountType, int coinType);
 }

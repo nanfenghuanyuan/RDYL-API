@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-20 18:18:17
+ * @date: 2020-01-06 15:13:49
  **/
 @Slf4j
 @Service("accountService")
@@ -77,7 +77,6 @@ public class AccountServiceImpl implements AccountService {
     public int selectCount(Map<Object, Object> param) {
         return this.accountMapper.selectCount(param);
     }
-
     @Override
     public void updateAccountAndInsertFlow(Integer userId, Integer accountType, Integer coinType,
                                            BigDecimal availIncrement, BigDecimal frozenIncrement, Integer operId, String operType, Integer relateId) throws BanlanceNotEnoughException {
@@ -90,8 +89,8 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = new Account();
         account.setUserId(userId);
-        account.setCoinType(coinType);
-        account.setAccountType(accountType);
+        account.setCoinType(coinType.byteValue());
+        account.setAccountType(accountType.byteValue());
         account.setAvailbalance(availIncrement);
         account.setFrozenblance(frozenIncrement);
 
@@ -151,4 +150,5 @@ public class AccountServiceImpl implements AccountService {
     public String selectSumAmountByAccountTypeAndCoinType(Integer id, int accountType, int coinType) {
         return this.accountMapper.selectSumAmountByAccountTypeAndCoinType(id, accountType, coinType);
     }
+
 }

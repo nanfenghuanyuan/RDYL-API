@@ -6,24 +6,24 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="availbalance" jdbcType="DECIMAL" property="availbalance" />
     <result column="frozenblance" jdbcType="DECIMAL" property="frozenblance" />
-    <result column="account_type" jdbcType="INTEGER" property="accountType" />
-    <result column="coin_type" jdbcType="INTEGER" property="coinType" />
-    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="account_type" jdbcType="TINYINT" property="accountType" />
+    <result column="coin_type" jdbcType="TINYINT" property="coinType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, availbalance, frozenblance, account_type, coin_type, createtime, updatetime
+    id, user_id, availbalance, frozenblance, account_type, coin_type, create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.Account">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into account (user_id, availbalance, frozenblance, 
-      account_type, coin_type, createtime, 
-      updatetime)
+      account_type, coin_type, create_time, 
+      update_time)
     values (#{userId,jdbcType=INTEGER}, #{availbalance,jdbcType=DECIMAL}, #{frozenblance,jdbcType=DECIMAL}, 
-      #{accountType,jdbcType=INTEGER}, #{coinType,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{updatetime,jdbcType=TIMESTAMP})
+      #{accountType,jdbcType=TINYINT}, #{coinType,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.Account">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -46,11 +46,11 @@
       <if test="coinType != null">
         coin_type,
       </if>
-      <if test="createtime != null">
-        createtime,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="updatetime != null">
-        updatetime,
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -64,16 +64,16 @@
         #{frozenblance,jdbcType=DECIMAL},
       </if>
       <if test="accountType != null">
-        #{accountType,jdbcType=INTEGER},
+        #{accountType,jdbcType=TINYINT},
       </if>
       <if test="coinType != null">
-        #{coinType,jdbcType=INTEGER},
+        #{coinType,jdbcType=TINYINT},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -82,10 +82,10 @@
     set user_id = #{userId,jdbcType=INTEGER},
       availbalance = #{availbalance,jdbcType=DECIMAL},
       frozenblance = #{frozenblance,jdbcType=DECIMAL},
-      account_type = #{accountType,jdbcType=INTEGER},
-      coin_type = #{coinType,jdbcType=INTEGER},
-      createtime = #{createtime,jdbcType=TIMESTAMP},
-      updatetime = #{updatetime,jdbcType=TIMESTAMP}
+      account_type = #{accountType,jdbcType=TINYINT},
+      coin_type = #{coinType,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.zh.module.entity.Account">
@@ -101,16 +101,16 @@
         frozenblance = #{frozenblance,jdbcType=DECIMAL},
       </if>
       <if test="accountType != null">
-        account_type = #{accountType,jdbcType=INTEGER},
+        account_type = #{accountType,jdbcType=TINYINT},
       </if>
       <if test="coinType != null">
-        coin_type = #{coinType,jdbcType=INTEGER},
+        coin_type = #{coinType,jdbcType=TINYINT},
       </if>
-      <if test="createtime != null">
-        createtime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -124,11 +124,6 @@
     <include refid="Base_Column_List" />
     from account
     where id = #{id,jdbcType=INTEGER}
-  </select>
-  <select id="selectSumAmountByAccountTypeAndCoinType"  resultType="string">
-    select sum(availbalance) sumAmount
-    from account
-    where user_id = #{userId,jdbcType=INTEGER} and account_type = #{accountType} and coin_type = #{coinType}
   </select>
   <select id="selectAll" parameterType="java.util.Map" resultMap="BaseResultMap">
     select 
@@ -145,16 +140,16 @@
        and  frozenblance = #{frozenblance,jdbcType=DECIMAL}
     </if>
     <if test="accountType != null">
-       and  account_type = #{accountType,jdbcType=INTEGER}
+       and  account_type = #{accountType,jdbcType=TINYINT}
     </if>
     <if test="coinType != null">
-       and  coin_type = #{coinType,jdbcType=INTEGER}
+       and  coin_type = #{coinType,jdbcType=TINYINT}
     </if>
-    <if test="createtime != null">
-       and  createtime = #{createtime,jdbcType=TIMESTAMP}
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="updatetime != null">
-       and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
      order by id desc 
   </select>
@@ -173,16 +168,16 @@
        and  frozenblance = #{frozenblance,jdbcType=DECIMAL}
     </if>
     <if test="accountType != null">
-       and  account_type = #{accountType,jdbcType=INTEGER}
+       and  account_type = #{accountType,jdbcType=TINYINT}
     </if>
     <if test="coinType != null">
-       and  coin_type = #{coinType,jdbcType=INTEGER}
+       and  coin_type = #{coinType,jdbcType=TINYINT}
     </if>
-    <if test="createtime != null">
-       and  createtime = #{createtime,jdbcType=TIMESTAMP}
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="updatetime != null">
-       and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
      order by id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
   </select>
@@ -200,17 +195,22 @@
        and  frozenblance = #{frozenblance,jdbcType=DECIMAL}
     </if>
     <if test="accountType != null">
-       and  account_type = #{accountType,jdbcType=INTEGER}
+       and  account_type = #{accountType,jdbcType=TINYINT}
     </if>
     <if test="coinType != null">
-       and  coin_type = #{coinType,jdbcType=INTEGER}
+       and  coin_type = #{coinType,jdbcType=TINYINT}
     </if>
-    <if test="createtime != null">
-       and  createtime = #{createtime,jdbcType=TIMESTAMP}
+    <if test="createTime != null">
+       and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="updatetime != null">
-       and  updatetime = #{updatetime,jdbcType=TIMESTAMP}
+    <if test="updateTime != null">
+       and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
+  </select>
+  <select id="selectSumAmountByAccountTypeAndCoinType"  resultType="string">
+    select sum(availbalance) sumAmount
+    from account
+    where user_id = #{userId,jdbcType=INTEGER} and account_type = #{accountType} and coin_type = #{coinType}
   </select>
   <update id="updateBalance" parameterType="com.zh.module.entity.Account">
     update account

@@ -7,14 +7,14 @@ import java.util.Map;
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-20 16:04:55
+ * @date: 2020-01-06 15:27:03
  **/ 
 public interface SysparamsService {
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2020-01-06 15:27:03
      **/ 
     int insert(Sysparams record);
 
@@ -22,7 +22,7 @@ public interface SysparamsService {
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2020-01-06 15:27:03
      **/ 
     int insertSelective(Sysparams record);
 
@@ -30,7 +30,7 @@ public interface SysparamsService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2020-01-06 15:27:03
      **/ 
     int updateByPrimaryKey(Sysparams record);
 
@@ -38,7 +38,7 @@ public interface SysparamsService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2020-01-06 15:27:03
      **/ 
     int updateByPrimaryKeySelective(Sysparams record);
 
@@ -46,7 +46,7 @@ public interface SysparamsService {
      * 删除
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2020-01-06 15:27:03
      **/ 
     int deleteByPrimaryKey(Integer id);
 
@@ -54,7 +54,7 @@ public interface SysparamsService {
      * 按主键查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2020-01-06 15:27:03
      **/ 
     Sysparams selectByPrimaryKey(Integer id);
 
@@ -62,7 +62,7 @@ public interface SysparamsService {
      * 条件查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2020-01-06 15:27:03
      **/ 
     List<Sysparams> selectAll(Map<Object, Object> param);
 
@@ -70,7 +70,7 @@ public interface SysparamsService {
      * 分页查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2020-01-06 15:27:03
      **/ 
     List<Sysparams> selectPaging(Map<Object, Object> param);
 
@@ -78,11 +78,9 @@ public interface SysparamsService {
      * 统计查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-20 16:04:55
+     * @date: 2020-01-06 15:27:03
      **/ 
     int selectCount(Map<Object, Object> param);
-
     Sysparams getValByKey(String key);
-
     String getValStringByKey(String key);
 }

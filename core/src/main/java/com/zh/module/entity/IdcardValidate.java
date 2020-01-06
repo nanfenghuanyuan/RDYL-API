@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class IdcardValidate implements Serializable {
-    private static final long serialVersionUID = -2704757290870260543L;
+    private static final long serialVersionUID = -7395806834291367540L;
 
     private Integer id;
 
-    private Integer userid;
+    private Integer userId;
 
     private String name;
 
@@ -30,11 +30,11 @@ public class IdcardValidate implements Serializable {
 
     private Integer state;
 
-    private String taskid;
+    private String taskId;
 
-    private Date createtime;
+    private Date createTime;
 
-    private Date updatetime;
+    private Date updateTime;
 
     public Integer getId() {
         return id;
@@ -44,12 +44,12 @@ public class IdcardValidate implements Serializable {
         this.id = id;
     }
 
-    public Integer getUserid() {
-        return userid;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUserid(Integer userid) {
-        this.userid = userid;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -132,28 +132,28 @@ public class IdcardValidate implements Serializable {
         this.state = state;
     }
 
-    public String getTaskid() {
-        return taskid;
+    public String getTaskId() {
+        return taskId;
     }
 
-    public void setTaskid(String taskid) {
-        this.taskid = taskid == null ? null : taskid.trim();
+    public void setTaskId(String taskId) {
+        this.taskId = taskId == null ? null : taskId.trim();
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override
@@ -164,7 +164,7 @@ public class IdcardValidate implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append(", id=").append(id);
-        sb.append(", userid=").append(userid);
+        sb.append(", userId=").append(userId);
         sb.append(", name=").append(name);
         sb.append(", identificationnumber=").append(identificationnumber);
         sb.append(", idcardtype=").append(idcardtype);
@@ -175,9 +175,9 @@ public class IdcardValidate implements Serializable {
         sb.append(", idcardbackpic=").append(idcardbackpic);
         sb.append(", facepic=").append(facepic);
         sb.append(", state=").append(state);
-        sb.append(", taskid=").append(taskid);
-        sb.append(", createtime=").append(createtime);
-        sb.append(", updatetime=").append(updatetime);
+        sb.append(", taskId=").append(taskId);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
         sb.append("]");
         return sb.toString();
     }
