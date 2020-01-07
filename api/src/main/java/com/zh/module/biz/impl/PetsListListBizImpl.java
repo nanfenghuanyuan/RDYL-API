@@ -64,6 +64,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     public String list(Users users, Integer state, PageModel pageModel) {
         Map<Object, Object> param = new HashMap<>();
         param.put("state", state);
+        param.put("userId", users.getId());
         param.put("firstResult", pageModel.getFirstResult());
         param.put("maxResult", pageModel.getMaxResult());
         List<Map<String, Object>> lists = petsListService.selectListPaging(param);

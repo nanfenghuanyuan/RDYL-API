@@ -1,6 +1,5 @@
 package com.zh.module.biz.impl;
 
-import com.zh.module.biz.HomeBiz;
 import com.zh.module.biz.PetsBiz;
 import com.zh.module.constants.AccountType;
 import com.zh.module.constants.CoinType;
@@ -10,7 +9,8 @@ import com.zh.module.dto.Result;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.exception.BanlanceNotEnoughException;
-import com.zh.module.model.PetsModel;
+import com.zh.module.model.PageModel;
+import com.zh.module.model.PetsMatchingListModel;
 import com.zh.module.service.*;
 import com.zh.module.utils.*;
 import com.zh.module.variables.RedisKey;
@@ -213,5 +213,27 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         map.put("buyUserId", userId);
         map.put("state", state);
         return petsMatchingListService.selectCount(map);
+    }
+
+    @Override
+    public String list(Users users, PageModel pageModel) {
+        Map<Object, Object> param = new HashMap<>();
+        param.put("userId", users.getId());
+        param.put("firstResult", pageModel.getFirstResult());
+        param.put("maxResult", pageModel.getMaxResult());
+        List<PetsList> petsLists = petsListService.selectPaging(param);
+        List<PetsMatchingListModel> listModels = new LinkedList<>();
+        for(PetsList petsList : petsLists){
+            Pets pets = petsService.selectByLevel(petsList.getLevel().intValue());
+            PetsMatchingListModel petsMatchingListModel = new PetsMatchingListModel();
+            petsMatchingListModel.setName(pets.getName());
+            petsMatchingListModel.setImgUrl(pets.getImgUrl());
+            petsMatchingListModel.setPrice(petsList.getPrice());
+            petsMatchingListModel.setProfit(pets.getProfitDays() + "天/" + pets.getProfitRate().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP) + "%");
+            petsMatchingListModel.setProfited(petsList.getPrice().multiply(petsList.getProfitRate()).multiply(new BigDecimal(0.01)).setScale(2, BigDecimal.ROUND_HALF_UP));
+            petsMatchingListModel.setAppointmentTime(petsList.getStartTime());
+            listModels.add(petsMatchingListModel);
+        }
+        return Result.toResult(ResultCode.SUCCESS, listModels);
     }
 }

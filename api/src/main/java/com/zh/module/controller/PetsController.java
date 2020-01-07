@@ -8,6 +8,7 @@ import com.zh.module.dto.Result;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.exception.BanlanceNotEnoughException;
+import com.zh.module.model.PageModel;
 import com.zh.module.utils.StrUtils;
 import com.zh.module.utils.ValidateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,21 @@ public class PetsController {
             e.printStackTrace();
             return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
         } catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    @ResponseBody
+    @RequestMapping(value="list",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String init(@CurrentUser Users users, Integer rows, Integer page){
+        try {
+            if(page == null){
+                page = 0;
+            }
+
+            PageModel pageModel = new PageModel(page, rows);
+            return petsBiz.list(users, pageModel);
+        }catch (Exception e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }

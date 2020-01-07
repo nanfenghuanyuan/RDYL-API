@@ -1,6 +1,7 @@
 package com.zh.module.biz;
 
 import com.zh.module.entity.Users;
+import com.zh.module.model.PageModel;
 
 /**
  * @program: R.D.Y.LMain
@@ -24,4 +25,12 @@ public interface PetsBiz {
      * @return
      */
     String buy(Users users, Integer level);
+
+    /**
+     * 我的资产
+     * @param users
+     * @param pageModel
+     * @return
+     */
+    String list(Users users, PageModel pageModel);
 }

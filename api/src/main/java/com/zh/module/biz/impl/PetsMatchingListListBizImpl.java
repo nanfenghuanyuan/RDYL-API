@@ -46,6 +46,7 @@ public class PetsMatchingListListBizImpl implements PetsMatchingListBiz {
     public String list(Users users, Integer state, PageModel pageModel) {
         Map<Object, Object> param = new HashMap<>();
         param.put("state", state);
+        param.put("userId", users.getId());
         param.put("firstResult", pageModel.getFirstResult());
         param.put("maxResult", pageModel.getMaxResult());
         List<Map<String, Object>> lists = petsMatchingListService.selectListPaging(param);

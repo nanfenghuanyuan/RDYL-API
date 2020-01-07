@@ -54,6 +54,13 @@ public class PetsBizTests {
         PageModel pageModel = new PageModel(1, 10);
         System.out.println(petsListBiz.list(users, 2, pageModel));
     }
+    @Test
+    public void petList() {
+        Users users = new Users();
+        users.setId(1);
+        PageModel pageModel = new PageModel(1, 10);
+        System.out.println(petsBiz.list(users, pageModel));
+    }
 
     @Test
     public void get() {

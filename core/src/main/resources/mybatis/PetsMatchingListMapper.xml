@@ -322,7 +322,7 @@
 
   <select id="selectListPaging" parameterType="java.util.Map" resultType="map">
     SELECT pm.id, p.img_url, p.name, pl.price, pl.profit_days, pl.profit_rate, pl.start_time, pm.appointment_start_time,pm.appointment_end_time FROM pets_matching_list pm LEFT JOIN pets p ON p.level = pm.level LEFT JOIN pets_list pl ON pm.pet_list_id = pl.id
-    where 1=1
+    where buy_user_id = #{userId}
     <if test="state != null">
       <if test="state == 0">
         and  (pm.state = 1 or pm.state = 2)
