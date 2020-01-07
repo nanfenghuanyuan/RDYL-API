@@ -111,19 +111,19 @@ public class UsersBizImpl implements UsersBiz {
 
         /*校验验证码是否正确*/
         SmsRecord sms = smsRecordService.getByIdAndPhone(codeId, phone);
-        if(sms == null || !code.equals(sms.getCode())){
-            if(validateErrorTimesOfSms(codeId)){
+        if (sms == null || !code.equals(sms.getCode())) {
+            if (validateErrorTimesOfSms(codeId)) {
                 return Result.toResult(ResultCode.SMS_CHECK_ERROR);
-            }else{
+            } else {
                 return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
             }
         }
         /*校验验证码有效期*/
-        /*Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
-        int interval = (int) ((System.currentTimeMillis() - sms.getCreateTime().getTime()) / (1000*60));
-        if(timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval>=Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)){
+        Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
+        int interval = (int) ((System.currentTimeMillis() - sms.getCreateTime().getTime()) / (1000 * 60));
+        if (timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval >= Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)) {
             return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
-        }*/
+        }
         /*手机号是否存在*/
         Map<Object, Object> param = new HashMap<>();
         param.put("phone", phone);

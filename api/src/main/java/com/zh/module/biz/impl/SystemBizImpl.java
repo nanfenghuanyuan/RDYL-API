@@ -72,8 +72,10 @@ public class SystemBizImpl implements SystemBiz {
             coinModule.setRechargeDoc(coinModule.getRechargeDoc());
             coinModules.add(coinModule);
         }
+        String shareUrl = sysparamsService.getValStringByKey(SystemParams.REGIST_URL);
         Configuration config = new Configuration();
         config.setNotice(notice);
+        config.setShareUrl(shareUrl);
         config.setCoinList(coinModules);
         return Result.toResult(ResultCode.SUCCESS, config);
     }

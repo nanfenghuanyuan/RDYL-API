@@ -75,4 +75,7 @@ public class SystemParams {
     public static final String NO_PAY_PUNISH_ONE="NO_PAY_PUNISH_ONE";
     public static final String NO_PAY_PUNISH_TWO="NO_PAY_PUNISH_TWO";
     public static final String NO_PAY_PUNISH_THREE="NO_PAY_PUNISH_THREE";
+
+    //注册地址
+    public static final String REGIST_URL="REGIST_URL";
 }

@@ -20,6 +20,8 @@ public class Configuration implements Serializable{
     private  String agreenmentUrl;
     /*帮助文档*/
     private  String helpDocUrl;
+    /*分享链接*/
+    private  String shareUrl;
     //弹窗公告
     private Object notice;
 

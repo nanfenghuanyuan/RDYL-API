@@ -57,10 +57,10 @@ public class SmsCodeBizImpl implements SmsCodeBiz {
         /*每分钟最多一次*/
         Map<String, Object> map = new HashMap<>();
         map.put("phone", phone);
-        /*List<SmsRecord> list = smsRecordService.queryListByTimeLimit(map);
+        List<SmsRecord> list = smsRecordService.queryListByTimeLimit(map);
         if(list.size() != 0){
             return Result.toResult(ResultCode.SMS_COUNTS_LIMIT_ERROR);
-        }*/
+        }
 
         Users user = usersService.selectByPhone(phone);
         if(type == GlobalParams.SMS_CODE_REGIESTER){

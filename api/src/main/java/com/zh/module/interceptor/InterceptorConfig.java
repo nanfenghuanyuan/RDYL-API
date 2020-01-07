@@ -18,8 +18,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        String[] excludes = new String[]{"/js/**", "/css/**", "/static/**"};
         registry.addInterceptor(authenticationInterceptor())
-                .addPathPatterns("/**");
+                .addPathPatterns("/**").excludePathPatterns(excludes);
     }
     @Bean
     public AuthenticationInterceptor authenticationInterceptor() {
