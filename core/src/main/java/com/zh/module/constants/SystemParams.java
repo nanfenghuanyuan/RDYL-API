@@ -69,4 +69,10 @@ public class SystemParams {
     public static final String TEAM_AWARD_TWO="PERSON_AWARD_TWO";
     public static final String TEAM_AWARD_THREE="TEAM_AWARD_THREE";
 
+    //未付款惩罚开关
+    public static final String NO_PAY_PUNISH="NO_PAY_PUNISH";
+    //未付款次数惩罚
+    public static final String NO_PAY_PUNISH_ONE="NO_PAY_PUNISH_ONE";
+    public static final String NO_PAY_PUNISH_TWO="NO_PAY_PUNISH_TWO";
+    public static final String NO_PAY_PUNISH_THREE="NO_PAY_PUNISH_THREE";
 }

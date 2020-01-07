@@ -84,7 +84,7 @@ public interface AccountService {
      **/ 
     int selectCount(Map<Object, Object> param);
 
-    Account selectByUserIdAndAccountTypeAndType(int accountTypeActive, int os, Integer id);
+    Account selectByUserIdAndAccountTypeAndType(int accountType, int coinType, Integer userId);
 
     void updateAccountAndInsertFlow(Integer userId, Integer accountType, Integer coinType,
                                     BigDecimal availIncrement, BigDecimal frozenIncrement, Integer operId, String operType, Integer relateId);

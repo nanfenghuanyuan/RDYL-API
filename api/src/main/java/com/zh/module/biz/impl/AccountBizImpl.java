@@ -155,11 +155,17 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         map.put("maxResult", pageModel.getMaxResult());
         List<AppointmentRecord> appointmentRecords = appointmentRecordService.selectPaging(map);
         List<AppoinModel> flowModels = new LinkedList<>();
+        String amount = "";
         for(AppointmentRecord appointmentRecord : appointmentRecords){
             AppoinModel appoinModel = new AppoinModel();
             appoinModel.setTime(DateUtils.getDateFormate(appointmentRecord.getCreateTime()));
             appoinModel.setName(appointmentRecord.getName());
-            appoinModel.setAmount(appointmentRecord.getSpend());
+            if(appointmentRecord.getName().contains("返还")){
+                amount = " + " + appointmentRecord.getSpend();
+            }else{
+                amount = " - " + appointmentRecord.getSpend();
+            }
+            appoinModel.setAmount(amount);
             flowModels.add(appoinModel);
         }
         return Result.toResult(ResultCode.SUCCESS, flowModels);

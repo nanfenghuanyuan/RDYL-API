@@ -28,4 +28,6 @@ public class RedisKey {
     //交易超时订单列表:超时分钟数
 	public static final String MATHCHING_NOTCONFIRM = "rdyl:matching:notconfirm:%s";
 	public static final String MATHCHING_NOPAY = "rdyl:matching:nopay:%s";
+	//未付款处罚用户
+	public static final String PUNISH_NOPAY = "rdyl:punish:%s";
 }

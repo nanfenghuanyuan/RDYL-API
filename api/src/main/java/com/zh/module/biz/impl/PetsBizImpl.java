@@ -43,6 +43,8 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     @Autowired
     private SysparamsService sysparamsService;
     @Autowired
+    private AppointmentRecordService appointmentRecordService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -86,6 +88,13 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         petsMatchingListService.insertSelective(petsMatchingList);
         //修改账户信息
         accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), BigDecimal.ZERO, userId, "预约消耗", petsMatchingList.getId());
+
+        //保存预约记录
+        AppointmentRecord appointmentRecord = new AppointmentRecord();
+        appointmentRecord.setName("预约" + pets.getName());
+        appointmentRecord.setSpend(appointmentAmount);
+        appointmentRecord.setUserId(userId);
+        appointmentRecordService.insertSelective(appointmentRecord);
 
         String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
         RedisUtil.addString(redis, redisKey, "-1");

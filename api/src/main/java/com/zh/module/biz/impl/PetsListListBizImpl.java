@@ -15,6 +15,7 @@ import com.zh.module.model.PetsOrderModel;
 import com.zh.module.service.*;
 import com.zh.module.utils.*;
 import com.zh.module.variables.RedisKey;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ import java.util.*;
  **/
 @Component
 @Transactional
+@Slf4j
 public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     @Autowired
     private PetsMatchingListService petsMatchingListService;
@@ -53,6 +55,8 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     private TeamRecordService teamRecordService;
     @Autowired
     private TeamAwardRecordService teamAwardRecordService;
+    @Autowired
+    private AppointmentRecordService appointmentRecordService;
     @Autowired
     private RedisTemplate<String,String> redis;
 
@@ -402,6 +406,186 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             flow.setAmount(profitAmount);
             flow.setResultAmount(account.getAvailbalance().add(profitAmount).toPlainString());
             flowService.insertSelective(flow);
+        }
+    }
+
+    @Override
+    public void cancelAppointmentSchedule() {
+        String currentTimeStr = DateUtils.getCurrentTimeStr();
+        Timestamp currentTime = TimeStampUtils.StrToTimeStamp(currentTimeStr);
+        Map<Object, Object> map = new HashMap<>();
+        map.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
+        List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(map);
+        Date inactiveTime;
+        Users users;
+        for(PetsMatchingList petsMatchingList: petsMatchingLists){
+            inactiveTime = petsMatchingList.getInactiveTime();
+            if(inactiveTime.before(currentTime)){
+                log.info("【撤销预约订单定时】-撤销预约订单--->id:" + petsMatchingList.getId());
+                users = usersService.selectByPrimaryKey(petsMatchingList.getBuyUserId());
+                //取消预约
+                cancelAppointment(users, petsMatchingList.getId());
+            }
+        }
+    }
+
+    @Override
+    public void cancelAppointment(Users users, Integer id) {
+        Integer userId = users.getId();
+        PetsMatchingList petsMatchingList = petsMatchingListService.selectByPrimaryKey(id);
+        petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_CANCEL);
+        this.petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
+
+        accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, petsMatchingList.getAmount(), BigDecimal.ZERO, userId, "取消预约返还", petsMatchingList.getId());
+
+        //保存预约记录
+        AppointmentRecord appointmentRecord = new AppointmentRecord();
+        appointmentRecord.setName("预约返还" + petsMatchingList);
+        appointmentRecord.setSpend(petsMatchingList.getAmount());
+        appointmentRecord.setUserId(userId);
+        appointmentRecordService.insertSelective(appointmentRecord);
+    }
+
+
+    @Override
+    public void cancelNoPaySchedule() {
+        String currentTimeStr = DateUtils.getCurrentTimeStr();
+        Timestamp currentTime = TimeStampUtils.StrToTimeStamp(currentTimeStr);
+        Map<Object, Object> map = new HashMap<>();
+        map.put("state", GlobalParams.PET_MATCHING_STATE_NOPAY);
+        List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(map);
+        Date inactiveTime;
+        Users users;
+        for(PetsMatchingList petsMatchingList : petsMatchingLists){
+            inactiveTime = petsMatchingList.getInactiveTime();
+            if(inactiveTime.before(currentTime)){
+                log.info("【撤销未付款订单定时】-撤销未付款订单--->id:" + petsMatchingList.getId());
+                users = usersService.selectByPrimaryKey(petsMatchingList.getBuyUserId());
+                cancelNoPay(users, petsMatchingList.getId());
+            }
+        }
+    }
+
+    @Override
+    public void cancelNoPay(Users users, Integer id) {
+        Integer userId = users.getId();
+        //修改订单状态
+        PetsMatchingList petsMatchingList = petsMatchingListService.selectByPrimaryKey(id);
+        petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_CANCEL);
+        this.petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
+
+        //修改宠物状态
+        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId().intValue());
+        petsList.setTransferUserId(-1);
+        petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAIT);
+        petsListService.updateByPrimaryKeySelective(petsList);
+
+        //删除redis预约记录
+        String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, petsMatchingList.getLevel(), userId);
+        RedisUtil.deleteKey(redis, redisKey);
+        //未付款处罚开关开启
+        String noPayPunish = sysparamsService.getValStringByKey(SystemParams.NO_PAY_PUNISH);
+        if(noPayPunish.equals(GlobalParams.ACTIVE)){
+            String amount;
+            String number = RedisUtil.searchString(redis, String.format(RedisKey.PUNISH_NOPAY, userId));
+            //无记录 则保存记录，账号冻结，直接扣除一定量的MEPC
+            if(StrUtils.isBlank(number)){
+                amount = sysparamsService.getValStringByKey(SystemParams.NO_PAY_PUNISH_ONE);
+                RedisUtil.addString(redis, String.format(RedisKey.PUNISH_NOPAY, userId), "1");
+                //冻结账号
+                users.setState((byte) GlobalParams.FORBIDDEN);
+                usersService.updateByPrimaryKeySelective(users);
+            }else if("1".equals(number)){
+                amount = sysparamsService.getValStringByKey(SystemParams.NO_PAY_PUNISH_TWO);
+                RedisUtil.addString(redis, String.format(RedisKey.PUNISH_NOPAY, userId), "2");
+                users.setState((byte) GlobalParams.FORBIDDEN);
+                usersService.updateByPrimaryKeySelective(users);
+            }else{
+                amount = sysparamsService.getValStringByKey(SystemParams.NO_PAY_PUNISH_THREE);
+                RedisUtil.addString(redis, String.format(RedisKey.PUNISH_NOPAY, userId), new BigDecimal(number).add(BigDecimal.ONE).toPlainString());
+                users.setState((byte) GlobalParams.LOGOFF);
+                usersService.updateByPrimaryKeySelective(users);
+            }
+
+            //扣除相应金额
+            try {
+                accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(new BigDecimal(amount)), BigDecimal.ZERO, userId, "未付款惩罚", petsMatchingList.getId());
+            } catch (Exception e) {
+                //若扣除失败加入流水
+                Flow flow = new Flow();
+                flow.setRelateId(petsMatchingList.getId());
+                flow.setOperType("罚金扣除失败");
+                flow.setUserId(userId);
+                flow.setOperId(userId);
+                flow.setResultAmount(amount);
+                flow.setAmount(new BigDecimal(amount));
+                flow.setCoinType(CoinType.OS);
+                flow.setAccountType(AccountType.ACCOUNT_TYPE_ACTIVE);
+                flowService.insertSelective(flow);
+            }
+        }
+    }
+
+    @Override
+    public void cancelNoConfirmSchedule() {
+        String currentTimeStr = DateUtils.getCurrentTimeStr();
+        Timestamp currentTime = TimeStampUtils.StrToTimeStamp(currentTimeStr);
+        Map<Object, Object> map = new HashMap<>();
+        map.put("state", GlobalParams.PET_MATCHING_STATE_PAYED);
+        List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(map);
+        Date inactiveTime;
+        Users users;
+        for(PetsMatchingList petsMatchingList : petsMatchingLists){
+            inactiveTime = petsMatchingList.getInactiveTime();
+            if(inactiveTime.before(currentTime)){
+                log.info("【撤确认未确认订单定时】-确认未确认订单--->id:" + petsMatchingList.getId());
+                users = usersService.selectByPrimaryKey(petsMatchingList.getBuyUserId());
+                cancelNoConfirm(users, petsMatchingList);
+            }
+        }
+    }
+
+    @Override
+    public void cancelNoConfirm(Users users, PetsMatchingList petsMatchingList) {
+        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId().intValue());
+        //判断订单状态 仅有转让中和未确认未付款状态可行
+        if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAITING){
+            return;
+        }
+        if(petsMatchingList.getState() != GlobalParams.PET_MATCHING_STATE_PAYED){
+            return;
+        }
+        //修改宠物记录
+        petsList.setUserId(petsMatchingList.getBuyUserId());
+        petsList.setTransferUserId(-1);
+        petsList.setState((byte) GlobalParams.PET_LIST_STATE_PROFITING);
+        petsList.setStartTime(DateUtils.getCurrentTimeStr());
+        petsList.setEndTime(DateUtils.getSomeDay(petsList.getProfitDays()));
+        petsListService.updateByPrimaryKeySelective(petsList);
+
+        //修改匹配记录
+        petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
+        petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
+
+        /*短信通知买家*/
+        Integer buyUserId = petsMatchingList.getBuyUserId();
+        Users buyUser = usersService.selectByPrimaryKey(buyUserId);
+        if(buyUser != null){
+            FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
+            feigeSmsUtils.sendTemplatesSms(buyUser.getPhone(), SmsTemplateCode.SMS_C2C_CONFIRM_NOTICE, "");
+            //增加用户贡献值
+            buyUser.setContribution(buyUser.getContribution() + 1);
+            //设为用户为有效的
+            buyUser.setEffective((byte) GlobalParams.ACTIVE);
+            usersService.updateByPrimaryKeySelective(buyUser);
+            //团队奖励
+            String profit = sysparamsService.getValStringByKey(SystemParams.PERSON_AWARD_ONE);
+            //推荐代数
+            int cursor = 1;
+            //团队累计奖励
+            BigDecimal awardTotal = BigDecimal.ZERO;
+            users = usersService.selectByUUID(buyUser.getReferId());
+            referLevelAward(users, petsList.getPrice(), new BigDecimal(profit), cursor, awardTotal);
         }
     }
 }

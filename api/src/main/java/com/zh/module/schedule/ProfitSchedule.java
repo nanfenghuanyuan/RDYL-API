@@ -20,4 +20,27 @@ public class ProfitSchedule {
 		petsListBiz.getProfit();
 	}
 
+
+	/**
+	 * 自动取消预约
+	 */
+	@Scheduled(cron="1/5 * * * * ?")
+	public void cancelAppointment(){
+		petsListBiz.cancelAppointmentSchedule();
+	}
+	/**
+	 * 自动取消未付款
+	 */
+	@Scheduled(cron="1/5 * * * * ?")
+	public void cancelNoPay(){
+		petsListBiz.cancelNoPaySchedule();
+	}
+	/**
+	 * 自动确认未确认
+	 */
+	@Scheduled(cron="1/5 * * * * ?")
+	public void cancelNoConfirm(){
+		petsListBiz.cancelNoConfirmSchedule();
+	}
+
 }
