@@ -43,7 +43,7 @@ public class TencentCloud {
         String sign = sign(strings, nonceTicket);
         try {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("url", "https://ida.webank.com/api/web/login?webankAppId=" + appId + "&version=1.0.0&nonce=" + nonce + "&orderNo=" + orderNo + "&h5faceId=" + h5faceId + "&url=https%3a%2f%2fcloud.tencent.com&" +
+            jsonObject.put("url", "https://ida.webank.com/api/web/login?webankAppId=" + appId + "&version=1.0.0&nonce=" + nonce + "&orderNo=" + orderNo + "&h5faceId=" + h5faceId + "&url=http%3a%2f%2f47.56.87.149.%3a8081%2f&" +
                     "resultType=1&userId=" + userId + "&sign=" + sign + "&from=APP");
             jsonObject.put("h5faceId", h5faceId);
             return jsonObject;
