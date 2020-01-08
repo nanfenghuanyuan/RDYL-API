@@ -45,6 +45,8 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     @Autowired
     private AppointmentRecordService appointmentRecordService;
     @Autowired
+    private BindInfoService bindInfoService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -58,6 +60,10 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         //是否在允许的时间范围内
         if(!checkIsDateLimit(level)){
             return Result.toResult(ResultCode.TIME_ERROR);
+        }
+        List<BindInfo> bindInfos = bindInfoService.queryByUser(userId);
+        if(bindInfos.size() == 0){
+            return Result.toResult(ResultCode.BIND_INFO_NONE);
         }
         //验证是否已存在预约记录
         int count = checkMatchingRecord(userId, level, GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
@@ -112,6 +118,10 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         //是否在允许的时间范围内
         if(!checkIsDateLimit(level)){
             return Result.toResult(ResultCode.TIME_ERROR);
+        }
+        List<BindInfo> bindInfos = bindInfoService.queryByUser(userId);
+        if(bindInfos.size() == 0){
+            return Result.toResult(ResultCode.BIND_INFO_NONE);
         }
 
         Map<Object, Object> param = new HashMap<>();

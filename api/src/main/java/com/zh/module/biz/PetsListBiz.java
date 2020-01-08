@@ -55,4 +55,13 @@ public interface PetsListBiz {
      * 自动确认未确定订单 定时
      */
     void cancelNoConfirmSchedule();
+
+    /**
+     * 取消订单
+     * @param users
+     * @param id
+     * @param password
+     * @return
+     */
+    String cancel(Users users, Integer id, String password);
 }

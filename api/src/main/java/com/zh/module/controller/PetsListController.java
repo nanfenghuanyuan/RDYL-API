@@ -124,4 +124,32 @@ public class PetsListController {
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }
     }
+    /**
+     * 取消订单
+     * @param users
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="cancel",method=RequestMethod.POST,produces="application/json;charset=utf-8")
+    public String cancel(@CurrentUser Users users, @RequestBody String param){
+        try {
+            JSONObject json = JSONObject.parseObject(param);
+            Integer id = json.getInteger("id");
+            String password = json.getString("password");
+
+            /*参数校验*/
+            if(id == null || StrUtils.isBlank(password)){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+
+            return petsListBiz.cancel(users, id, password);
+        } catch (BanlanceNotEnoughException e){
+            e.printStackTrace();
+            return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
 }

@@ -589,4 +589,34 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             referLevelAward(users, petsList.getPrice(), new BigDecimal(profit), cursor, awardTotal);
         }
     }
+
+    @Override
+    public String cancel(Users users, Integer id, String password) {
+        //验证用户状态
+        if(!checkUserState(users)){
+            return Result.toResult(ResultCode.USER_STATE_ERROR);
+        }
+        PetsList petsList = petsListService.selectByPrimaryKey(id);
+        PetsMatchingList petsMatchingList = petsMatchingListService.selectByPetListIdAndActive(id);
+        //判断订单状态 仅有转让中和未确认未付款状态可行
+        if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAITING || petsMatchingList == null){
+            return Result.toResult(ResultCode.PETS_STATE_ERROR);
+        }
+        if(petsMatchingList.getState() != GlobalParams.PET_MATCHING_STATE_NOPAY){
+            return Result.toResult(ResultCode.PETS_STATE_ERROR);
+        }
+        //仅买家可以操作
+        if(!petsMatchingList.getBuyUserId().equals(users.getId())){
+            return Result.toResult(ResultCode.OPERATOR_NOT_LIMIT);
+        }
+        /*校验交易密码*/
+        if(!StrUtils.isBlank(password)){
+            String valiStr = validateOrderPassword(users, password);
+            if(valiStr != null){
+                return valiStr;
+            }
+        }
+        cancelNoPay(users, id);
+        return Result.toResult(ResultCode.SUCCESS);
+    }
 }

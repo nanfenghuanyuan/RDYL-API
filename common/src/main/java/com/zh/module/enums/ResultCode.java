@@ -76,6 +76,7 @@ public enum ResultCode {
     PETS_STATE_ERROR(30049, "宠物当前状态不可进行此操作哦"),
     OPERATOR_NOT_LIMIT(30050, "无权进行当前操作"),
     TRANS_ROLE(30051, "仅可上下级之间进行转账"),
+    BIND_INFO_NONE(30052, "请先完成支付信息绑定"),
 
 
     /* 系统错误：40001-49999 */
