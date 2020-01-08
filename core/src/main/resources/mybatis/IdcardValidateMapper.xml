@@ -133,7 +133,7 @@
     <if test="userId != null">
        and  user_id = #{userId,jdbcType=INTEGER}
     </if>
-    <if test="name != null">
+    <if test="name != null and name != ''">
        and  name = #{name,jdbcType=VARCHAR}
     </if>
     <if test="identificationnumber != null">
@@ -209,7 +209,7 @@
   </select>
   <select id="queryValidateTimes" parameterType="java.util.Map" resultType="map">
     SELECT COUNT(*) as counts, DATE_FORMAT(create_time, '%Y-%m-%d') as valiDate  FROM idcard_validate
-     WHERE userId=#{userId,jdbcType=INTEGER} and createTime between #{startDate,jdbcType=VARCHAR} and #{currDate,jdbcType=VARCHAR} GROUP BY  valiDate
+     WHERE user_id=#{userId,jdbcType=INTEGER} and create_time between #{startDate,jdbcType=VARCHAR} and #{currDate,jdbcType=VARCHAR} GROUP BY  valiDate
   </select>
   <select id="selectConditionPaging" parameterType="java.util.Map" resultType="java.util.Map">
     select iv.*,u.phone from idcard_validate iv left join user u on iv.userId=u.id
@@ -223,7 +223,7 @@
     order by id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
   </select>
   <select id="selectConditionCount" parameterType="java.util.Map" resultType="java.lang.Integer">
-    select count(*) from idcard_validate iv left join user u on iv.userId=u.id
+    select count(*) from idcard_validate iv left join user u on iv.user_id=u.id
     where 1=1
     <if test="phone != null">
       and  u.phone = #{phone,jdbcType=VARCHAR}
