@@ -13,6 +13,15 @@ spring:
     password:
   main:
     allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
+  mvc:
+    static-path-pattern: /static/**
+  resources:
+    static-locations: /static/**
+  thymeleaf:
+    cache: false
+    encoding: utf-8
+    suffix: .html
+    prefix: classpath:/templates/
 #showSql
 logging:
   level:

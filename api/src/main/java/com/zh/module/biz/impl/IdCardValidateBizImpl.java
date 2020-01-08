@@ -62,4 +62,9 @@ public class IdCardValidateBizImpl implements IdCardValidateBiz {
     public void insert(IdcardValidate iv) {
         this.idcardValidateService.insertSelective(iv);
     }
+
+    @Override
+    public IdcardValidate selectByFaceId(String faceId) {
+        return idcardValidateService.queryByTaskId(faceId);
+    }
 }

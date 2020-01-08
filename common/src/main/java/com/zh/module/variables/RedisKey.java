@@ -30,4 +30,6 @@ public class RedisKey {
 	public static final String MATHCHING_NOPAY = "rdyl:matching:nopay:%s";
 	//未付款处罚用户
 	public static final String PUNISH_NOPAY = "rdyl:punish:%s";
+	//实名认证用户获取的faceid
+	public static final String REAL_NAME_USER_FACEID = "rdyl:realname:%s";
 }

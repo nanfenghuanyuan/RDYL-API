@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2020-01-06 15:17:34
+ * @date: 2020-01-08 18:00:18
  **/ 
 @Service("idcardValidateService")
 public class IdcardValidateServiceImpl implements IdcardValidateService {
@@ -76,7 +76,7 @@ public class IdcardValidateServiceImpl implements IdcardValidateService {
     @Override
     public IdcardValidate queryByTaskId(String taskId) {
         Map<Object, Object> params = new HashMap<Object, Object>();
-        params.put("taskid", taskId);
+        params.put("taskId", taskId);
         List<IdcardValidate> list = this.idcardValidateMapper.selectAll(params);
         return list == null || list.isEmpty() ? null :list.get(0);
     }

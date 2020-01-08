@@ -20,4 +20,6 @@ public interface IdCardValidateBiz {
     Integer getByUserByIdcard(String identificationnumber);
 
     void insert(IdcardValidate iv);
+
+    IdcardValidate selectByFaceId(String faceId);
 }

@@ -7,14 +7,14 @@ import java.util.Map;
 /**
  * 
  * @author: autogeneration
- * @date: 2020-01-06 15:17:34
+ * @date: 2020-01-08 18:00:18
  **/ 
 public interface IdcardValidateService {
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2020-01-06 15:17:34
+     * @date: 2020-01-08 18:00:18
      **/ 
     int insert(IdcardValidate record);
 
@@ -22,7 +22,7 @@ public interface IdcardValidateService {
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2020-01-06 15:17:34
+     * @date: 2020-01-08 18:00:18
      **/ 
     int insertSelective(IdcardValidate record);
 
@@ -30,7 +30,7 @@ public interface IdcardValidateService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2020-01-06 15:17:34
+     * @date: 2020-01-08 18:00:18
      **/ 
     int updateByPrimaryKey(IdcardValidate record);
 
@@ -38,7 +38,7 @@ public interface IdcardValidateService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2020-01-06 15:17:34
+     * @date: 2020-01-08 18:00:18
      **/ 
     int updateByPrimaryKeySelective(IdcardValidate record);
 
@@ -46,7 +46,7 @@ public interface IdcardValidateService {
      * 删除
      * 
      * @author: autogeneration
-     * @date: 2020-01-06 15:17:34
+     * @date: 2020-01-08 18:00:18
      **/ 
     int deleteByPrimaryKey(Integer id);
 
@@ -54,7 +54,7 @@ public interface IdcardValidateService {
      * 按主键查询
      * 
      * @author: autogeneration
-     * @date: 2020-01-06 15:17:34
+     * @date: 2020-01-08 18:00:18
      **/ 
     IdcardValidate selectByPrimaryKey(Integer id);
 
@@ -62,7 +62,7 @@ public interface IdcardValidateService {
      * 条件查询
      * 
      * @author: autogeneration
-     * @date: 2020-01-06 15:17:34
+     * @date: 2020-01-08 18:00:18
      **/ 
     List<IdcardValidate> selectAll(Map<Object, Object> param);
 
@@ -70,7 +70,7 @@ public interface IdcardValidateService {
      * 分页查询
      * 
      * @author: autogeneration
-     * @date: 2020-01-06 15:17:34
+     * @date: 2020-01-08 18:00:18
      **/ 
     List<IdcardValidate> selectPaging(Map<Object, Object> param);
 
@@ -78,11 +78,12 @@ public interface IdcardValidateService {
      * 统计查询
      * 
      * @author: autogeneration
-     * @date: 2020-01-06 15:17:34
+     * @date: 2020-01-08 18:00:18
      **/ 
     int selectCount(Map<Object, Object> param);
-    List<?> queryValidateTimes(Map<String, Object> map);
-    IdcardValidate queryByTaskId(String taskId);
-    List<Map<String, Object>> selectConditionPaging(Map<Object, Object> param);
     int selectConditionCount(Map<Object, Object> param);
+    List<Map<String, Object>> selectConditionPaging(Map<Object, Object> param);
+    IdcardValidate queryByTaskId(String taskId);
+    List<?> queryValidateTimes(Map<String, Object> map);
+
 }

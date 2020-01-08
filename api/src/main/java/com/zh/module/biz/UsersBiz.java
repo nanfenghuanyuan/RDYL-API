@@ -26,5 +26,5 @@ public interface UsersBiz {
      */
     String getToken(Users user, String name, String idCard);
 
-    String getStatus(Users user, String taskId);
+    String getStatus(String code, String h5faceId);
 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class IdcardValidate implements Serializable {
-    private static final long serialVersionUID = -7395806834291367540L;
+    private static final long serialVersionUID = 115360251203603711L;
 
     private Integer id;
 
@@ -13,20 +13,6 @@ public class IdcardValidate implements Serializable {
     private String name;
 
     private String identificationnumber;
-
-    private String idcardtype;
-
-    private String idcardexpiry;
-
-    private String address;
-
-    private String sex;
-
-    private String idcardfrontpic;
-
-    private String idcardbackpic;
-
-    private String facepic;
 
     private Integer state;
 
@@ -66,62 +52,6 @@ public class IdcardValidate implements Serializable {
 
     public void setIdentificationnumber(String identificationnumber) {
         this.identificationnumber = identificationnumber == null ? null : identificationnumber.trim();
-    }
-
-    public String getIdcardtype() {
-        return idcardtype;
-    }
-
-    public void setIdcardtype(String idcardtype) {
-        this.idcardtype = idcardtype == null ? null : idcardtype.trim();
-    }
-
-    public String getIdcardexpiry() {
-        return idcardexpiry;
-    }
-
-    public void setIdcardexpiry(String idcardexpiry) {
-        this.idcardexpiry = idcardexpiry == null ? null : idcardexpiry.trim();
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex == null ? null : sex.trim();
-    }
-
-    public String getIdcardfrontpic() {
-        return idcardfrontpic;
-    }
-
-    public void setIdcardfrontpic(String idcardfrontpic) {
-        this.idcardfrontpic = idcardfrontpic == null ? null : idcardfrontpic.trim();
-    }
-
-    public String getIdcardbackpic() {
-        return idcardbackpic;
-    }
-
-    public void setIdcardbackpic(String idcardbackpic) {
-        this.idcardbackpic = idcardbackpic == null ? null : idcardbackpic.trim();
-    }
-
-    public String getFacepic() {
-        return facepic;
-    }
-
-    public void setFacepic(String facepic) {
-        this.facepic = facepic == null ? null : facepic.trim();
     }
 
     public Integer getState() {
@@ -167,13 +97,6 @@ public class IdcardValidate implements Serializable {
         sb.append(", userId=").append(userId);
         sb.append(", name=").append(name);
         sb.append(", identificationnumber=").append(identificationnumber);
-        sb.append(", idcardtype=").append(idcardtype);
-        sb.append(", idcardexpiry=").append(idcardexpiry);
-        sb.append(", address=").append(address);
-        sb.append(", sex=").append(sex);
-        sb.append(", idcardfrontpic=").append(idcardfrontpic);
-        sb.append(", idcardbackpic=").append(idcardbackpic);
-        sb.append(", facepic=").append(facepic);
         sb.append(", state=").append(state);
         sb.append(", taskId=").append(taskId);
         sb.append(", createTime=").append(createTime);

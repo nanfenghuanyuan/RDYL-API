@@ -3,8 +3,8 @@ package com.zh.module.biz.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.zh.module.aliyun.H5RpBasic;
 import com.zh.module.aliyun.MaterialModel;
+import com.zh.module.aliyun.TencentCloud;
 import com.zh.module.biz.IdCardValidateBiz;
 import com.zh.module.biz.UsersBiz;
 import com.zh.module.constants.AccountType;
@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @program: R.D.Y.LMain
@@ -50,7 +49,7 @@ public class UsersBizImpl implements UsersBiz {
     @Autowired
     private SysparamsService sysparamsService;
     @Autowired
-    private H5RpBasic h5RpBasic;
+    private TencentCloud tencentCloud;
     @Autowired
     private SmsRecordService smsRecordService;
     @Autowired
@@ -297,17 +296,17 @@ public class UsersBizImpl implements UsersBiz {
             return Result.toResult(ResultCode.PERMISSION_NO_ACCESS);
         }
         if(user.getIdStatus() != GlobalParams.REALNAME_NEW_STATE_NO){
-            return Result.toResult(ResultCode.USER_REALNAME_ERROR);
+            return Result.toResult(ResultCode.REAL_NAME_FINISHED);
         }
 
         /*判断验证次数*/
         Map<String, Object> countMap = idcardValidateBiz.queryValidateTimes(user.getId(),3);
         Sysparams timesLimit = sysparamsService.getValByKey(SystemParams.IDCARD_VALIDATE_TIMES_LIMIT);
-        if(timesLimit==null){
+        if(timesLimit == null){
             return Result.toResult(ResultCode.SYSTEM_PARAM_ERROR);
         }
         int times = Integer.parseInt(timesLimit.getKeyval());
-        if(countMap!=null&&times>0){
+        if(countMap != null && times > 0){
             //当日认证次数
             BigInteger dateCount = (BigInteger)countMap.get(DateUtils.getCurrentDateStr());
             if(dateCount!=null&&dateCount.intValue()>=times){
@@ -318,79 +317,46 @@ public class UsersBizImpl implements UsersBiz {
             BigInteger dateCount1 = (BigInteger)countMap.get(DateUtils.getSomeDay(-1));
             BigInteger dateCount2 = (BigInteger)countMap.get(DateUtils.getSomeDay(-2));
             BigInteger dateCount3 = (BigInteger)countMap.get(DateUtils.getSomeDay(-3));
-            if((dateCount1!=null&&dateCount1.intValue()>=times&&dateCount2!=null&&dateCount2.intValue()>=times)
-                    ||(dateCount2!=null&&dateCount2.intValue()>=times&&dateCount3!=null&&dateCount3.intValue()>=times)){
+            if((dateCount1 != null && dateCount1.intValue() >= times&&dateCount2 != null && dateCount2.intValue() >= times)
+                    || (dateCount2 != null && dateCount2.intValue() >= times && dateCount3 != null && dateCount3.intValue() >= times)){
                 return Result.toResult(ResultCode.REAL_NAME_LIMIT);
             }
         }
-        JSONObject jsonObject = h5RpBasic.init(name, idCard);
+        JSONObject jsonObject = tencentCloud.getStatus(user.getId().toString(), name, idCard, StrUtils.getCharAndNumr(10));
+        IdcardValidate iv = new IdcardValidate();
+        iv.setName(name);
+        iv.setIdentificationnumber(idCard);
+        iv.setUserId(user.getId());
+        //将faceId绑定用户存入redis
+        String faceId = jsonObject.getString("h5faceId");
+        iv.setTaskId(faceId);
+        iv.setState(GlobalParams.REALNAME_STATE_ING);
+        idcardValidateBiz.insert(iv);
+        RedisUtil.addString(redis, String.format(RedisKey.REAL_NAME_USER_FACEID, faceId), user.getId().toString());
         Map<String, Object>  map = new HashMap<String, Object>();
-        map.put("token", jsonObject.getString("token"));
-        map.put("taskId", jsonObject.getString("ticketId"));
-        map.put("url", jsonObject.getString("url"));
-
+        map.put("url", jsonObject.get("url"));
         return Result.toResult(ResultCode.SUCCESS, map);
     }
 
     @Override
-    public String getStatus(Users user, String taskId) {
+    public String getStatus(String codes, String faceId) {
+        String userId = RedisUtil.searchString(redis, String.format(RedisKey.REAL_NAME_USER_FACEID, faceId));
+        Users user = usersService.selectByPrimaryKey(Integer.valueOf(userId));
         /*用户是否已经实名*/
         if(user.getIdStatus() != GlobalParams.REALNAME_NEW_STATE_NO){
             return Result.toResult(ResultCode.USER_REALNAME_ERROR);
         }
-
-        JSONObject jsonObject = h5RpBasic.getStatus(taskId);
-        System.out.println(jsonObject.toJSONString());
-        int status = -1;
-        //认证记录不存在，直接返回
-        if(status == GlobalParams.REALNAME_STATE_NOT_EXIST){
-            return Result.toResult(ResultCode.REAL_NAME_TASK_NOT_EXIST);
-        }
-        //认证中，等待两秒继续请求一次
-        if(status == GlobalParams.REALNAME_STATE_ING){
-            try {
-                TimeUnit.SECONDS.sleep(2);
-                status = 0;
-            } catch (InterruptedException e) {
-                log.info("实人认证等待被打断---");
-                e.printStackTrace();
-            }
-        }
-        HashMap<String, Object> map = new HashMap<>();
-
-        IdcardValidate iv = new IdcardValidate();
+        IdcardValidate iv = idcardValidateBiz.selectByFaceId(faceId);
         ResultCode code = ResultCode.REAL_NAME_FAIL;
-        if(status == GlobalParams.REALNAME_STATE_SUCCESS || status == GlobalParams.REALNAME_STATE_FAIL){
-            MaterialModel mate = new MaterialModel();
-            BeanUtils.copyProperties(mate, iv);
-            iv.setState(status);
-            iv.setName(mate.getName());
-            iv.setAddress(mate.getAddress());
-            iv.setFacepic(mate.getFacePic());
-            iv.setIdcardbackpic(mate.getIdCardBackPic());
-            iv.setIdcardexpiry(mate.getIdCardExpiry());
-            iv.setIdcardfrontpic(mate.getIdCardFrontPic());
-            iv.setSex(mate.getSex());
-            iv.setIdcardtype(mate.getIdCardType());
-            iv.setTaskId(taskId);
-            iv.setUserId(user.getId());
-            iv.setIdentificationnumber(mate.getIdentificationNumber());
-        }
-
+        int status = "0".equals(codes) ? GlobalParams.REALNAME_NEW_STATE_TRUE : GlobalParams.REALNAME_STATE_FAIL;
+        iv.setState(status);
         if(status == GlobalParams.REALNAME_STATE_SUCCESS){
-            Integer oldUserId = idcardValidateBiz.getByUserByIdcard(iv.getIdentificationnumber());
-            if(oldUserId != null && !oldUserId.equals(user.getId())){
-                iv.setState(GlobalParams.REALNAME_STATE_IDCARD_EXIST);
-                code = ResultCode.REAL_NAME_IDCARD_EXIST;
-            }else{
-                user.setIdStatus((byte) GlobalParams.ACTIVE);
-                usersService.updateByPrimaryKeySelective(user);
-                code = ResultCode.SUCCESS;
-                map.put("name", iv.getName());
-            }
+            user.setIdStatus((byte) GlobalParams.ACTIVE);
+            usersService.updateByPrimaryKeySelective(user);
+            code = ResultCode.SUCCESS;
         }
         idcardValidateBiz.insert(iv);
-        return Result.toResult(code, map);
+        return Result.toResult(code);
     }
 
 }

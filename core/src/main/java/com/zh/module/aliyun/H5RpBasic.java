@@ -82,15 +82,8 @@ public class H5RpBasic {
             try {
                 GetMaterialsResponse response = client.getAcsResponse(getMaterialsRequest);
                 if(statusCode == GlobalParams.REALNAME_STATE_SUCCESS) {
-                    iv.setAddress(response.getData().getAddress());
-                    iv.setFacepic(response.getData().getFacePic());
-                    iv.setIdcardbackpic(response.getData().getIdCardBackPic());
-                    iv.setIdcardexpiry(response.getData().getIdCardExpiry());
-                    iv.setIdcardfrontpic(response.getData().getIdCardFrontPic());
-                    iv.setIdcardtype(response.getData().getIdCardType());
                     iv.setIdentificationnumber(response.getData().getIdentificationNumber());
                     iv.setName(response.getData().getName());
-                    iv.setSex(response.getData().getSex());
                 }
             } catch (ServerException e) {
                 e.printStackTrace();

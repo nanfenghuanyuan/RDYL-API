@@ -32,7 +32,7 @@ public class UserRealNameController{
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="init",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+	@RequestMapping(value="init",method=RequestMethod.POST,produces="application/json;charset=utf-8")
 	public String initRealName(@CurrentUser Users user, String name, String idCard){
 		try {
 
@@ -52,19 +52,18 @@ public class UserRealNameController{
 
 	/**
 	 * 获取实人认证信息
-	 * @param user
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value="status",method= RequestMethod.GET,produces="application/json;charset=utf-8")
-	public String getStatus(@CurrentUser Users user , String taskId){
+	public String getStatus(String code, String orderNo, String h5faceId, String newSignature, String liveRate){
 		try {
 			/*参数校验*/
-			if(StrUtils.isBlank(taskId)){
+			if(StrUtils.isBlank(code) || StrUtils.isBlank(h5faceId)){
 				return Result.toResult(ResultCode.PARAM_IS_BLANK);
 			}
 			//设置头像
-			return userBiz.getStatus(user, taskId);
+			return userBiz.getStatus(code, h5faceId);
 		}catch (NumberFormatException e) {
 			e.printStackTrace();
 			return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);
