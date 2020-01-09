@@ -1,9 +1,11 @@
 package com.zh.module.aliyun;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.hash.Hashing;
 import com.zh.module.utils.HTTP;
+import com.zh.module.utils.HttpsUtil;
 import com.zh.module.utils.StrUtils;
 import org.apache.commons.codec.Charsets;
 import org.springframework.stereotype.Component;
@@ -81,7 +83,7 @@ public class TencentCloud {
         values.add(userId);
         values.add("1.0.0");
         String sign = sign(values, tickets);
-        Map<String, Object> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("webankAppId", appId);
         map.put("orderNo", orderNo);
         map.put("name", userName);
@@ -122,7 +124,7 @@ public class TencentCloud {
     public String getAccessToken(String appId, String secret){
         String url = "https://idasc.webank.com/api/oauth2/access_token?app_id=%s&secret=%s&grant_type=client_credential&version=1.0.0";
         try {
-            String result = HTTP.get(String.format(url, appId, secret), null);
+            String result = HttpsUtil.httpsGet(String.format(url, appId, secret));
             if(!StrUtils.isBlank(result)) {
                 JSONObject jsonObject = JSONObject.parseObject(result);
                 String code = jsonObject.getString("code");
@@ -158,7 +160,7 @@ public class TencentCloud {
     public String getSignTicket(String appId, String accessToken){
         String url = "https://idasc.webank.com/api/oauth2/api_ticket?app_id=%s&access_token=%s&type=SIGN&version=1.0.0";
         try {
-            String result = HTTP.get(String.format(url, appId, accessToken), null);
+            String result = HttpsUtil.httpsGet(String.format(url, appId, accessToken));
             if(!StrUtils.isBlank(result)) {
                 JSONObject jsonObject = JSONObject.parseObject(result);
                 String code = jsonObject.getString("code");
@@ -186,7 +188,7 @@ public class TencentCloud {
         String url = "https://idasc.webank.com/api/oauth2/api_ticket?app_id=%s&access_token=%s&type=NONCE&version=1.0.0&user_id=%s";
         try {
             url = String.format(url, appId, accessToken, userId);
-            String result = HTTP.get(url, null);
+            String result = HttpsUtil.httpsGet(url);
             if(!StrUtils.isBlank(result)) {
                 JSONObject jsonObject = JSONObject.parseObject(result);
                 String code = jsonObject.getString("code");
