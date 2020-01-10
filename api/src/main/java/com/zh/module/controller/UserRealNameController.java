@@ -10,9 +10,7 @@ import com.zh.module.enums.ResultCode;
 import com.zh.module.utils.StrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户登录注册
@@ -33,9 +31,14 @@ public class UserRealNameController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="init",method=RequestMethod.POST,produces="application/json;charset=utf-8")
-	public String initRealName(@CurrentUser Users user, String name, String idCard){
+	public String initRealName(@CurrentUser Users user, @RequestBody String param){
 		try {
-
+			JSONObject jsonObject = JSONObject.parseObject(param);
+			String name = jsonObject.getString("name");
+			String idCard = jsonObject.getString("idCard");
+			if(StrUtils.isBlank(name) || StrUtils.isBlank(idCard)){
+				return Result.toResult(ResultCode.PARAM_IS_BLANK);
+			}
 			return userBiz.getToken(user, name, idCard);
 		}catch (NumberFormatException e) {
 			e.printStackTrace();

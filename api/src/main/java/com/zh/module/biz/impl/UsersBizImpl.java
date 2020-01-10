@@ -308,15 +308,15 @@ public class UsersBizImpl implements UsersBiz {
         int times = Integer.parseInt(timesLimit.getKeyval());
         if(countMap != null && times > 0){
             //当日认证次数
-            BigInteger dateCount = (BigInteger)countMap.get(DateUtils.getCurrentDateStr());
+            BigInteger dateCount = BigInteger.valueOf((Long) countMap.get(DateUtils.getCurrentDateStr()));
             if(dateCount!=null&&dateCount.intValue()>=times){
                 return Result.toResult(ResultCode.REAL_NAME_LIMIT);
             }
 
             //连续两天次数限制
-            BigInteger dateCount1 = (BigInteger)countMap.get(DateUtils.getSomeDay(-1));
-            BigInteger dateCount2 = (BigInteger)countMap.get(DateUtils.getSomeDay(-2));
-            BigInteger dateCount3 = (BigInteger)countMap.get(DateUtils.getSomeDay(-3));
+            BigInteger dateCount1 = BigInteger.valueOf((Long) countMap.get(DateUtils.getSomeDay(-1)));
+            BigInteger dateCount2 = BigInteger.valueOf((Long) countMap.get(DateUtils.getSomeDay(-2)));
+            BigInteger dateCount3 = BigInteger.valueOf((Long) countMap.get(DateUtils.getSomeDay(-3)));
             if((dateCount1 != null && dateCount1.intValue() >= times&&dateCount2 != null && dateCount2.intValue() >= times)
                     || (dateCount2 != null && dateCount2.intValue() >= times && dateCount3 != null && dateCount3.intValue() >= times)){
                 return Result.toResult(ResultCode.REAL_NAME_LIMIT);
