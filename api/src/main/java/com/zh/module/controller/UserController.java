@@ -70,6 +70,14 @@ public class UserController {
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }
     }
+    @PostMapping(value = "/getAuthState", produces = { "application/json;charset=UTF-8"})
+    public String getAuthState(@RequestBody Users user){
+        try {
+            return usersBiz.getAuthState(user);
+        } catch (Exception e) {
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
 
     /**
      * 修改密码

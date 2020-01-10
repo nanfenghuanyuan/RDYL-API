@@ -68,6 +68,11 @@ public class UsersBizImpl implements UsersBiz {
     }
 
     @Override
+    public String getAuthState(Users user) {
+        return Result.toResult(ResultCode.SUCCESS, user.getIdStatus());
+    }
+
+    @Override
     public String login(Users user) throws Exception {
         JSONObject jsonObject = new JSONObject();
         Users userForBase = usersService.selectByPhone(user.getPhone());

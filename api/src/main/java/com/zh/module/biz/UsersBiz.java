@@ -29,4 +29,6 @@ public interface UsersBiz {
     String getStatus(Users users);
 
     Users getUser(Integer userId);
+
+    String getAuthState(Users user);
 }
