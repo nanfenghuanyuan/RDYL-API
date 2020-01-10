@@ -48,7 +48,39 @@ public class TencentCloud {
             jsonObject.put("url", "https://ida.webank.com/api/web/login?webankAppId=" + appId + "&version=1.0.0&nonce=" + nonce + "&orderNo=" + orderNo + "&h5faceId=" + h5faceId + "&url=http%3a%2f%2f47.56.87.149%3a8081%2f&" +
                     "resultType=1&userId=" + userId + "&sign=" + sign + "&from=APP");
             jsonObject.put("h5faceId", h5faceId);
+            jsonObject.put("orderNo", orderNo);
+            jsonObject.put("nonce", nonce);
             return jsonObject;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取认证结果
+     * @param orderNo
+     * @return
+     */
+    public JSONObject getResult(String nonce, String orderNo){
+        String accessToken = getAccessToken(appId, secret);
+        String signTickets = getSignTicket(appId, accessToken);
+        List<String> strings = new LinkedList<>();
+        strings.add(appId);
+        strings.add(orderNo);
+        strings.add("1.0.0");
+        strings.add(nonce);
+        String sign = sign(strings, signTickets);
+        try {
+            String url = "https://idasc.webank.com/api/server/sync?app_id=%s&nonce=%s&order_no=%s&version=1.0.0&sign=%s";
+            String result = HttpsUtil.httpsGet(String.format(url, appId, nonce, orderNo, sign));
+            if(!StrUtils.isBlank(result)) {
+                JSONObject jsonObject = JSONObject.parseObject(result);
+                jsonObject.put("code", jsonObject.getString("code"));
+                return jsonObject;
+            }else {
+                return null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

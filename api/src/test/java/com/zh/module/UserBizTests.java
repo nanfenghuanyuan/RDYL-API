@@ -43,7 +43,13 @@ public class UserBizTests {
     }
     @Test
     public void realName1() throws Exception {
-        System.out.println(h5RpBasic.getStatus("f6f833fd-aff6-47e4-ad0f-b4f019bad817"));
+        Users users = usersBiz.getUser(1);
+        System.out.println(usersBiz.getToken(users, "赵赫", "370883199409167412"));
+    }
+    @Test
+    public void realName2() throws Exception {
+        Users users = usersBiz.getUser(1);
+        System.out.println(usersBiz.getStatus(users));
     }
 
 }

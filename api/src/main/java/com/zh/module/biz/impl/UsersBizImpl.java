@@ -60,6 +60,13 @@ public class UsersBizImpl implements UsersBiz {
     private IdCardValidateBiz idcardValidateBiz;
     @Resource
     private RedisTemplate<String,String> redis;
+
+
+    @Override
+    public Users getUser(Integer userId) {
+        return usersService.selectByPrimaryKey(userId);
+    }
+
     @Override
     public String login(Users user) throws Exception {
         JSONObject jsonObject = new JSONObject();
@@ -309,16 +316,7 @@ public class UsersBizImpl implements UsersBiz {
         if(countMap != null && times > 0){
             //当日认证次数
             BigInteger dateCount = BigInteger.valueOf((Long) countMap.get(DateUtils.getCurrentDateStr()));
-            if(dateCount!=null&&dateCount.intValue()>=times){
-                return Result.toResult(ResultCode.REAL_NAME_LIMIT);
-            }
-
-            //连续两天次数限制
-            BigInteger dateCount1 = BigInteger.valueOf((Long) countMap.get(DateUtils.getSomeDay(-1)));
-            BigInteger dateCount2 = BigInteger.valueOf((Long) countMap.get(DateUtils.getSomeDay(-2)));
-            BigInteger dateCount3 = BigInteger.valueOf((Long) countMap.get(DateUtils.getSomeDay(-3)));
-            if((dateCount1 != null && dateCount1.intValue() >= times&&dateCount2 != null && dateCount2.intValue() >= times)
-                    || (dateCount2 != null && dateCount2.intValue() >= times && dateCount3 != null && dateCount3.intValue() >= times)){
+            if(dateCount != null && dateCount.intValue() >= times){
                 return Result.toResult(ResultCode.REAL_NAME_LIMIT);
             }
         }
@@ -332,16 +330,20 @@ public class UsersBizImpl implements UsersBiz {
         iv.setTaskId(faceId);
         iv.setState(GlobalParams.REALNAME_STATE_ING);
         idcardValidateBiz.insert(iv);
-        RedisUtil.addString(redis, String.format(RedisKey.REAL_NAME_USER_FACEID, faceId), user.getId().toString());
+        RedisUtil.addStringObj(redis, String.format(RedisKey.REAL_NAME_USER_OBJECT, user.getId()), jsonObject);
         Map<String, Object>  map = new HashMap<String, Object>();
         map.put("url", jsonObject.get("url"));
         return Result.toResult(ResultCode.SUCCESS, map);
     }
 
     @Override
-    public String getStatus(String codes, String faceId) {
-        String userId = RedisUtil.searchString(redis, String.format(RedisKey.REAL_NAME_USER_FACEID, faceId));
-        Users user = usersService.selectByPrimaryKey(Integer.valueOf(userId));
+    public String getStatus(Users user) {
+        JSONObject jsonObject = RedisUtil.searchStringObj(redis, String.format(RedisKey.REAL_NAME_USER_OBJECT, user.getId()), JSONObject.class);
+        String faceId = jsonObject.getString("h5faceId");
+        String orderNo = jsonObject.getString("orderNo");
+        String nonce = jsonObject.getString("nonce");
+        JSONObject result = tencentCloud.getResult(nonce, orderNo);
+        String codes = result.getString("code");
         /*用户是否已经实名*/
         if(user.getIdStatus() != GlobalParams.REALNAME_NEW_STATE_NO){
             return Result.toResult(ResultCode.USER_REALNAME_ERROR);

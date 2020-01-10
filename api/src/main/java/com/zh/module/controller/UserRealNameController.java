@@ -59,14 +59,10 @@ public class UserRealNameController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="status",method= RequestMethod.GET,produces="application/json;charset=utf-8")
-	public String getStatus(String code, String orderNo, String h5faceId, String newSignature, String liveRate){
+	public String getStatus(@CurrentUser Users users){
 		try {
-			/*参数校验*/
-			if(StrUtils.isBlank(code) || StrUtils.isBlank(h5faceId)){
-				return Result.toResult(ResultCode.PARAM_IS_BLANK);
-			}
-			//设置头像
-			return userBiz.getStatus(code, h5faceId);
+
+			return userBiz.getStatus(users);
 		}catch (NumberFormatException e) {
 			e.printStackTrace();
 			return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);
