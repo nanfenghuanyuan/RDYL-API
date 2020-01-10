@@ -57,7 +57,6 @@ public class UserRealNameController{
 	 * 获取实人认证信息
 	 * @return
 	 */
-	@ResponseBody
 	@RequestMapping(value="status",method= RequestMethod.GET,produces="application/json;charset=utf-8")
 	public String getStatus(@CurrentUser Users users){
 		try {

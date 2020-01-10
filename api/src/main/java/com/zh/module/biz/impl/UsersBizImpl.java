@@ -352,13 +352,14 @@ public class UsersBizImpl implements UsersBiz {
         ResultCode code = ResultCode.REAL_NAME_FAIL;
         int status = "0".equals(codes) ? GlobalParams.REALNAME_NEW_STATE_TRUE : GlobalParams.REALNAME_STATE_FAIL;
         iv.setState(status);
+        idcardValidateBiz.insert(iv);
         if(status == GlobalParams.REALNAME_STATE_SUCCESS){
             user.setIdStatus((byte) GlobalParams.ACTIVE);
             usersService.updateByPrimaryKeySelective(user);
-            code = ResultCode.SUCCESS;
+            return "realName/success";
+        }else{
+            return "realName/error";
         }
-        idcardValidateBiz.insert(iv);
-        return Result.toResult(code);
     }
 
 }
