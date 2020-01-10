@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>error</title>
+  <title>success</title>
   <style>
     div {
       position: fixed;
@@ -31,8 +31,8 @@
 
 <body>
   <div>
-    <img src="./error.png" alt="">
-    <p>认证失败</p>
+    <img th:src="@{http://www.pgy.pub/externalLinksController/chain/success.png?ckey=iPi5OAkdkFpCp%2FYypHebiknLKkX%2FZA%2B1YMQQXomChntKCL%2FRR4VywkIbPgldyBjw}" alt="">
+    <p>认证成功</p>
   </div>
 </body>
 

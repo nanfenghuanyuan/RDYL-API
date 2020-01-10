@@ -73,5 +73,4 @@ public class UserRealNameController{
 			return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
 		}
 	}
-
 }
