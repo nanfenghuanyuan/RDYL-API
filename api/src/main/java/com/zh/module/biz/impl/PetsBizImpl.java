@@ -83,7 +83,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         petsMatchingList.setAppointmentStartTime(DateUtils.getCurrentTimeStr());
         /*设置失效时间*/
         int interval = 10;
-        Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_PAY_CANCEL_TIME);
+        Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_CANCEL_TIME);
         if(param1 != null){
             interval = Integer.parseInt(param1.getKeyval());
         }
@@ -134,7 +134,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             params.put("level", level);
             params.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
             List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(params);
-            if(petsMatchingLists.size() != 0){
+            if(petsMatchingLists.size() != 0) {
                 PetsMatchingList petsMatchingList = petsMatchingLists.get(0);
                 petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_CANCEL);
                 petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
@@ -142,58 +142,73 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                 accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, amount, BigDecimal.ZERO, userId, "预约取消返还", petsMatchingList.getId());
             }
             return Result.toResult(ResultCode.PETS_HAS_NONE);
-        }
-        PetsList petsList = new PetsList();
-        //修改宠物信息状态
-        for(PetsList list : petsLists){
-            if (!list.getUserId().equals(userId)) {
-                petsList = list;
-                break;
+        }else {
+            PetsList petsList = new PetsList();
+            //修改宠物信息状态
+            for (PetsList list : petsLists) {
+                if (!list.getUserId().equals(userId)) {
+                    petsList = list;
+                    break;
+                }
             }
-        }
-        //自己不能和自己匹配
-        if(petsList.getUserId() == null || petsList.getUserId().equals(userId)){
-            return Result.toResult(ResultCode.PETS_HAS_NONE);
-        }
-        Integer saleUserId = petsList.getUserId();
-        petsList.setTransferUserId(userId);
-        petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAITING);
-        petsListService.updateByPrimaryKey(petsList);
+            //自己不能和自己匹配
+            if (petsList.getUserId() == null || petsList.getUserId().equals(userId)) {
+                return Result.toResult(ResultCode.PETS_HAS_NONE);
+            }
+            Integer saleUserId = petsList.getUserId();
+            petsList.setTransferUserId(userId);
+            petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAITING);
+            petsListService.updateByPrimaryKey(petsList);
 
-        //验证是否已存在预约记录
-        int count = checkMatchingRecord(userId, level, GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
-        BigDecimal appointmentAmount;
-        //没有预约
-        if(count == 0){
-            appointmentAmount = pets.getPayAmount();
-            PetsMatchingList petsMatchingList = new PetsMatchingList();
-            petsMatchingList.setLevel(level.byteValue());
-            petsMatchingList.setAmount(appointmentAmount);
-            petsMatchingList.setBuyUserId(userId);
-            petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_NOPAY);
-            petsMatchingList.setPetListId(petsList.getId().byteValue());
-            petsMatchingList.setSaleUserId(saleUserId);
-            petsMatchingListService.insertSelective(petsMatchingList);
-        }else{
-            param = new HashMap<>();
-            param.put("level", level);
-            param.put("petListId", "-1");
-            param.put("buyUserId", userId);
-            param.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
-            List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(param);
-            PetsMatchingList petsMatchingList = petsMatchingLists.size() == 0 ? null : petsMatchingLists.get(0);
-            if(petsMatchingList != null) {
+            //验证是否已存在预约记录
+            int count = checkMatchingRecord(userId, level, GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
+            BigDecimal appointmentAmount;
+
+
+            /*设置失效时间*/
+            int interval = 10;
+            Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_CONFIRM_CANCEL_TIME);
+            if(param1 != null){
+                interval = Integer.parseInt(param1.getKeyval());
+            }
+            Calendar current = Calendar.getInstance();
+            current.add(Calendar.MINUTE, interval);
+            Date inactiveTime = new Timestamp(current.getTimeInMillis());
+
+            //没有预约
+            if (count == 0) {
+                appointmentAmount = pets.getPayAmount();
+                PetsMatchingList petsMatchingList = new PetsMatchingList();
+                petsMatchingList.setLevel(level.byteValue());
+                petsMatchingList.setAmount(appointmentAmount);
+                petsMatchingList.setBuyUserId(userId);
                 petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_NOPAY);
                 petsMatchingList.setPetListId(petsList.getId().byteValue());
                 petsMatchingList.setSaleUserId(saleUserId);
-                petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
+                petsMatchingList.setInactiveTime(inactiveTime);
+                petsMatchingListService.insertSelective(petsMatchingList);
+            } else {
+                param = new HashMap<>();
+                param.put("level", level);
+                param.put("petListId", "-1");
+                param.put("buyUserId", userId);
+                param.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
+                List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(param);
+                PetsMatchingList petsMatchingList = petsMatchingLists.size() == 0 ? null : petsMatchingLists.get(0);
+                if (petsMatchingList != null) {
+                    petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_NOPAY);
+                    petsMatchingList.setPetListId(petsList.getId().byteValue());
+                    petsMatchingList.setSaleUserId(saleUserId);
+                    petsMatchingList.setInactiveTime(inactiveTime);
+                    petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
+                }
             }
-        }
 
-        //删除redis预约记录
-        String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
-        RedisUtil.deleteKey(redis, redisKey);
-        return Result.toResult(ResultCode.SUCCESS);
+            //删除redis预约记录
+            String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
+            RedisUtil.deleteKey(redis, redisKey);
+            return Result.toResult(ResultCode.SUCCESS);
+        }
     }
 
     /**
