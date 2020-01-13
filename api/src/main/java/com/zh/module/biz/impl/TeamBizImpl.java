@@ -8,6 +8,7 @@ import com.zh.module.enums.ResultCode;
 import com.zh.module.model.PageModel;
 import com.zh.module.model.TeamListModel;
 import com.zh.module.service.*;
+import com.zh.module.utils.StrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,7 @@ public class TeamBizImpl implements TeamBiz {
         personAmount = usersService.selectCount(param);
         result.put("effectiveAmount", personAmount);
         String profit = profitRecordService.selectSumAmount(users.getId(), GlobalParams.PROFIT_RECORD_TEAM);
-        result.put("profit", profit);
+        result.put("profit", StrUtils.isBlank(profit) ? "0" : profit);
         List<TeamListModel> models = new LinkedList<>();
         param = new HashMap<>();
         param.put("referId", users.getUuid());
