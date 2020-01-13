@@ -320,7 +320,13 @@ public class UsersBizImpl implements UsersBiz {
         int times = Integer.parseInt(timesLimit.getKeyval());
         if(countMap != null && times > 0){
             //当日认证次数
-            BigInteger dateCount = BigInteger.valueOf((Long) countMap.get(DateUtils.getCurrentDateStr()));
+            BigInteger dateCount = null;
+            try {
+                dateCount = BigInteger.valueOf((Long) countMap.get(DateUtils.getCurrentDateStr()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                dateCount = null;
+            }
             if(dateCount != null && dateCount.intValue() >= times){
                 return Result.toResult(ResultCode.REAL_NAME_LIMIT);
             }
@@ -344,9 +350,17 @@ public class UsersBizImpl implements UsersBiz {
     @Override
     public String getStatus(Users user) {
         JSONObject jsonObject = RedisUtil.searchStringObj(redis, String.format(RedisKey.REAL_NAME_USER_OBJECT, user.getId()), JSONObject.class);
-        String faceId = jsonObject.getString("h5faceId");
-        String orderNo = jsonObject.getString("orderNo");
-        String nonce = jsonObject.getString("nonce");
+        String faceId = null;
+        String orderNo = null;
+        String nonce = null;
+        try {
+            faceId = jsonObject.getString("h5faceId");
+            orderNo = jsonObject.getString("orderNo");
+            nonce = jsonObject.getString("nonce");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
         JSONObject result = tencentCloud.getResult(nonce, orderNo);
         String codes = result.getString("code");
         /*用户是否已经实名*/
