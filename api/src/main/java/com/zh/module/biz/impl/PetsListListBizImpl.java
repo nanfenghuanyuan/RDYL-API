@@ -94,7 +94,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
 
     @Override
     public String get(Users users, Integer id) {
-        PetsMatchingList petsMatchingList = petsMatchingListService.selectByPetListIdAndActive(id);
+        PetsMatchingList petsMatchingList = petsMatchingListService.selectByPrimaryKey(id);
         if(petsMatchingList == null){
             return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);
         }
