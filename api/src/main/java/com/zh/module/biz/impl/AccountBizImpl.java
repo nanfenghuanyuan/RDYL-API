@@ -53,6 +53,8 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     @Autowired
     private RechargeService rechargeService;
     @Autowired
+    private AccountTransferService accountTransferService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -101,10 +103,20 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
             }
             String uuid = toUser.getUuid();
             String uuid2 = users.getUuid();
-            if(!uuid.equals(users.getReferId()) || !uuid2.equals(toUser.getReferId())){
+            if(!uuid.equals(users.getReferId()) && !uuid2.equals(toUser.getReferId())){
                 return Result.toResult(ResultCode.TRANS_ROLE);
             }
         }
+
+        AccountTransfer accountTransfer = new AccountTransfer();
+        accountTransfer.setAccountType((byte) AccountType.ACCOUNT_TYPE_ACTIVE);
+        accountTransfer.setAmount(new BigDecimal(amount));
+        accountTransfer.setCoinType((byte) CoinType.OS);
+        accountTransfer.setRelatedid(-1);
+        accountTransfer.setToUserId(toUser.getId());
+        accountTransfer.setUserId(users.getId());
+        accountTransferService.insertSelective(accountTransfer);
+
         try {
             accountService.updateAccountAndInsertFlow(toUser.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, new BigDecimal(amount), BigDecimal.ZERO, users.getId(), "转入(" + users.getPhone()+")", 1);
             accountService.updateAccountAndInsertFlow(users.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(new BigDecimal(amount)), BigDecimal.ZERO, users.getId(), "转出(" + phone+")", 1);
