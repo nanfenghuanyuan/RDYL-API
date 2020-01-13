@@ -24,4 +24,12 @@ public interface BindInfoBiz {
      * @return
      */
     String binding(Users users, JSONObject params);
+
+    /**
+     * 取消绑定
+     * @param users
+     * @param params
+     * @return
+     */
+    String cancel(Users users, JSONObject params);
 }

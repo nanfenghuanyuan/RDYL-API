@@ -50,4 +50,18 @@ public class BindInfoController {
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }
     }
+    /**
+     * 绑定信息
+     * @param users
+     * @return
+     */
+    @PostMapping(value = "/cancel", produces = { "application/json;charset=UTF-8"})
+    public String cancel(@CurrentUser Users users, @RequestBody String param){
+        try {
+            JSONObject params = JSONObject.parseObject(param);
+            return bindInfoBiz.cancel(users, params);
+        } catch (Exception e) {
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
 }

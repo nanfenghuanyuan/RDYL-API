@@ -65,4 +65,11 @@ public class BindInfoBizImpl implements BindInfoBiz {
         bindInfoService.insertSelective(bindInfo);
         return Result.toResult(ResultCode.SUCCESS);
     }
+
+    @Override
+    public String cancel(Users users, JSONObject params) {
+        Integer id = params.getInteger("id");
+        bindInfoService.deleteByPrimaryKey(id);
+        return Result.toResult(ResultCode.SUCCESS);
+    }
 }

@@ -122,7 +122,7 @@ public class UserController {
             if(StrUtils.isBlank(password) || StrUtils.isBlank(code) || codeId == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
-            if(!PatternUtil.isDigitalAndWord(password)){
+            if(!PatternUtil.isTradePwd(password)){
                 return Result.toResult(ResultCode.USER_PWD_TYPE_ERROR);
             }
             if(!PatternUtil.isVerificationCode(code)){
