@@ -11,6 +11,7 @@ import com.zh.module.entity.Users;
 import com.zh.module.exception.NoTokenException;
 import com.zh.module.service.UsersService;
 import com.zh.module.utils.StrUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 在Controller的方法参数中使用此注解，该方法在映射时会注入当前登录的User对象
@@ -29,6 +32,7 @@ import javax.annotation.PostConstruct;
 * @version V1.0
  */
 @Component
+@Slf4j
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
 	public static CurrentUserMethodArgumentResolver currentUserMethodArgumentResolver;
 	@Autowired
@@ -53,6 +57,8 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
 
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+		HttpServletRequest httpServletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
+		log.info("地址--->" + httpServletRequest.getRequestURI());
 		String token = webRequest.getHeader("token");
 		// 执行认证
 		if (token == null) {
