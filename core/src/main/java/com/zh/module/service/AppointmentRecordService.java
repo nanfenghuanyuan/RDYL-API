@@ -7,14 +7,14 @@ import java.util.Map;
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-30 19:30:44
+ * @date: 2020-01-13 11:31:17
  **/ 
 public interface AppointmentRecordService {
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-30 19:30:44
+     * @date: 2020-01-13 11:31:17
      **/ 
     int insert(AppointmentRecord record);
 
@@ -22,7 +22,7 @@ public interface AppointmentRecordService {
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2019-12-30 19:30:44
+     * @date: 2020-01-13 11:31:17
      **/ 
     int insertSelective(AppointmentRecord record);
 
@@ -30,7 +30,7 @@ public interface AppointmentRecordService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-30 19:30:44
+     * @date: 2020-01-13 11:31:17
      **/ 
     int updateByPrimaryKey(AppointmentRecord record);
 
@@ -38,7 +38,7 @@ public interface AppointmentRecordService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2019-12-30 19:30:44
+     * @date: 2020-01-13 11:31:17
      **/ 
     int updateByPrimaryKeySelective(AppointmentRecord record);
 
@@ -46,7 +46,7 @@ public interface AppointmentRecordService {
      * 删除
      * 
      * @author: autogeneration
-     * @date: 2019-12-30 19:30:44
+     * @date: 2020-01-13 11:31:17
      **/ 
     int deleteByPrimaryKey(Integer id);
 
@@ -54,7 +54,7 @@ public interface AppointmentRecordService {
      * 按主键查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-30 19:30:44
+     * @date: 2020-01-13 11:31:17
      **/ 
     AppointmentRecord selectByPrimaryKey(Integer id);
 
@@ -62,7 +62,7 @@ public interface AppointmentRecordService {
      * 条件查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-30 19:30:44
+     * @date: 2020-01-13 11:31:17
      **/ 
     List<AppointmentRecord> selectAll(Map<Object, Object> param);
 
@@ -70,7 +70,7 @@ public interface AppointmentRecordService {
      * 分页查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-30 19:30:44
+     * @date: 2020-01-13 11:31:17
      **/ 
     List<AppointmentRecord> selectPaging(Map<Object, Object> param);
 
@@ -78,7 +78,7 @@ public interface AppointmentRecordService {
      * 统计查询
      * 
      * @author: autogeneration
-     * @date: 2019-12-30 19:30:44
+     * @date: 2020-01-13 11:31:17
      **/ 
     int selectCount(Map<Object, Object> param);
 }

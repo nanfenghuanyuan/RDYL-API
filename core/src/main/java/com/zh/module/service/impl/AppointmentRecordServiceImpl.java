@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-30 19:30:44
+ * @date: 2020-01-13 11:31:17
  **/ 
 @Service("appointmentRecordService")
 public class AppointmentRecordServiceImpl implements AppointmentRecordService {

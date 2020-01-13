@@ -434,6 +434,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     public void cancelAppointment(Users users, Integer id) {
         Integer userId = users.getId();
         PetsMatchingList petsMatchingList = petsMatchingListService.selectByPrimaryKey(id);
+        Pets pets = petsService.selectByLevel(petsMatchingList.getLevel().intValue());
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_CANCEL);
         this.petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
 
@@ -441,7 +442,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
 
         //保存预约记录
         AppointmentRecord appointmentRecord = new AppointmentRecord();
-        appointmentRecord.setName("预约返还" + petsMatchingList);
+        appointmentRecord.setName("预约返还" + pets.getName());
         appointmentRecord.setSpend(petsMatchingList.getAmount());
         appointmentRecord.setUserId(userId);
         appointmentRecordService.insertSelective(appointmentRecord);

@@ -31,6 +31,11 @@ public class UserBizTests {
         System.out.println(h5RpBasic.init("唐立慧", "370883199403287261"));
     }
     @Test
+    public void getAuthState() throws Exception {
+        Users users = usersBiz.getUser(1);
+        System.out.println(usersBiz.getAuthState(users));
+    }
+    @Test
     public void regiester() throws Exception {
         System.out.println(usersBiz.register("13666666667", "123456", "19216441", 1, "303894"));
     }

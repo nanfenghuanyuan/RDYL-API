@@ -137,6 +137,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             if(petsMatchingLists.size() != 0){
                 PetsMatchingList petsMatchingList = petsMatchingLists.get(0);
                 petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_CANCEL);
+                petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
                 BigDecimal amount = petsMatchingList.getAmount();
                 accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, amount, BigDecimal.ZERO, userId, "预约取消返还", petsMatchingList.getId());
             }
