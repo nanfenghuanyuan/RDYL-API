@@ -71,7 +71,7 @@ public class UserController {
         }
     }
     @PostMapping(value = "/getAuthState")
-    public String getAuthState(@RequestBody Users user){
+    public String getAuthState(@CurrentUser Users user){
         try {
             return usersBiz.getAuthState(user);
         } catch (Exception e) {
