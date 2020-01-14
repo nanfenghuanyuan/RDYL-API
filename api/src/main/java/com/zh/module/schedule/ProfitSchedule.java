@@ -5,12 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class ProfitSchedule {
 	
 	@Autowired
 	private PetsListBiz petsListBiz;
-
 
 	/**
 	 * 收益结算
@@ -19,7 +20,6 @@ public class ProfitSchedule {
 	public void getProfit(){
 		petsListBiz.getProfit();
 	}
-
 
 	/**
 	 * 自动取消预约
