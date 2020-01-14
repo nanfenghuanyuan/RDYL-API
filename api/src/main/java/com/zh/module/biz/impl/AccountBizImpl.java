@@ -271,7 +271,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
             RechargeModel rechargeModel = new RechargeModel();
             rechargeModel.setAmount(recharge.getAmount());
             rechargeModel.setState(rechargeModel.getStates(recharge.getState().intValue()));
-            rechargeModel.setCoinType(recharge.getCoinType().intValue());
+            rechargeModel.setCoinType(CoinType.getCoinName(recharge.getCoinType().intValue()));
             rechargeModel.setTime(DateUtils.getDateFormate(recharge.getCreateTime()));
             list.add(rechargeModel);
         }

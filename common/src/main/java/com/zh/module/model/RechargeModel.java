@@ -23,7 +23,7 @@ public class RechargeModel {
     /**
      * 币种
      */
-    private Integer coinType;
+    private String coinType;
     /**
      * 时间
      */
@@ -32,8 +32,8 @@ public class RechargeModel {
     public String getStates(Integer state){
         switch (state){
             case 0 : return "未处理";
-            case 1 : return "成功";
-            case 2 : return "驳回";
+            case 1 : return "充值成功";
+            case 2 : return "充值驳回";
             default: return "系统异常";
         }
     }

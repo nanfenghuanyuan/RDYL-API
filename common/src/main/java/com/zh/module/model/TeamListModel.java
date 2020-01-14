@@ -23,7 +23,7 @@ public class TeamListModel {
     /**
      * 等级
      */
-    private Integer level;
+    private String level;
     /**
      * 认证状态
      */

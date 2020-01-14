@@ -2,6 +2,7 @@ package com.zh.module.biz.impl;
 
 import com.zh.module.biz.TeamBiz;
 import com.zh.module.constants.GlobalParams;
+import com.zh.module.constants.TeamType;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
@@ -62,7 +63,7 @@ public class TeamBizImpl implements TeamBiz {
                 TeamListModel teamListModel = new TeamListModel();
                 teamListModel.setPhone(user.getPhone());
                 teamListModel.setIdStatus(user.getIdStatus().intValue());
-                teamListModel.setLevel(user.getTeamLevel().intValue());
+                teamListModel.setLevel(TeamType.getCoinName(user.getTeamLevel().intValue()));
                 profit = profitRecordService.selectSumAmount(user.getId(), GlobalParams.PROFIT_RECORD_TEAM);
                 teamListModel.setAmount(profit);
                 models.add(teamListModel);
@@ -76,7 +77,7 @@ public class TeamBizImpl implements TeamBiz {
                     TeamListModel teamListModel = new TeamListModel();
                     teamListModel.setPhone(referUser.getPhone());
                     teamListModel.setIdStatus(referUser.getIdStatus().intValue());
-                    teamListModel.setLevel(referUser.getTeamLevel().intValue());
+                    teamListModel.setLevel(TeamType.getCoinName(referUser.getTeamLevel().intValue()));
                     profit = profitRecordService.selectSumAmount(referUser.getId(), GlobalParams.PROFIT_RECORD_TEAM);
                     teamListModel.setAmount(profit);
                     models.add(teamListModel);
