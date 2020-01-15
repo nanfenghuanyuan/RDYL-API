@@ -374,6 +374,7 @@ public class UsersBizImpl implements UsersBiz {
         idcardValidateBiz.insert(iv);
         if(status == GlobalParams.REALNAME_STATE_SUCCESS){
             user.setIdStatus((byte) GlobalParams.ACTIVE);
+            user.setNickName(iv.getName());
             usersService.updateByPrimaryKeySelective(user);
             return "realName/success";
         }else{
