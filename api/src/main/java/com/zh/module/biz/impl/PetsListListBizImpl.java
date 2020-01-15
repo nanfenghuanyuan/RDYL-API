@@ -446,6 +446,10 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         appointmentRecord.setSpend(petsMatchingList.getAmount());
         appointmentRecord.setUserId(userId);
         appointmentRecordService.insertSelective(appointmentRecord);
+
+        //删除redis预约记录
+        String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, petsMatchingList.getLevel(), userId);
+        RedisUtil.deleteKey(redis, redisKey);
     }
 
 
@@ -597,10 +601,10 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
         }
-        PetsList petsList = petsListService.selectByPrimaryKey(id);
-        PetsMatchingList petsMatchingList = petsMatchingListService.selectByPetListIdAndActive(id);
+        PetsMatchingList petsMatchingList = petsMatchingListService.selectByPrimaryKey(id);
+        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId().intValue());
         //判断订单状态 仅有转让中和未确认未付款状态可行
-        if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAITING || petsMatchingList == null){
+        if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAITING){
             return Result.toResult(ResultCode.PETS_STATE_ERROR);
         }
         if(petsMatchingList.getState() != GlobalParams.PET_MATCHING_STATE_NOPAY){

@@ -140,6 +140,9 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                 petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
                 BigDecimal amount = petsMatchingList.getAmount();
                 accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, amount, BigDecimal.ZERO, userId, "预约取消返还", petsMatchingList.getId());
+                //删除redis预约记录
+                String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, petsMatchingList.getLevel(), userId);
+                RedisUtil.deleteKey(redis, redisKey);
             }
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }else {
