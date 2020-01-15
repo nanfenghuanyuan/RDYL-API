@@ -30,33 +30,13 @@ public class GlobalParams {
     public static final int TRANSFER_TYPE_IN = 0;//转入
     public static final int TRANSFER_TYPE_OUT = 1;//转出
 
-    public static final String PAY_ALIPAY_ACCOUNT = "fai@huoli.pro";
-    public static final String PAY_WECHANT_ACCOUNT = "";
-    public static final String PAY_BANK_ACCOUNT_NUM = " ";
-    public static final String PAY_BANK_NAME = " ";
-    public static final String PAY_BANK_ACCOUNT_NAME = " ";
-
-    public static final int NOTICE_NOTICE = 0;//公告
-    public static final int NOTICE_ABOUT = 1;//关于
-    public static final int NOTICE_HELP = 2;//帮助
-    public static final int NOTICE_REGISTER_AGREEMENT = 3;//注册协议
-
-
-    public static final int ORDER_TYPE_BUY = 0;//买入
-    public static final int ORDER_TYPE_SALE = 1;//卖出
-    public static final int ORDER_TYPE_ALL = -1;//全部
-
-
     public static final int COMMISSION_TYPE_PERFORM = 0;//平台手续费
     public static final int COMMISSION_TYPE_REFER = 1;//推荐人手续费
 
 
-    public static final int REALNAME_STATE_NOT_EXIST = -1;//未进行实名认证
-    public static final int REALNAME_STATE_ING = 0;//实名认证进行中
+    public static final int REALNAME_STATE_ING = 0;//未进行实名认证
     public static final int REALNAME_STATE_SUCCESS = 1;//实名认证成功
     public static final int REALNAME_STATE_FAIL = 2;//实名认证失败
-    public static final int REALNAME_STATE_AGE_ILLEGAL = 3;//年龄不合法
-    public static final int REALNAME_STATE_IDCARD_EXIST = 4;//身份证号已存在
 
     public static final int REALNAME_NEW_STATE_NO = 0;//未实名
     public static final int REALNAME_NEW_STATE_TRUE = 1;//已通过
@@ -79,11 +59,6 @@ public class GlobalParams {
     public static final int APPLY_STATE_WAITINT_PROCESS = 0;//等待处理
     public static final int APPLY_STATE_SUCCESS = 1;//已成功
     public static final int APPLY_STATE_FAIL = 2;//已拒绝
-
-
-    public static  final  int USER_STATE_VALID = 1; //用户正常
-    public static  final  int USER_STATE_FREEZING = 2;//用户冻结
-    public static  final  int USER_STATE_CANCEL = 3;//用户注销
 
     public static  final  int RECHARGE_STATE_NEW = 0;//充值未处理
     public static  final  int RECHARGE_STATE_FINISH = 1;//充值完成

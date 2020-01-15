@@ -38,6 +38,8 @@ import java.util.Map;
 public class BindInfoBizImpl implements BindInfoBiz {
     @Autowired
     private BindInfoService bindInfoService;
+    @Autowired
+    private IdcardValidateService idcardValidateService;
     @Override
     public String getBindInfo(Users users) {
         List<BindInfo> list = bindInfoService.queryByUser(users.getId());
@@ -46,6 +48,10 @@ public class BindInfoBizImpl implements BindInfoBiz {
 
     @Override
     public String binding(Users users, JSONObject params) {
+        //未实名不可进行绑定
+        if(users.getIdStatus() != GlobalParams.REALNAME_STATE_SUCCESS){
+            return Result.toResult(ResultCode.USER_NOT_REALNAME);
+        }
         BindInfo bindInfo = new BindInfo();
         Integer type = params.getInteger("type");
         bindInfo.setType(type.byteValue());
@@ -57,6 +63,9 @@ public class BindInfoBizImpl implements BindInfoBiz {
         String name = params.getString("name");
         bindInfo.setName(name);
         if(type.equals(GlobalParams.PAY_BANK)){
+            if(!name.equals(users.getNickName())){
+                return Result.toResult(ResultCode.USER_IDSTATE_ERROR);
+            }
             String bankName = params.getString("bankName");
             bindInfo.setBankName(bankName);
             String branchName = params.getString("branchName");
