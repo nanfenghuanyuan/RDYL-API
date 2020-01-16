@@ -1,6 +1,7 @@
 package com.zh.module;
 
 import com.zh.module.biz.AccountBiz;
+import com.zh.module.biz.UsersBiz;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
 import org.junit.Test;
@@ -15,6 +16,8 @@ public class AccountBizTests {
 
     @Autowired
     private AccountBiz accountBiz;
+    @Autowired
+    private UsersBiz usersBiz;
     @Test
     public void init() {
         Users users = new Users();
@@ -68,8 +71,7 @@ public class AccountBizTests {
     }
     @Test
     public void get() {
-        Users users = new Users();
-        users.setId(1);
+        Users users = usersBiz.getUser(1);
         byte accountType = 0;
         Integer coinType = 1;
         System.out.println(accountBiz.getAvailBalance(users,coinType,accountType));

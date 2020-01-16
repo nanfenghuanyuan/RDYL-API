@@ -236,7 +236,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             }
         }
         //修改宠物记录
-        petsList.setUserId(users.getId());
+        petsList.setUserId(petsMatchingList.getBuyUserId());
         petsList.setTransferUserId(-1);
         petsList.setState((byte) GlobalParams.PET_LIST_STATE_PROFITING);
         petsList.setStartTime(DateUtils.getCurrentTimeStr());

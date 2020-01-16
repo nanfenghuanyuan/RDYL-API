@@ -55,6 +55,8 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     @Autowired
     private AccountTransferService accountTransferService;
     @Autowired
+    private PetsListService petsListService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -214,9 +216,16 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
 
     @Override
     public String getAvailBalance(Users users, Integer coinType, byte accountType) {
+        Map<String, Object> result = new HashMap<>();
         Integer userId = users.getId();
         Account account = accountService.selectByUserIdAndAccountTypeAndType(accountType, coinType, userId);
-        return Result.toResult(ResultCode.SUCCESS, account.getAvailbalance());
+        result.put("contribution", users.getContribution());
+        result.put("availbalance", account.getAvailbalance());
+        result.put("teamLevel", users.getTeamLevel());
+        String holdAssets = petsListService.selectSumAmountByUser(userId);
+        holdAssets = StrUtils.isBlank(holdAssets) ? "0" : holdAssets;
+        result.put("holdAssets", new BigDecimal(holdAssets).setScale(0, BigDecimal.ROUND_HALF_UP));
+        return Result.toResult(ResultCode.SUCCESS, result);
     }
 
     @Override
