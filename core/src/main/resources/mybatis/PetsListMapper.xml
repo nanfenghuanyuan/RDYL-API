@@ -358,8 +358,8 @@
     </if>
   </select>
   <select id="selectListPaging" parameterType="java.util.Map" resultType="map">
-    SELECT pm.id, p.img_url, p.name, pm.price, pm.profit_days, pm.profit_rate, pm.start_time, pm.update_time FROM pets_list pm LEFT JOIN pets p ON p.level = pm.level
-    where pm.user_id = #{userId}
+    SELECT pl.id, p.img_url, p.name, pm.price, pm.profit_days, pm.profit_rate, pm.start_time, pm.update_time FROM pets_list pm LEFT JOIN pets p ON p.level = pm.level LEFT JOIN pets_matching_list pl ON pl.pet_list_id=pm.id
+    where pm.user_id = #{userId} and (pl.state = 1 or pl.state = 2)
     <if test="state != null">
       and  pm.state = #{state,jdbcType=TINYINT}
     </if>
