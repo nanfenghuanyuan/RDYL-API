@@ -79,32 +79,34 @@ public class HomeBizImpl implements HomeBiz {
             if(DateUtils.minBetween(startTime) > -10 && DateUtils.minBetween(endTime) < 0){
                 //查看用户是否预约
                 String appointmentState = RedisUtil.searchString(redis, String.format(RedisKey.BUY_APPOINTMENT_USER, pets.getLevel(), users.getId()));
-                if(StrUtils.isBlank(appointmentState)) {
-                    petsModel.setState(GlobalParams.PET_STATE_0);
-                }else{
-                    //如果用户已预约且到领养时间后，则可领养；否则显示已预约
-                    if(DateUtils.minBetween(startTime) >= 0 && DateUtils.minBetween(endTime) < 0){
-                        map = new HashMap<>();
-                        map.put("buyUserId", users.getId());
-                        map.put("level", pets.getLevel());
-                        map.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
-                        //看看用户是否存在已预约订单
-                        int count = petsMatchingListService.selectCount(map);
-                        if(count != 0){
-                            map = new HashMap<>();
-                            map.put("transferUserId", users.getId());
-                            map.put("state", GlobalParams.PET_LIST_STATE_WAITING);
-                            count = petsListService.selectCount(map);
-                            if(count != 0){
-                                petsModel.setState(GlobalParams.PET_STATE_3);
-                            }else {
-                                petsModel.setState(GlobalParams.PET_STATE_2);
-                            }
-                        }else {
-                            petsModel.setState(GlobalParams.PET_STATE_3);
-                        }
-                    }else{
+                //抢购前10分钟
+                if(DateUtils.minBetween(startTime) > -10 && DateUtils.minBetween(startTime) < 0){
+                    if(StrUtils.isBlank(appointmentState)) {
+                        petsModel.setState(GlobalParams.PET_STATE_0);
+                    }else {
                         petsModel.setState(GlobalParams.PET_STATE_1);
+                    }
+                //时间到
+                }else{
+                //如果用户已预约且到领养时间后，则可领养；否则显示已预约
+                    map = new HashMap<>();
+                    map.put("buyUserId", users.getId());
+                    map.put("level", pets.getLevel());
+                    map.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
+                    //看看用户是否存在已预约订单
+                    int count = petsMatchingListService.selectCount(map);
+                    if(count != 0){
+                        map = new HashMap<>();
+                        map.put("transferUserId", users.getId());
+                        map.put("state", GlobalParams.PET_LIST_STATE_WAITING);
+                        count = petsListService.selectCount(map);
+                        if(count != 0){
+                            petsModel.setState(GlobalParams.PET_STATE_3);
+                        }else {
+                            petsModel.setState(GlobalParams.PET_STATE_2);
+                        }
+                    }else {
+                        petsModel.setState(GlobalParams.PET_STATE_3);
                     }
                 }
             }else{
