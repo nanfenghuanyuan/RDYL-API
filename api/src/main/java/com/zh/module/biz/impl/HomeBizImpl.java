@@ -106,7 +106,7 @@ public class HomeBizImpl implements HomeBiz {
                             petsModel.setState(GlobalParams.PET_STATE_2);
                         }
                     }else {
-                        petsModel.setState(GlobalParams.PET_STATE_3);
+                        petsModel.setState(GlobalParams.PET_STATE_2);
                     }
                 }
             }else{

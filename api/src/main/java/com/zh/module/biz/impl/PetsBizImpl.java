@@ -189,6 +189,8 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                 petsMatchingList.setPetListId(petsList.getId().byteValue());
                 petsMatchingList.setSaleUserId(saleUserId);
                 petsMatchingList.setInactiveTime(inactiveTime);
+                petsMatchingList.setAppointmentStartTime(DateUtils.getCurrentTimeStr());
+                petsMatchingList.setAppointmentEndTime(DateUtils.getDateFormate(inactiveTime));
                 petsMatchingListService.insertSelective(petsMatchingList);
             } else {
                 param = new HashMap<>();
@@ -203,6 +205,8 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                     petsMatchingList.setPetListId(petsList.getId().byteValue());
                     petsMatchingList.setSaleUserId(saleUserId);
                     petsMatchingList.setInactiveTime(inactiveTime);
+                    petsMatchingList.setAppointmentStartTime(DateUtils.getCurrentTimeStr());
+                    petsMatchingList.setAppointmentEndTime(DateUtils.getDateFormate(inactiveTime));
                     petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
                 }
             }
