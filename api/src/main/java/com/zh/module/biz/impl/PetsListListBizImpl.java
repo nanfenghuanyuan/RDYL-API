@@ -310,7 +310,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
 
             ProfitRecord profitRecord = new ProfitRecord();
             profitRecord.setAmount(newAmount);
-            profitRecord.setRemark(cursor.toString());
+            profitRecord.setRemark(cursor < 3 ? "个人收益" : "动态收益");
             profitRecord.setType((byte) (cursor < 3 ? 0 : 1));
             profitRecord.setUserId(users.getId());
             profitRecordService.insertSelective(profitRecord);

@@ -72,7 +72,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         List<FlowModel> flowModels = new LinkedList<>();
         for(Flow flow : flows){
             FlowModel flowModel = new FlowModel();
-            flowModel.setAmount(flow.getAmount());
+            flowModel.setAmount(flow.getAmount().toPlainString());
             flowModel.setOperaType(flow.getOperType());
             flowModel.setTime(DateUtils.getDateFormate(flow.getCreateTime()));
             flowModels.add(flowModel);
@@ -151,7 +151,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
             FlowModel flowModel = new FlowModel();
             flowModel.setTime(DateUtils.getDateFormate(profitRecord.getCreateTime()));
             flowModel.setOperaType(profitRecord.getRemark());
-            flowModel.setAmount(profitRecord.getAmount());
+            flowModel.setAmount(profitRecord.getAmount().compareTo(BigDecimal.ZERO) > 0 ? "+" + profitRecord.getAmount().toPlainString() : "-" + profitRecord.getAmount().toPlainString());
             flowModels.add(flowModel);
         }
         String sumAmount = profitRecordService.selectSumAmount(userId, type);

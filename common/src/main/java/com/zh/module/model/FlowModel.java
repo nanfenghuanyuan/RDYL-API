@@ -15,7 +15,7 @@ public class FlowModel {
     /**
      * 数量
      */
-    private BigDecimal amount;
+    private String amount;
     /**
      * 操作
      */
