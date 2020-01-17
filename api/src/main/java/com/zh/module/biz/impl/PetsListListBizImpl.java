@@ -58,6 +58,8 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     @Autowired
     private AppointmentRecordService appointmentRecordService;
     @Autowired
+    private ProfitRecordService profitRecordService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -305,6 +307,13 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             teamRecord.setReferId(users.getReferId());
             teamRecord.setUserId(users.getId());
             teamRecordService.insertSelective(teamRecord);
+
+            ProfitRecord profitRecord = new ProfitRecord();
+            profitRecord.setAmount(newAmount);
+            profitRecord.setRemark(cursor.toString());
+            profitRecord.setType((byte) (cursor < 3 ? 0 : 1));
+            profitRecord.setUserId(users.getId());
+            profitRecordService.insertSelective(profitRecord);
             //插入流水
             accountService.updateAccountAndInsertFlow(users.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.CNY, newAmount, BigDecimal.ZERO, users.getId(), "推荐收益", teamRecord.getId());
             //团队奖励记录累计金额
