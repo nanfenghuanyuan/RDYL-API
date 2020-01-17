@@ -116,8 +116,8 @@ public class AccountController {
             JSONObject json = JSONObject.parseObject(param);
             String amount = json.getString("amount");
             String password = json.getString("password");
-            Integer coinType = json.getInteger("coinType");
-            if(StrUtils.isBlank(amount) || StrUtils.isBlank(password) || coinType == null){
+            Integer coinType = CoinType.CNY;
+            if(StrUtils.isBlank(amount) || StrUtils.isBlank(password)){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             return accountBiz.withdraw(users, coinType, amount, password);
