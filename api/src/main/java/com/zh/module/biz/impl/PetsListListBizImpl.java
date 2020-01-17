@@ -132,7 +132,11 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             petsOrderModel.setSaleName(users.getNickName());
             petsOrderModel.setSalePhone(users.getPhone());
             bindInfos = bindInfoService.queryByUser(users.getId());
-            btnType = GlobalParams.ORDER_BTN_TYPE_CONFIRM;
+            if(state == 1){
+                btnType = GlobalParams.ORDER_BTN_TYPE_WAIT_CONFIRM;
+            }else{
+                btnType = GlobalParams.ORDER_BTN_TYPE_CONFIRM;
+            }
         }
         for(BindInfo bindInfo : bindInfos){
             PayInfoModel payInfoModel = new PayInfoModel();

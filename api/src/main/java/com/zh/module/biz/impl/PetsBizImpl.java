@@ -192,6 +192,8 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                 petsMatchingList.setAppointmentStartTime(DateUtils.getCurrentTimeStr());
                 petsMatchingList.setAppointmentEndTime(DateUtils.getDateFormate(inactiveTime));
                 petsMatchingListService.insertSelective(petsMatchingList);
+
+                accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), BigDecimal.ZERO, userId, "领养消耗", petsMatchingList.getId());
             } else {
                 param = new HashMap<>();
                 param.put("level", level);
