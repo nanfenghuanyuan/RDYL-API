@@ -48,4 +48,6 @@ public interface AccountBiz {
     String recharge(Users users, Integer coinType, String amount, String address, String password);
 
     String rechargeList(Users users, Integer coinType, PageModel pageModel);
+
+    String getWithdrawBalance(Users users, Integer coinType, byte accountType);
 }

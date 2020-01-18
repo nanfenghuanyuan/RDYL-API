@@ -170,6 +170,23 @@ public class AccountController {
         }
     }
     /**
+     * 获取提现可用余额
+     * @param users
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="getWithdrawBalance",method=RequestMethod.POST,produces="application/json;charset=utf-8")
+    public String getWithdrawBalance(@CurrentUser Users users){
+        try {
+            byte accountType = AccountType.ACCOUNT_TYPE_ACTIVE;
+            Integer coinType = CoinType.CNY;
+            return accountBiz.getWithdrawBalance(users, coinType, accountType);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
      * 充值
      * @param users
      * @return

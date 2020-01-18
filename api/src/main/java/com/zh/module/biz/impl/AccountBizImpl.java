@@ -72,7 +72,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         List<FlowModel> flowModels = new LinkedList<>();
         for(Flow flow : flows){
             FlowModel flowModel = new FlowModel();
-            flowModel.setAmount(flow.getAmount().toPlainString());
+            flowModel.setAmount(flow.getAmount().stripTrailingZeros().toPlainString());
             flowModel.setOperaType(flow.getOperType());
             flowModel.setTime(DateUtils.getDateFormate(flow.getCreateTime()));
             flowModels.add(flowModel);
@@ -285,5 +285,12 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
             list.add(rechargeModel);
         }
         return Result.toResult(ResultCode.SUCCESS, list);
+    }
+
+    @Override
+    public String getWithdrawBalance(Users users, Integer coinType, byte accountType) {
+        Integer userId = users.getId();
+        Account account = accountService.selectByUserIdAndAccountTypeAndType(accountType, coinType, userId);
+        return Result.toResult(ResultCode.SUCCESS, account.getAvailbalance().stripTrailingZeros().toPlainString());
     }
 }

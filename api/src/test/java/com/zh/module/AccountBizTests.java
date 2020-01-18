@@ -76,5 +76,12 @@ public class AccountBizTests {
         Integer coinType = 1;
         System.out.println(accountBiz.getAvailBalance(users,coinType,accountType));
     }
+    @Test
+    public void get1() {
+        Users users = usersBiz.getUser(4);
+        byte accountType = 0;
+        Integer coinType = 0;
+        System.out.println(accountBiz.getWithdrawBalance(users,coinType,accountType));
+    }
 
 }
