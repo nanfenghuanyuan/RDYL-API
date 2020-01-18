@@ -58,10 +58,10 @@ public class UserRealNameController{
 	 * @return
 	 */
 	@RequestMapping(value="status",method= RequestMethod.GET,produces="application/json;charset=utf-8")
-	public String getStatus(@CurrentUser Users users){
+	public String getStatus(Integer userId){
 		try {
 
-			return userBiz.getStatus(users);
+			return userBiz.getStatus(userId);
 		}catch (NumberFormatException e) {
 			e.printStackTrace();
 			return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);

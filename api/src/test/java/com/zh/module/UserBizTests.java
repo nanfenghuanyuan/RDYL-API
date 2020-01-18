@@ -54,7 +54,7 @@ public class UserBizTests {
     @Test
     public void realName2() throws Exception {
         Users users = usersBiz.getUser(1);
-        System.out.println(usersBiz.getStatus(users));
+        System.out.println(usersBiz.getStatus(1));
     }
 
 }

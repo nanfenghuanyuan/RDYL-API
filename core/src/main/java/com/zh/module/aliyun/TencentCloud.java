@@ -46,7 +46,7 @@ public class TencentCloud {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("url", "https://ida.webank.com/api/web/login?webankAppId=" + appId + "&version=1.0.0&nonce=" + nonce + "&orderNo=" + orderNo + "&h5faceId=" + h5faceId + "&url=http%3a%2f%2f47.56.87.149%3a8081%2frealname%2fstatus" +
-                    "resultType=1&userId=" + userId + "&sign=" + sign + "&from=APP");
+                    "?resultType=1&userId=" + userId + "&sign=" + sign + "&from=APP");
             jsonObject.put("h5faceId", h5faceId);
             jsonObject.put("orderNo", orderNo);
             jsonObject.put("nonce", nonce);
