@@ -76,6 +76,9 @@ public class UsersBizImpl implements UsersBiz {
     public String login(Users user) throws Exception {
         JSONObject jsonObject = new JSONObject();
         Users userForBase = usersService.selectByPhone(user.getPhone());
+        if (user.getPhone() == null){
+            return Result.toResult(ResultCode.PARAM_IS_BLANK);
+        }
         if (userForBase == null){
             return Result.toResult(ResultCode.USER_LOGIN_ERROR);
         }
