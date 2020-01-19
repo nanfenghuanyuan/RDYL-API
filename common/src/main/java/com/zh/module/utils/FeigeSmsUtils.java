@@ -66,7 +66,7 @@ public class FeigeSmsUtils {
                 formparams.add(new BasicNameValuePair("Pwd","ea78a8d62fcb7d7c1fc3e6bda"));//登录后台 首页显示
                 formparams.add(new BasicNameValuePair("Content",content));
                 formparams.add(new BasicNameValuePair("Mobile",phone));
-                formparams.add(new BasicNameValuePair("SignId","181054"));//登录后台 添加签名获取id
+                formparams.add(new BasicNameValuePair("SignId","221052"));//登录后台 添加签名获取id
 
                 HttpPost httpPost = new HttpPost("http://api.feige.ee/SmsService/Send");
                 httpPost.setEntity(new UrlEncodedFormEntity(formparams,"UTF-8"));
@@ -112,7 +112,7 @@ public class FeigeSmsUtils {
                 formparams.add(new BasicNameValuePair("Content",content));
                 formparams.add(new BasicNameValuePair("Mobile",phone));
                 formparams.add(new BasicNameValuePair("TemplateId",templateId));
-                formparams.add(new BasicNameValuePair("SignId","181054"));//登录后台 添加签名获取id
+                formparams.add(new BasicNameValuePair("SignId","221052"));//登录后台 添加签名获取id
 
                 HttpPost httpPost = new HttpPost("http://api.feige.ee/SmsService/Template");
                 httpPost.setEntity(new UrlEncodedFormEntity(formparams,"UTF-8"));
