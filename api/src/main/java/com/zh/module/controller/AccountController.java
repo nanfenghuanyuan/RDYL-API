@@ -135,9 +135,7 @@ public class AccountController {
     @RequestMapping(value="withdraw/list",method=RequestMethod.GET,produces="application/json;charset=utf-8")
     public String withdrawList(@CurrentUser Users users, Integer rows, Integer page, Integer coinType){
         try {
-            if(coinType == null){
-                return Result.toResult(ResultCode.PARAM_IS_BLANK);
-            }
+            coinType = CoinType.CNY;
             if(page == null){
                 page = 0;
             }

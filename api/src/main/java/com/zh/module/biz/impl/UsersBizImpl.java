@@ -352,6 +352,9 @@ public class UsersBizImpl implements UsersBiz {
 
     @Override
     public String getStatus(Integer userId) {
+        if(userId == null){
+            return "realName/error";
+        }
         Users user = usersService.selectByPrimaryKey(userId);
         JSONObject jsonObject = RedisUtil.searchStringObj(redis, String.format(RedisKey.REAL_NAME_USER_OBJECT, user.getId()), JSONObject.class);
         String faceId = null;
