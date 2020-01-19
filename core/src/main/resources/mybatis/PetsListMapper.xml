@@ -383,7 +383,7 @@
     from pets_list
     where 1=1
     <if test="endTime != null">
-      and  end_time = #{endTime,jdbcType=VARCHAR}
+      and  end_time &lt; #{endTime,jdbcType=VARCHAR}
     </if>
     <if test="state != null">
       and  state = #{state,jdbcType=TINYINT}
