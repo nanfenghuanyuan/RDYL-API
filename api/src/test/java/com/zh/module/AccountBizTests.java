@@ -31,8 +31,7 @@ public class AccountBizTests {
     }
     @Test
     public void personList() {
-        Users users = new Users();
-        users.setId(1);
+        Users users = usersBiz.getUser(16);
         PageModel pageModel = new PageModel(1, 10);
         System.out.println(accountBiz.personProfit(users, 0, pageModel));
     }

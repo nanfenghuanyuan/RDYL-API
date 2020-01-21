@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.ParseException;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PetsBizTests {
@@ -29,13 +31,13 @@ public class PetsBizTests {
     @Autowired
     private UsersService usersService;
     @Test
-    public void buy() {
+    public void buy() throws ParseException {
         Users users = new Users();
         users.setId(1);
         System.out.println(petsBiz.buy(users, 2));
     };
     @Test
-    public void init() {
+    public void init() throws ParseException {
         Users users = new Users();
         users.setId(1);
         System.out.println(petsBiz.appointment(users, 2));
