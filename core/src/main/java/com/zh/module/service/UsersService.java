@@ -85,4 +85,6 @@ public interface UsersService {
     Users selectByPhone(String phone);
 
     Users selectByUUID(String toString);
+
+    Users selectByReferID(String referId);
 }

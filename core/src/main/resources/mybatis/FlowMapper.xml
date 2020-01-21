@@ -270,4 +270,8 @@
        and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
   </select>
+    <select id="selectPersonProfitSumAmount" resultType="java.lang.String">
+      select SUM(amount) AS sumamount
+    from flow where user_id = #{userId} and oper_type = #{operType}
+    </select>
 </mapper>

@@ -66,4 +66,9 @@ public class FlowServiceImpl implements FlowService {
     public int selectCount(Map<Object, Object> param) {
         return this.flowMapper.selectCount(param);
     }
+
+    @Override
+    public String selectPersonProfitSumAmount(Integer userId, String type) {
+        return this.flowMapper.selectPersonProfitSumAmount(userId, type);
+    }
 }

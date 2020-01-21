@@ -1,6 +1,8 @@
 package com.zh.module.dao;
 
 import com.zh.module.entity.Flow;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -22,4 +24,6 @@ public interface FlowMapper {
     List<Flow> selectPaging(Map<Object, Object> param);
 
     int selectCount(Map<Object, Object> param);
+
+    String selectPersonProfitSumAmount(@Param("userId") Integer userId, @Param("operType") String operType);
 }

@@ -25,11 +25,16 @@ public class AccountBizTests {
         System.out.println(accountBiz.init(users));
     }
     @Test
+    public void transfer() {
+        Users users = usersBiz.getUser(1);
+        System.out.println(accountBiz.transfer(users, "13165555555", "10", "123456"));
+    }
+    @Test
     public void personList() {
         Users users = new Users();
         users.setId(1);
         PageModel pageModel = new PageModel(1, 10);
-        System.out.println(accountBiz.personProfit(users, 1, pageModel));
+        System.out.println(accountBiz.personProfit(users, 0, pageModel));
     }
     @Test
     public void appointment() {

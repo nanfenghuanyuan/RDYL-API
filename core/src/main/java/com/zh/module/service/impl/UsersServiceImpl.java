@@ -84,4 +84,12 @@ public class UsersServiceImpl implements UsersService {
 
         return users == null|| users.isEmpty() ? null : users.get(0);
     }
+
+    @Override
+    public Users selectByReferID(String referId) {
+        Map<Object, Object> map = new HashMap();
+        map.put("referId", referId);
+        List<Users> users = selectAll(map);
+        return users == null || users.isEmpty() ? null : users.get(0);
+    }
 }

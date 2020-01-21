@@ -81,4 +81,6 @@ public interface FlowService {
      * @date: 2019-12-25 17:52:13
      **/ 
     int selectCount(Map<Object, Object> param);
+
+    String selectPersonProfitSumAmount(Integer userId, String type);
 }

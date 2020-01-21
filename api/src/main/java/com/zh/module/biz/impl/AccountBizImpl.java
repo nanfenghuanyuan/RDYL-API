@@ -21,10 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: R.D.Y.LMain
@@ -103,9 +100,10 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
             if(toUser == null){
                 return Result.toResult(ResultCode.USER_NOT_EXIST);
             }
-            String uuid = toUser.getUuid();
-            String uuid2 = users.getUuid();
-            if(!uuid.equals(users.getReferId()) && !uuid2.equals(toUser.getReferId())){
+            Set<Integer> userSet = new HashSet<>();
+            getReferSetUp(users.getUuid(), userSet);
+            getReferSetloss(users.getUuid(), userSet);
+            if(!userSet.contains(toUser.getId())){
                 return Result.toResult(ResultCode.TRANS_ROLE);
             }
         }
@@ -136,25 +134,66 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         return Result.toResult(ResultCode.SUCCESS);
     }
 
+    /**
+     * 向下
+     */
+    private Set<Integer> getReferSetloss(String referId, Set<Integer> userSet) {
+        Users user = usersService.selectByReferID(referId);
+        if(user != null){
+            userSet.add(user.getId());
+            getReferSetloss(user.getUuid(), userSet);
+        }
+        return userSet;
+    }
+
+    /**
+     * 向上
+     */
+    private Set<Integer> getReferSetUp(String uuid, Set<Integer> userSet) {
+        Users user = usersService.selectByUUID(uuid);
+        if(user != null){
+            userSet.add(user.getId());
+            getReferSetUp(user.getReferId(), userSet);
+        }
+        return userSet;
+    }
+
     @Override
     public String personProfit(Users users, Integer type, PageModel pageModel) {
         Integer userId = users.getId();
         Map<Object, Object> map = new HashMap<>();
         Map<Object, Object> result = new HashMap<>();
-        map.put("userId", userId);
-        map.put("type", type);
-        map.put("firstResult", pageModel.getFirstResult());
-        map.put("maxResult", pageModel.getMaxResult());
-        List<ProfitRecord> profitRecords = profitRecordService.selectPaging(map);
+        String sumAmount;
         List<FlowModel> flowModels = new LinkedList<>();
-        for(ProfitRecord profitRecord : profitRecords){
-            FlowModel flowModel = new FlowModel();
-            flowModel.setTime(DateUtils.getDateFormate(profitRecord.getCreateTime()));
-            flowModel.setOperaType(profitRecord.getRemark());
-            flowModel.setAmount(profitRecord.getAmount().compareTo(BigDecimal.ZERO) > 0 ? "+" + profitRecord.getAmount().toPlainString() : "-" + profitRecord.getAmount().toPlainString());
-            flowModels.add(flowModel);
+        if(type == 0){
+            map.put("userId", userId);
+            map.put("operType", "个人收益");
+            map.put("firstResult", pageModel.getFirstResult());
+            map.put("maxResult", pageModel.getMaxResult());
+            List<Flow> flows = flowService.selectPaging(map);
+            for(Flow flow : flows){
+                FlowModel flowModel = new FlowModel();
+                flowModel.setTime(DateUtils.getDateFormate(flow.getCreateTime()));
+                flowModel.setOperaType(flow.getOperType());
+                flowModel.setAmount(flow.getAmount().compareTo(BigDecimal.ZERO) > 0 ? "+" + flow.getAmount().toPlainString() : "-" + flow.getAmount().toPlainString());
+                flowModels.add(flowModel);
+            }
+            sumAmount = flowService.selectPersonProfitSumAmount(userId, "个人收益");
+        }else {
+            map.put("userId", userId);
+            map.put("type", type);
+            map.put("firstResult", pageModel.getFirstResult());
+            map.put("maxResult", pageModel.getMaxResult());
+            List<ProfitRecord> profitRecords = profitRecordService.selectPaging(map);
+            for (ProfitRecord profitRecord : profitRecords) {
+                FlowModel flowModel = new FlowModel();
+                flowModel.setTime(DateUtils.getDateFormate(profitRecord.getCreateTime()));
+                flowModel.setOperaType(profitRecord.getRemark());
+                flowModel.setAmount(profitRecord.getAmount().compareTo(BigDecimal.ZERO) > 0 ? "+" + profitRecord.getAmount().toPlainString() : "-" + profitRecord.getAmount().toPlainString());
+                flowModels.add(flowModel);
+            }
+            sumAmount = profitRecordService.selectSumAmount(userId, type);
         }
-        String sumAmount = profitRecordService.selectSumAmount(userId, type);
         result.put("sumAmount", sumAmount);
         result.put("list", flowModels);
         return Result.toResult(ResultCode.SUCCESS, result);

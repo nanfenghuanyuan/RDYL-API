@@ -310,8 +310,8 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
 
             ProfitRecord profitRecord = new ProfitRecord();
             profitRecord.setAmount(newAmount);
-            profitRecord.setRemark(cursor < 3 ? "个人收益" : "动态收益");
-            profitRecord.setType((byte) (cursor < 3 ? 0 : 1));
+            profitRecord.setRemark("动态收益");
+            profitRecord.setType((byte) 1);
             profitRecord.setUserId(users.getId());
             profitRecordService.insertSelective(profitRecord);
             //插入流水
@@ -414,7 +414,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             //插入收益流水
             flow.setUserId(petsList.getUserId());
             flow.setRelateId(petsList.getId());
-            flow.setOperType("合约收益");
+            flow.setOperType("个人收益");
             flow.setOperId(petsList.getUserId());
             flow.setCoinType(CoinType.CNY);
             flow.setAccountType(AccountType.ACCOUNT_TYPE_ACTIVE);
