@@ -37,7 +37,7 @@ public class UserController {
         String code = params.getString("code");
         Integer codeId = params.getInteger("codeId");
         /*参数校验*/
-        if(StrUtils.isBlank(phone) || StrUtils.isBlank(code) || codeId == null || StrUtils.isBlank(password)){
+        if(StrUtils.isBlank(phone) || StrUtils.isBlank(code) || codeId == null || StrUtils.isBlank(password) || uuid == null){
             return Result.toResult(ResultCode.PARAM_IS_BLANK);
         }
         /*正则校验*/
@@ -123,7 +123,7 @@ public class UserController {
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             if(!PatternUtil.isTradePwd(password)){
-                return Result.toResult(ResultCode.USER_PWD_TYPE_ERROR);
+                return Result.toResult(ResultCode.USER_ORDER_PWD_TYPE_ERROR);
             }
             if(!PatternUtil.isVerificationCode(code)){
                 return Result.toResult(ResultCode.SMS_CHECK_ERROR);

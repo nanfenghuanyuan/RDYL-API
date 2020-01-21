@@ -10,6 +10,7 @@ import com.zh.module.dto.Result;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.model.PageModel;
+import com.zh.module.utils.PatternUtil;
 import com.zh.module.utils.StrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -200,6 +201,9 @@ public class AccountController {
             String address = json.getString("address");
             if(StrUtils.isBlank(amount) || StrUtils.isBlank(password)|| StrUtils.isBlank(address) || coinType == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            if(!PatternUtil.isNumber(amount)){
+                return Result.toResult(ResultCode.AMOUNT_ERROR );
             }
             return accountBiz.recharge(users, coinType, amount, address, password);
         }catch (Exception e) {

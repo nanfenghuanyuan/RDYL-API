@@ -66,8 +66,8 @@ public class HomeBizImpl implements HomeBiz {
             petsModel.setName(pets.getName());
             petsModel.setPayPrice(pets.getPriceMin().setScale(0, BigDecimal.ROUND_HALF_UP) + "-" + pets.getPriceMix().setScale(0, BigDecimal.ROUND_HALF_UP));
             petsModel.setDateSection(pets.getStartTime() + "-" + pets.getEndTime());
-            petsModel.setPriceSection(pets.getAppointmentAmount().setScale(0, BigDecimal.ROUND_HALF_UP) + "/" + pets.getPayAmount().setScale(0, BigDecimal.ROUND_HALF_UP));
-            petsModel.setProfit(pets.getProfitDays() + "天/" + pets.getProfitRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
+            petsModel.setPriceSection(pets.getAppointmentAmount().setScale(0, BigDecimal.ROUND_HALF_UP) + "/" + pets.getPayAmount().setScale(0, BigDecimal.ROUND_HALF_UP) + " MEPC");
+            petsModel.setProfit(pets.getProfitDays() + "天/" + pets.getProfitRate().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP) + "%");
             String startTime = pets.getStartTime();
             String endTime = pets.getEndTime();
             startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
