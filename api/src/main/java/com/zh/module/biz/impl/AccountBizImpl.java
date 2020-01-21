@@ -262,17 +262,23 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         Map<String, Object> result = new HashMap<>();
         Integer userId = users.getId();
         Account account = accountService.selectByUserIdAndAccountTypeAndType(accountType, coinType, userId);
+        //贡献值
         result.put("contribution", users.getContribution());
+        //mepc余额
         result.put("availbalance", account.getAvailbalance());
+        //团队等级
         result.put("teamLevel", users.getTeamLevel());
         String holdAssets = petsListService.selectSumAmountByUser(userId);
         holdAssets = StrUtils.isBlank(holdAssets) ? "0" : holdAssets;
+        //持有资产
         result.put("holdAssets", new BigDecimal(holdAssets).setScale(0, BigDecimal.ROUND_DOWN));
         String personProfit = flowService.selectPersonProfitSumAmount(userId, "个人收益");
         personProfit = StrUtils.isBlank(personProfit) ? "0" : personProfit;
         String teamProfit = profitRecordService.selectSumAmount(userId, 1);
         teamProfit = StrUtils.isBlank(teamProfit) ? "0" : teamProfit;
+        //个人收益
         result.put("personProfit", new BigDecimal(personProfit).setScale(0, BigDecimal.ROUND_DOWN));
+        //团队收益
         result.put("teamProfit", new BigDecimal(teamProfit).setScale(0, BigDecimal.ROUND_DOWN));
         return Result.toResult(ResultCode.SUCCESS, result);
     }
