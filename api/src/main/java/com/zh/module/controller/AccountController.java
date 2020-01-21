@@ -9,6 +9,7 @@ import com.zh.module.constants.CoinType;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
+import com.zh.module.exception.BanlanceNotEnoughException;
 import com.zh.module.model.PageModel;
 import com.zh.module.utils.PatternUtil;
 import com.zh.module.utils.StrUtils;
@@ -100,6 +101,9 @@ public class AccountController {
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             return accountBiz.transfer(users, phone, amount, password);
+        }catch (BanlanceNotEnoughException e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
         }catch (Exception e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);

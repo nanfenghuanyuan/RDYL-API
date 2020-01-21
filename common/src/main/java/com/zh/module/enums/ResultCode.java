@@ -40,7 +40,7 @@ public enum ResultCode {
     AMOUNT_ERROR(30012, "金额输入不正确"),
     ORDERPWD_IN_LOCK(30013, "交易密码错误次数超限，%s分钟后再试。若忘记密码，请联系客服进行重置处理!"),
     ORDERPWD_ERROR(30014, "交易密码错误，您还有%s次机会"),
-    AMOUNT_NOT_ENOUGH(30015, "余额不足"),
+    AMOUNT_NOT_ENOUGH(30015, "账户余额不足"),
     AMOUNT_NOT_ENOUGH_REAL_NAME_REWARD(30106, "余额不足以提现，请保证在转出后资金大于系统奖励金额。系统奖励金额在%s次交易挖矿后解冻。"),
     TO_USER_NOT_EXIST(30016, "对方用户不存在"),
     TO_USER_FORBIDDEN(30017, "对方账号已被冻结"),

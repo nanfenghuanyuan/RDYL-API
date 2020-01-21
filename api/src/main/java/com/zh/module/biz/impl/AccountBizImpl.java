@@ -108,6 +108,10 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
             }
         }
 
+        if(new BigDecimal(amount).compareTo(new BigDecimal("99999999")) > 0){
+            return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
+        }
+
         AccountTransfer accountTransfer = new AccountTransfer();
         accountTransfer.setAccountType((byte) AccountType.ACCOUNT_TYPE_ACTIVE);
         accountTransfer.setAmount(new BigDecimal(amount));
@@ -123,7 +127,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         } catch (BanlanceNotEnoughException e) {
             log.info("资金划转失败");
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new BanlanceNotEnoughException("账户余额不足");
         }
         //下级激活账户
         if(toUser.getReferId().equals(users.getUuid()) && toUser.getState() == GlobalParams.INACTIVE){
