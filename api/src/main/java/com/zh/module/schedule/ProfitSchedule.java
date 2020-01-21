@@ -17,7 +17,6 @@ public class ProfitSchedule {
 	 * 收益结算
 	 */
 	@Scheduled(cron="0 1 * * * ?")
-	@PostConstruct
 	public void getProfit(){
 		petsListBiz.getProfit();
 	}

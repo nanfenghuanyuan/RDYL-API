@@ -267,7 +267,13 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         result.put("teamLevel", users.getTeamLevel());
         String holdAssets = petsListService.selectSumAmountByUser(userId);
         holdAssets = StrUtils.isBlank(holdAssets) ? "0" : holdAssets;
-        result.put("holdAssets", new BigDecimal(holdAssets).setScale(0, BigDecimal.ROUND_HALF_UP));
+        result.put("holdAssets", new BigDecimal(holdAssets).setScale(0, BigDecimal.ROUND_DOWN));
+        String personProfit = flowService.selectPersonProfitSumAmount(userId, "个人收益");
+        personProfit = StrUtils.isBlank(personProfit) ? "0" : personProfit;
+        String teamProfit = profitRecordService.selectSumAmount(userId, 1);
+        teamProfit = StrUtils.isBlank(teamProfit) ? "0" : teamProfit;
+        result.put("personProfit", new BigDecimal(personProfit).setScale(0, BigDecimal.ROUND_DOWN));
+        result.put("teamProfit", new BigDecimal(teamProfit).setScale(0, BigDecimal.ROUND_DOWN));
         return Result.toResult(ResultCode.SUCCESS, result);
     }
 
