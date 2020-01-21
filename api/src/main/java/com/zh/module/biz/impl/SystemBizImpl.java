@@ -75,7 +75,7 @@ public class SystemBizImpl implements SystemBiz {
         String shareUrl = sysparamsService.getValStringByKey(SystemParams.REGIST_URL);
         Configuration config = new Configuration();
         config.setNotice(notice);
-        config.setShareUrl(shareUrl);
+        config.setShareUrl(shareUrl + "?uuid=");
         config.setCoinList(coinModules);
         return Result.toResult(ResultCode.SUCCESS, config);
     }

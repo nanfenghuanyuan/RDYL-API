@@ -172,6 +172,7 @@ public class UsersBizImpl implements UsersBiz {
         users.setPersonLevel((byte) 0);
         users.setReferId(uuid);
         users.setUuid(uuids.toString());
+        users.setEffective((byte)0);
         usersService.insertSelective(users);
 
         /*初始化账户*/
