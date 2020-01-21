@@ -78,4 +78,7 @@ public class SystemParams {
 
     //注册地址
     public static final String REGIST_URL="REGIST_URL";
+
+    //预约提前时间
+    public static final String APPOINTMENT_TIME = "APPOINTMENT_TIME";
 }

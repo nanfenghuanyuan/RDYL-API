@@ -301,4 +301,18 @@ public class DateUtils {
 		}
 		return weekDays[w];
 	}
+
+	/**
+	 * Java String格式日期加1秒（分钟或小时）
+	 * @param dateTime 当前日期
+	 * @param time 毫秒 如果是加N分钟 N*60*1000
+	 * @return
+	 * @throws ParseException
+	 */
+	public static String dateAddTime(String dateTime, int time) throws ParseException {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date =df.parse(dateTime);
+		date.setTime(date.getTime() + time);
+		return getDateFormate(date);
+	}
 }

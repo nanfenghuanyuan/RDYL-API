@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -50,7 +51,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     private RedisTemplate<String,String> redis;
 
     @Override
-    public String appointment(Users users, Integer level) throws BanlanceNotEnoughException {
+    public String appointment(Users users, Integer level) throws BanlanceNotEnoughException, ParseException {
         //验证用户状态
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
@@ -58,7 +59,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         Pets pets = petsService.selectByLevel(level);
         Integer userId = users.getId();
         //是否在允许的时间范围内
-        if(!checkIsDateLimit(level)){
+        if(!checkIsDateLimit(level, false)){
             return Result.toResult(ResultCode.TIME_ERROR);
         }
         List<BindInfo> bindInfos = bindInfoService.queryByUser(userId);
@@ -108,7 +109,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     }
 
     @Override
-    public String buy(Users users, Integer level) {
+    public String buy(Users users, Integer level) throws ParseException {
         //验证用户状态
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
@@ -116,7 +117,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         Pets pets = petsService.selectByLevel(level);
         Integer userId = users.getId();
         //是否在允许的时间范围内
-        if(!checkIsDateLimit(level)){
+        if(!checkIsDateLimit(level, true)){
             return Result.toResult(ResultCode.TIME_ERROR);
         }
         List<BindInfo> bindInfos = bindInfoService.queryByUser(userId);
@@ -225,14 +226,26 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
      * @param level
      * @return
      */
-    public boolean checkIsDateLimit(Integer level){
-        Pets pets = petsService.selectByLevel(level);
-        String startTime = pets.getStartTime();
-        String endTime = pets.getEndTime();
-        String today = DateUtils.getCurrentTimeStr();
-        startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
-        endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
-        return DateUtils.minBetween(startTime) >= 0 && DateUtils.minBetween(endTime) <= 0;
+    public boolean checkIsDateLimit(Integer level, boolean isBuy) throws ParseException {
+        if(isBuy) {
+            Pets pets = petsService.selectByLevel(level);
+            String startTime = pets.getStartTime();
+            String endTime = pets.getEndTime();
+            String today = DateUtils.getCurrentTimeStr();
+            startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
+            endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
+            return DateUtils.minBetween(startTime) >= 0 && DateUtils.minBetween(endTime) <= 0;
+        }else{
+            String appoinmentTime = sysparamsService.getValStringByKey(SystemParams.APPOINTMENT_TIME);
+            int time = Integer.parseInt(appoinmentTime);
+            Pets pets = petsService.selectByLevel(level);
+            String startTime = DateUtils.dateAddTime(pets.getStartTime(), -time * 60 * 1000);
+            String endTime = pets.getEndTime();
+            String today = DateUtils.getCurrentTimeStr();
+            startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
+            endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
+            return DateUtils.minBetween(startTime) >= 0 && DateUtils.minBetween(endTime) <= 0;
+        }
     }
 
     /**

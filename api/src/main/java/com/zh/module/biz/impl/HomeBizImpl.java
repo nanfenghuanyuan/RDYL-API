@@ -2,6 +2,7 @@ package com.zh.module.biz.impl;
 
 import com.zh.module.biz.HomeBiz;
 import com.zh.module.constants.GlobalParams;
+import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
@@ -40,6 +41,8 @@ public class HomeBizImpl implements HomeBiz {
     @Autowired
     private BannerService bannerService;
     @Autowired
+    private SysparamsService sysparamsService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -72,15 +75,19 @@ public class HomeBizImpl implements HomeBiz {
             String endTime = pets.getEndTime();
             startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
             endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
+
+            String appoinmentTime = sysparamsService.getValStringByKey(SystemParams.APPOINTMENT_TIME);
+            int time = Integer.parseInt(appoinmentTime);
+
             if(pets.getState() == GlobalParams.INACTIVE){
                 petsModel.setState(GlobalParams.PET_STATE_6);
             }else
             //抢购前10分钟把状态设为可预约状态
-            if(DateUtils.minBetween(startTime) > -10 && DateUtils.minBetween(endTime) < 0){
+            if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
                 //查看用户是否预约
                 String appointmentState = RedisUtil.searchString(redis, String.format(RedisKey.BUY_APPOINTMENT_USER, pets.getLevel(), users.getId()));
                 //抢购前10分钟
-                if(DateUtils.minBetween(startTime) > -10 && DateUtils.minBetween(startTime) < 0){
+                if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(startTime) < 0){
                     if(StrUtils.isBlank(appointmentState)) {
                         petsModel.setState(GlobalParams.PET_STATE_0);
                     }else {

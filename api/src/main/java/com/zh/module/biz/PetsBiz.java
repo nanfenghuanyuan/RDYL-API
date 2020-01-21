@@ -3,6 +3,8 @@ package com.zh.module.biz;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
 
+import java.text.ParseException;
+
 /**
  * @program: R.D.Y.LMain
  * @description:
@@ -16,7 +18,7 @@ public interface PetsBiz {
      * @param level
      * @return
      */
-    String appointment(Users users, Integer level);
+    String appointment(Users users, Integer level) throws ParseException;
 
     /**
      * 领养
@@ -24,7 +26,7 @@ public interface PetsBiz {
      * @param level
      * @return
      */
-    String buy(Users users, Integer level);
+    String buy(Users users, Integer level) throws ParseException;
 
     /**
      * 我的资产
