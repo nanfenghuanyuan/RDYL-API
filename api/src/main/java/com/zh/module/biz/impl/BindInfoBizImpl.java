@@ -52,13 +52,17 @@ public class BindInfoBizImpl implements BindInfoBiz {
         if(users.getIdStatus() != GlobalParams.REALNAME_STATE_SUCCESS){
             return Result.toResult(ResultCode.USER_NOT_REALNAME);
         }
+        String url = params.getString("imgUrl");
+        String account = params.getString("account");
+        if(StrUtils.isBlank(url) || StrUtils.isBlank(account)){
+            return Result.toResult(ResultCode.PARAM_IS_BLANK);
+        }
         BindInfo bindInfo = new BindInfo();
         Integer type = params.getInteger("type");
         bindInfo.setType(type.byteValue());
         bindInfo.setUserId(users.getId());
         bindInfo.setState((byte) GlobalParams.ACTIVE);
-        bindInfo.setImgUrl(params.getString("imgUrl"));
-        String account = params.getString("account");
+        bindInfo.setImgUrl(url);
         bindInfo.setAccount(account);
         String name = params.getString("name");
         bindInfo.setName(name);
