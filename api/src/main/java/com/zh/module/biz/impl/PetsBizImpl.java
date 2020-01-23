@@ -279,7 +279,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             petsMatchingListModel.setImgUrl(pets.getImgUrl());
             petsMatchingListModel.setPrice(petsList.getPrice());
             petsMatchingListModel.setProfit(pets.getProfitDays() + "天/" + pets.getProfitRate().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP) + "%");
-            petsMatchingListModel.setProfited(petsList.getPrice().multiply(petsList.getProfitRate()).multiply(new BigDecimal(0.01)).setScale(2, BigDecimal.ROUND_HALF_UP));
+            petsMatchingListModel.setProfited(petsList.getPrice().multiply(petsList.getProfitRate()));
             petsMatchingListModel.setAppointmentTime(petsList.getStartTime());
             listModels.add(petsMatchingListModel);
         }

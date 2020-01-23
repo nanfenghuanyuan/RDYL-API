@@ -71,7 +71,7 @@ public class PetsBizTests {
     @Test
     public void confirmPay() {
         Users users = usersService.selectByPrimaryKey(1);
-        System.out.println(petsListBiz.confirmPay(users, 1, "123456", imgUrl));
+        System.out.println(petsListBiz.confirmPay(users, 1, "123456", "1"));
     }
     @Test
     public void confirmReceipt() {
