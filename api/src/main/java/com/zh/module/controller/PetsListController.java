@@ -81,13 +81,14 @@ public class PetsListController {
             JSONObject json = JSONObject.parseObject(param);
             Integer id = json.getInteger("id");
             String password = json.getString("password");
+            String imgUrl = json.getString("imgUrl");
 
             /*参数校验*/
-            if(id == null || StrUtils.isBlank(password)){
+            if(id == null || StrUtils.isBlank(password) || StrUtils.isBlank(imgUrl)){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
 
-            return petsListBiz.confirmPay(users, id, password);
+            return petsListBiz.confirmPay(users, id, password, imgUrl);
         } catch (BanlanceNotEnoughException e){
             e.printStackTrace();
             return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);

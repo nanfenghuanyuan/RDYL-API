@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class PetsMatchingList implements Serializable {
-    private static final long serialVersionUID = -1683722704709398228L;
+    private static final long serialVersionUID = -2310760842580964759L;
 
     private Integer id;
 
@@ -28,6 +28,8 @@ public class PetsMatchingList implements Serializable {
     private String appointmentStartTime;
 
     private String appointmentEndTime;
+
+    private String imgUrl;
 
     private Date createTime;
 
@@ -121,6 +123,14 @@ public class PetsMatchingList implements Serializable {
         this.appointmentEndTime = appointmentEndTime == null ? null : appointmentEndTime.trim();
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl == null ? null : imgUrl.trim();
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -155,6 +165,7 @@ public class PetsMatchingList implements Serializable {
         sb.append(", inactiveTime=").append(inactiveTime);
         sb.append(", appointmentStartTime=").append(appointmentStartTime);
         sb.append(", appointmentEndTime=").append(appointmentEndTime);
+        sb.append(", imgUrl=").append(imgUrl);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append("]");

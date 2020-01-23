@@ -1,13 +1,11 @@
 package com.zh.module.biz.impl;
 
 import com.zh.module.biz.PetsListBiz;
-import com.zh.module.biz.PetsMatchingListBiz;
 import com.zh.module.constants.*;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.enums.RewardType;
-import com.zh.module.exception.BanlanceNotEnoughException;
 import com.zh.module.model.PageModel;
 import com.zh.module.model.PayInfoModel;
 import com.zh.module.model.PetsMatchingListModel;
@@ -151,6 +149,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             payInfoModels.add(payInfoModel);
         }
         petsOrderModel.setBtnType(btnType);
+        petsOrderModel.setImgUrl(petsMatchingList.getImgUrl());
         petsOrderModel.setCancelBtn(cancelBtn);
         petsOrderModel.setPayInfoModels(payInfoModels);
         petsOrderModel.setName(pets.getName());
@@ -163,7 +162,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     }
 
     @Override
-    public String confirmPay(Users users, Integer id, String password) {
+    public String confirmPay(Users users, Integer id, String password, String imgUrl) {
         //验证用户状态
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
@@ -191,6 +190,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         }
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_PAYED);
         petsMatchingList.setPayTime(DateUtils.getCurrentTimeStr());
+        petsMatchingList.setImgUrl(imgUrl);
 
         /*设置失效时间*/
         int interval = 10;

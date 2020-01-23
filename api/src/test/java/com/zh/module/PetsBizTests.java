@@ -1,11 +1,9 @@
 package com.zh.module;
 
-import com.zh.module.biz.HomeBiz;
 import com.zh.module.biz.PetsBiz;
 import com.zh.module.biz.PetsListBiz;
 import com.zh.module.biz.PetsMatchingListBiz;
 import com.zh.module.constants.SmsTemplateCode;
-import com.zh.module.entity.PetsMatchingList;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
 import com.zh.module.service.UsersService;
@@ -73,7 +71,7 @@ public class PetsBizTests {
     @Test
     public void confirmPay() {
         Users users = usersService.selectByPrimaryKey(1);
-        System.out.println(petsListBiz.confirmPay(users, 1, "123456"));
+        System.out.println(petsListBiz.confirmPay(users, 1, "123456", imgUrl));
     }
     @Test
     public void confirmReceipt() {

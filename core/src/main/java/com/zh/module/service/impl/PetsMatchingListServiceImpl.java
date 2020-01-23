@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2020-01-02 17:45:53
+ * @date: 2020-01-23 18:03:22
  **/ 
 @Service("petsMatchingListService")
 public class PetsMatchingListServiceImpl implements PetsMatchingListService {
@@ -66,6 +66,7 @@ public class PetsMatchingListServiceImpl implements PetsMatchingListService {
     public int selectCount(Map<Object, Object> param) {
         return this.petsMatchingListMapper.selectCount(param);
     }
+
     @Override
     public List<Map<String, Object>> selectListPaging(Map<Object, Object> param) {
         return this.petsMatchingListMapper.selectListPaging(param);
@@ -75,4 +76,5 @@ public class PetsMatchingListServiceImpl implements PetsMatchingListService {
     public PetsMatchingList selectByPetListIdAndActive(Integer id) {
         return this.petsMatchingListMapper.selectByPetListIdAndActive(id);
     }
+
 }

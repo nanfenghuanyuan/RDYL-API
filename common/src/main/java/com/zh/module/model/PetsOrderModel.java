@@ -48,6 +48,7 @@ public class PetsOrderModel {
     private String salePhone;
 
     private String saleName;
+    private String imgUrl;
 
     private List<PayInfoModel> payInfoModels;
 
