@@ -80,7 +80,7 @@ public class WebController {
      */
     @ResponseBody
     @RequestMapping(value="submitRegister",method= RequestMethod.POST,produces="application/json;charset=utf-8")
-    public String register(String phone,String userPassword,String code,Integer codeId,String referPhone){
+    public String register(String phone,String userPassword,String code,Integer codeId,String referPhone,String orderPassword){
         /*正则校验*/
         if(phone.length() != 11){
             return Result.toResult(ResultCode.PHONE_TYPE_ERROR);
@@ -92,6 +92,9 @@ public class WebController {
             return Result.toResult(ResultCode.SMS_CHECK_ERROR);
         }
         if(!PatternUtil.isDigitalAndWord(userPassword)){
+            return Result.toResult(ResultCode.USER_LOGIN_ERROR);
+        }
+        if(!PatternUtil.isTradePwd(orderPassword)){
             return Result.toResult(ResultCode.USER_LOGIN_ERROR);
         }
         try {
