@@ -124,7 +124,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             }else{
                 btnType = GlobalParams.ORDER_BTN_TYPE_WAIT_CONFIRM;
             }
-            cancelBtn = true;
+           // cancelBtn = true;
         }else{
             Users saleUser = usersService.selectByPrimaryKey(petsMatchingList.getBuyUserId());
             petsOrderModel.setBuyName(saleUser.getNickName());
