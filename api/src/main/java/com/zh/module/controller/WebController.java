@@ -1,15 +1,11 @@
 package com.zh.module.controller;
 
-import com.zh.module.annotation.CurrentUser;
-import com.zh.module.biz.HomeBiz;
 import com.zh.module.biz.SmsCodeBiz;
 import com.zh.module.biz.UsersBiz;
 import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
-import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.service.SysparamsService;
-import com.zh.module.service.UsersService;
 import com.zh.module.utils.PatternUtil;
 import com.zh.module.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -100,7 +95,7 @@ public class WebController {
             return Result.toResult(ResultCode.USER_LOGIN_ERROR);
         }
         try {
-            return usersBiz.register(phone, userPassword, referPhone, codeId, code);
+            return usersBiz.register(phone, userPassword, referPhone, codeId, code, orderPassword);
         } catch (Exception e) {
             e.printStackTrace();
         }

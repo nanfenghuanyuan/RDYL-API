@@ -3,7 +3,6 @@ package com.zh.module.biz.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.zh.module.aliyun.MaterialModel;
 import com.zh.module.aliyun.TencentCloud;
 import com.zh.module.biz.IdCardValidateBiz;
 import com.zh.module.biz.UsersBiz;
@@ -20,7 +19,6 @@ import com.zh.module.service.*;
 import com.zh.module.utils.*;
 import com.zh.module.variables.RedisKey;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -116,7 +114,7 @@ public class UsersBizImpl implements UsersBiz {
     }
 
     @Override
-    public String register(String phone, String password, String uuid, Integer codeId, String code) throws Exception {
+    public String register(String phone, String password, String uuid, Integer codeId, String code, String orderPassword) throws Exception {
         /*判断功能是否关闭*/
         Sysparams systemParam = sysparamsService.getValByKey(SystemParams.REGIST_ONOFF);
         if("-1".equals(systemParam.getKeyval())){
@@ -170,6 +168,7 @@ public class UsersBizImpl implements UsersBiz {
         users.setPassword(MD5.getMd5(password));
         users.setTeamLevel((byte) 0);
         users.setPersonLevel((byte) 0);
+        users.setOrderPwd(MD5.getMd5(orderPassword));
         users.setReferId(uuid);
         users.setUuid(uuids.toString());
         users.setEffective((byte)0);
@@ -334,6 +333,10 @@ public class UsersBizImpl implements UsersBiz {
             if(dateCount != null && dateCount.intValue() >= times){
                 return Result.toResult(ResultCode.REAL_NAME_LIMIT);
             }
+        }
+        Integer count = idcardValidateBiz.getByUserByIdcard(idCard);
+        if(count != null){
+            return Result.toResult(ResultCode.REAL_NAME_IDCARD_EXIST);
         }
         JSONObject jsonObject = tencentCloud.getStatus(user.getId().toString(), name, idCard, StrUtils.getCharAndNumr(10));
         IdcardValidate iv = new IdcardValidate();

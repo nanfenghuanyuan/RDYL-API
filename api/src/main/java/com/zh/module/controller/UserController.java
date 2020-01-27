@@ -33,11 +33,12 @@ public class UserController {
         JSONObject params = JSONObject.parseObject(param);
         String phone = params.getString("phone");
         String password = params.getString("password");
+        String orderPassword = params.getString("orderPassword");
         String uuid = params.getString("uuid");
         String code = params.getString("code");
         Integer codeId = params.getInteger("codeId");
         /*参数校验*/
-        if(StrUtils.isBlank(phone) || StrUtils.isBlank(code) || codeId == null || StrUtils.isBlank(password) || uuid == null){
+        if(StrUtils.isBlank(phone) || StrUtils.isBlank(code) || codeId == null || StrUtils.isBlank(password) || StrUtils.isBlank(orderPassword) || uuid == null){
             return Result.toResult(ResultCode.PARAM_IS_BLANK);
         }
         /*正则校验*/
@@ -54,8 +55,11 @@ public class UserController {
         if(!PatternUtil.isDigitalAndWord(password)){
             return Result.toResult(ResultCode.USER_PWD_TYPE_ERROR);
         }
+        if(!PatternUtil.isTradePwd(orderPassword)){
+            return Result.toResult(ResultCode.USER_PWD_TYPE_ERROR);
+        }
         try {
-            return usersBiz.register(phone, password, uuid, codeId, code);
+            return usersBiz.register(phone, password, uuid, codeId, code, orderPassword);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);

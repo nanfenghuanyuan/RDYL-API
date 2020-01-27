@@ -11,7 +11,7 @@ import com.zh.module.entity.Users;
 public interface UsersBiz {
     String login(Users user) throws Exception;
 
-    String register(String phone, String password, String uuid, Integer codeId, String code) throws Exception;
+    String register(String phone, String password, String uuid, Integer codeId, String code, String orderPassword) throws Exception;
 
     String updatePassword(Users user, String password, String code, Integer codeId) throws Exception;
 

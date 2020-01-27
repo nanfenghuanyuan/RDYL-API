@@ -87,4 +87,5 @@ public interface UsersService {
     Users selectByUUID(String toString);
 
     Users selectByReferID(String referId);
+
 }

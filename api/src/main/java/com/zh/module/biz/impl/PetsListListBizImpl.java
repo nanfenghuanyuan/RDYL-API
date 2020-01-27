@@ -76,6 +76,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             petsMatchingListModel.setId((Integer) map.get("id"));
             petsMatchingListModel.setImgUrl(map.get("img_url").toString());
             petsMatchingListModel.setName(map.get("name").toString());
+            petsMatchingListModel.setNumber(map.get("number").toString());
             price = new BigDecimal(map.get("price").toString());
             petsMatchingListModel.setPrice(price);
             petsMatchingListModel.setState(state);
@@ -153,6 +154,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         petsOrderModel.setCancelBtn(cancelBtn);
         petsOrderModel.setPayInfoModels(payInfoModels);
         petsOrderModel.setName(pets.getName());
+        petsOrderModel.setNumber(petsList.getPetsNumber());
         petsOrderModel.setPrice(petsList.getPrice());
         petsOrderModel.setProfit(petsList.getProfitDays() + "天/" + new BigDecimal(petsList.getProfitRate().toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         petsOrderModel.setTransTime(DateUtils.getDateFormate(petsList.getCreateTime()));

@@ -21,6 +21,7 @@ public class PetsMatchingListModel {
      * 宠物名称
      */
     private String name;
+    private String number;
     /**
      * 价格
      */

@@ -6,6 +6,7 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="transfer_user_id" jdbcType="INTEGER" property="transferUserId" />
     <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="pets_number" jdbcType="VARCHAR" property="petsNumber" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="profit_days" jdbcType="INTEGER" property="profitDays" />
     <result column="profit_rate" jdbcType="DECIMAL" property="profitRate" />
@@ -19,23 +20,26 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, transfer_user_id, level, price, profit_days, profit_rate, profit_coin, 
-    profit_coin_rate, start_time, end_time, state, source_from, create_time, update_time
+    id, user_id, transfer_user_id, level, pets_number, price, profit_days, profit_rate, 
+    profit_coin, profit_coin_rate, start_time, end_time, state, source_from, create_time, 
+    update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.PetsList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into pets_list (user_id, transfer_user_id, level, 
-      price, profit_days, profit_rate, 
-      profit_coin, profit_coin_rate, start_time, 
-      end_time, state, source_from, 
-      create_time, update_time)
+      pets_number, price, profit_days, 
+      profit_rate, profit_coin, profit_coin_rate, 
+      start_time, end_time, state, 
+      source_from, create_time, update_time
+      )
     values (#{userId,jdbcType=INTEGER}, #{transferUserId,jdbcType=INTEGER}, #{level,jdbcType=TINYINT}, 
-      #{price,jdbcType=DECIMAL}, #{profitDays,jdbcType=INTEGER}, #{profitRate,jdbcType=DECIMAL}, 
-      #{profitCoin,jdbcType=VARCHAR}, #{profitCoinRate,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, 
-      #{endTime,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, #{sourceFrom,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{petsNumber,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{profitDays,jdbcType=INTEGER}, 
+      #{profitRate,jdbcType=DECIMAL}, #{profitCoin,jdbcType=VARCHAR}, #{profitCoinRate,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, 
+      #{sourceFrom,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.PetsList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -51,6 +55,9 @@
       </if>
       <if test="level != null">
         level,
+      </if>
+      <if test="petsNumber != null">
+        pets_number,
       </if>
       <if test="price != null">
         price,
@@ -96,6 +103,9 @@
       <if test="level != null">
         #{level,jdbcType=TINYINT},
       </if>
+      <if test="petsNumber != null">
+        #{petsNumber,jdbcType=VARCHAR},
+      </if>
       <if test="price != null">
         #{price,jdbcType=DECIMAL},
       </if>
@@ -136,6 +146,7 @@
     set user_id = #{userId,jdbcType=INTEGER},
       transfer_user_id = #{transferUserId,jdbcType=INTEGER},
       level = #{level,jdbcType=TINYINT},
+      pets_number = #{petsNumber,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
       profit_days = #{profitDays,jdbcType=INTEGER},
       profit_rate = #{profitRate,jdbcType=DECIMAL},
@@ -160,6 +171,9 @@
       </if>
       <if test="level != null">
         level = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="petsNumber != null">
+        pets_number = #{petsNumber,jdbcType=VARCHAR},
       </if>
       <if test="price != null">
         price = #{price,jdbcType=DECIMAL},
@@ -207,11 +221,6 @@
     from pets_list
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectSumAmountByUser" parameterType="java.lang.Integer" resultType="string">
-    select sum(price) sumAmount
-    from pets_list
-    where user_id = #{id}
-  </select>
   <select id="selectAll" parameterType="java.util.Map" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -225,6 +234,9 @@
     </if>
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}
+    </if>
+    <if test="petsNumber != null">
+       and  pets_number = #{petsNumber,jdbcType=VARCHAR}
     </if>
     <if test="price != null">
        and  price = #{price,jdbcType=DECIMAL}
@@ -275,6 +287,9 @@
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}
     </if>
+    <if test="petsNumber != null">
+       and  pets_number = #{petsNumber,jdbcType=VARCHAR}
+    </if>
     <if test="price != null">
        and  price = #{price,jdbcType=DECIMAL}
     </if>
@@ -323,6 +338,9 @@
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}
     </if>
+    <if test="petsNumber != null">
+       and  pets_number = #{petsNumber,jdbcType=VARCHAR}
+    </if>
     <if test="price != null">
        and  price = #{price,jdbcType=DECIMAL}
     </if>
@@ -357,6 +375,7 @@
        and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
   </select>
+
   <select id="selectListPaging" parameterType="java.util.Map" resultType="map">
     <if test="state != 1">
       SELECT pl.id
@@ -364,13 +383,13 @@
     <if test="state == 1">
       SELECT pm.id
     </if>
-    , p.img_url, p.name, pm.price, pm.profit_days, pm.profit_rate, pm.start_time, pm.update_time FROM pets_list pm LEFT JOIN pets p ON p.level = pm.level
+    , p.img_url, p.name, pm.price, pm.pets_number, pm.profit_days, pm.profit_rate, pm.start_time, pm.update_time FROM pets_list pm LEFT JOIN pets p ON p.level = pm.level
     <if test="state != 1">
-    LEFT JOIN pets_matching_list pl ON pl.pet_list_id=pm.id
+      LEFT JOIN pets_matching_list pl ON pl.pet_list_id=pm.id
     </if>
     where pm.user_id = #{userId}
     <if test="state != 1">
-    and (pl.state = 1 or pl.state = 2)
+      and (pl.state = 1 or pl.state = 2)
     </if>
     <if test="state != null">
       and  pm.state = #{state,jdbcType=TINYINT}
@@ -389,5 +408,10 @@
       and  state = #{state,jdbcType=TINYINT}
     </if>
     order by id desc
+  </select>
+  <select id="selectSumAmountByUser" parameterType="java.lang.Integer" resultType="string">
+    select sum(price) sumAmount
+    from pets_list
+    where user_id = #{id}
   </select>
 </mapper>

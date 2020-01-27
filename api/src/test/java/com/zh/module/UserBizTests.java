@@ -1,7 +1,6 @@
 package com.zh.module;
 
 import com.zh.module.aliyun.H5RpBasic;
-import com.zh.module.biz.HomeBiz;
 import com.zh.module.biz.UsersBiz;
 import com.zh.module.entity.Users;
 import org.junit.Test;
@@ -37,7 +36,7 @@ public class UserBizTests {
     }
     @Test
     public void regiester() throws Exception {
-        System.out.println(usersBiz.register("13666666667", "123456", "19216441", 1, "303894"));
+        System.out.println(usersBiz.register("13666666667", "123456", "19216441", 1, "303894", orderPassword));
     }
     @Test
     public void login() throws Exception {

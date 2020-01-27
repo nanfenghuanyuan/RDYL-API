@@ -3,8 +3,6 @@ package com.zh.module.service.impl;
 import com.zh.module.dao.PetsListMapper;
 import com.zh.module.entity.PetsList;
 import com.zh.module.service.PetsListService;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -15,7 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2019-12-30 13:57:37
+ * @date: 2020-01-27 18:15:25
  **/ 
 @Service("petsListService")
 public class PetsListServiceImpl implements PetsListService {
@@ -68,14 +66,15 @@ public class PetsListServiceImpl implements PetsListService {
     public int selectCount(Map<Object, Object> param) {
         return this.petsListMapper.selectCount(param);
     }
-    @Override
-    public List<Map<String, Object>> selectListPaging(Map<Object, Object> param) {
-        return this.petsListMapper.selectListPaging(param);
-    }
 
     @Override
     public List<PetsList> selectDoProfit(Map<Object, Object> param) {
         return this.petsListMapper.selectDoProfit(param);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectListPaging(Map<Object, Object> param) {
+        return this.petsListMapper.selectListPaging(param);
     }
 
     @Override
