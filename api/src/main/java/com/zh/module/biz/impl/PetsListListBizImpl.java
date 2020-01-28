@@ -76,7 +76,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             petsMatchingListModel.setId((Integer) map.get("id"));
             petsMatchingListModel.setImgUrl(map.get("img_url").toString());
             petsMatchingListModel.setName(map.get("name").toString());
-            petsMatchingListModel.setNumber(map.get("number").toString());
+            petsMatchingListModel.setNumber(map.get("pets_number").toString());
             price = new BigDecimal(map.get("price").toString());
             petsMatchingListModel.setPrice(price);
             petsMatchingListModel.setState(state);

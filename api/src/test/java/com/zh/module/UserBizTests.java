@@ -36,7 +36,7 @@ public class UserBizTests {
     }
     @Test
     public void regiester() throws Exception {
-        System.out.println(usersBiz.register("13666666667", "123456", "19216441", 1, "303894", orderPassword));
+        System.out.println(usersBiz.register("13666666667", "123456", "19216441", 1, "303894", "123"));
     }
     @Test
     public void login() throws Exception {

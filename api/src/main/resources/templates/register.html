@@ -73,6 +73,10 @@ http://www.pgy.pub/externalLinksController/chain/logo.jpg?ckey=u9jlc%2Bes3x1g8%2
 			<input type="password" class="myapp-login-input-text am-form-field" placeholder="6-18位数字与字母组合密码" id="password">
 		</div>
 	    <div class="am-form-group am-form-icon">
+			<i class="am-icon-lock"></i>
+			<input type="password" class="myapp-login-input-text am-form-field" placeholder="6数字交易密码" id="orderPassword">
+		</div>
+	    <div class="am-form-group am-form-icon">
 			<i class="am-icon-user-plus"></i>
 			<input type="text" class="myapp-login-input-text am-form-field" th:value="${uuid}" placeholder="邀请人推荐码" id="referPhone" readonly="readonly">
 		</div>
@@ -195,6 +199,7 @@ http://www.pgy.pub/externalLinksController/chain/logo.jpg?ckey=u9jlc%2Bes3x1g8%2
 	function login(){
 		var phone=$("#phone").val();
 		var password=$("#password").val();
+		var orderPassword=$("#orderPassword").val();
 		var code = $("#code").val();
 		var referPhone=$("#referPhone").val();
 		var codeId=$("#smsCodeId").val();
@@ -205,6 +210,10 @@ http://www.pgy.pub/externalLinksController/chain/logo.jpg?ckey=u9jlc%2Bes3x1g8%2
 		}
 		if(!password){
 			layer.msg("请输入密码!",{icon:2,time:1000});
+			return false;
+		}
+		if(!orderPassword){
+			layer.msg("请输入交易密码!",{icon:2,time:1000});
 			return false;
 		}
 		if(!code){
@@ -233,6 +242,7 @@ http://www.pgy.pub/externalLinksController/chain/logo.jpg?ckey=u9jlc%2Bes3x1g8%2
 		 $.post("/web/submitRegister.action",
 		 		{"phone":phone,
 				 "userPassword" : password,
+				 "orderPassword" : orderPassword,
 				 "code" : code,
 				 "codeId" : codeId,
 				 "referPhone" : referPhone},
