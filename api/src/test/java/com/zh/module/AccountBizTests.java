@@ -75,7 +75,7 @@ public class AccountBizTests {
     }
     @Test
     public void get() {
-        Users users = usersBiz.getUser(1);
+        Users users = usersBiz.getUser(36);
         byte accountType = 0;
         Integer coinType = 1;
         System.out.println(accountBiz.getAvailBalance(users,coinType,accountType));

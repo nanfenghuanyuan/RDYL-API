@@ -3,6 +3,7 @@ package com.zh.module;
 import com.zh.module.biz.PetsBiz;
 import com.zh.module.biz.PetsListBiz;
 import com.zh.module.biz.PetsMatchingListBiz;
+import com.zh.module.biz.UsersBiz;
 import com.zh.module.constants.SmsTemplateCode;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
@@ -28,6 +29,8 @@ public class PetsBizTests {
     private PetsListBiz petsListBiz;
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private UsersBiz usersBiz;
     @Test
     public void buy() throws ParseException {
         Users users = new Users();
@@ -49,10 +52,9 @@ public class PetsBizTests {
     }
     @Test
     public void list() {
-        Users users = new Users();
-        users.setId(1);
+        Users users = usersBiz.getUser(40);
         PageModel pageModel = new PageModel(1, 10);
-        System.out.println(petsListBiz.list(users, 2, pageModel));
+        System.out.println(petsListBiz.list(users, 3, pageModel));
     }
     @Test
     public void petList() {
