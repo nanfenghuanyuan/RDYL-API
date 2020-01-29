@@ -54,6 +54,8 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     @Autowired
     private PetsListService petsListService;
     @Autowired
+    private PetsMatchingListService petsMatchingListService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -280,6 +282,24 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         result.put("personProfit", new BigDecimal(personProfit).setScale(0, BigDecimal.ROUND_DOWN));
         //团队收益
         result.put("teamProfit", new BigDecimal(teamProfit).setScale(0, BigDecimal.ROUND_DOWN));
+
+        /*领养记录数量*/
+        Map<Object, Object> params = new HashMap<>();
+        params.put("buyUserId", userId);
+        params.put("state", GlobalParams.PET_MATCHING_STATE_NOPAY);
+        int appointmentCount = petsMatchingListService.selectCount(params);
+        params.put("state", GlobalParams.PET_MATCHING_STATE_PAYED);
+        appointmentCount = appointmentCount + petsMatchingListService.selectCount(params);
+        result.put("appointmentCount", appointmentCount);
+
+        /*转让记录数量*/
+        params = new HashMap<>();
+        params.put("saleUserId", userId);
+        params.put("state", GlobalParams.PET_MATCHING_STATE_NOPAY);
+        int transferCount = petsMatchingListService.selectCount(params);
+        params.put("state", GlobalParams.PET_MATCHING_STATE_PAYED);
+        transferCount = transferCount + petsMatchingListService.selectCount(params);
+        result.put("transferCount", transferCount);
         return Result.toResult(ResultCode.SUCCESS, result);
     }
 
