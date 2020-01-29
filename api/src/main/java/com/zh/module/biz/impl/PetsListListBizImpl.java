@@ -67,7 +67,12 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         param.put("userId", users.getId());
         param.put("firstResult", pageModel.getFirstResult());
         param.put("maxResult", pageModel.getMaxResult());
-        List<Map<String, Object>> lists = petsListService.selectListPaging(param);
+        List<Map<String, Object>> lists = new ArrayList<>();
+        if(state != 3) {
+            lists = petsListService.selectListPaging(param);
+        }else{
+            lists = petsMatchingListService.selectOverPaging(param);
+        }
         List<PetsMatchingListModel> listModels = new LinkedList<>();
         String transferTime;
         BigDecimal price;
@@ -254,6 +259,12 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         //修改匹配记录
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
         petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
+
+        //留存转让记录
+        petsMatchingList.setId(null);
+        petsMatchingList.setSaleUserId(users.getId());
+        petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_OVER);
+        petsMatchingListService.insertSelective(petsMatchingList);
 
         /*短信通知买家*/
         Integer buyUserId = petsMatchingList.getBuyUserId();

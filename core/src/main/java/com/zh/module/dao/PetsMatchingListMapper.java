@@ -26,4 +26,6 @@ public interface PetsMatchingListMapper {
     List<Map<String, Object>> selectListPaging(Map<Object, Object> param);
 
     PetsMatchingList selectByPetListIdAndActive(Integer id);
+
+    List<Map<String, Object>> selectOverPaging(Map<Object, Object> param);
 }

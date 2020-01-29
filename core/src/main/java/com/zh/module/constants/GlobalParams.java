@@ -113,6 +113,10 @@ public class GlobalParams {
      * 宠物匹配状态 已取消
      */
     public static  final  int PET_MATCHING_STATE_CANCEL = 4;
+    /**
+     * 已结束（卖家留存)
+     */
+    public static  final  int PET_MATCHING_STATE_OVER = 5;
 
     /**
      * 宠物信息 收益中

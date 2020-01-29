@@ -77,4 +77,8 @@ public class PetsMatchingListServiceImpl implements PetsMatchingListService {
         return this.petsMatchingListMapper.selectByPetListIdAndActive(id);
     }
 
+    @Override
+    public List<Map<String, Object>> selectOverPaging(Map<Object, Object> param) {
+        return this.petsMatchingListMapper.selectOverPaging(param);
+    }
 }

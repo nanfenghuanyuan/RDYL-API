@@ -82,7 +82,19 @@ public interface PetsMatchingListService {
      **/
     int selectCount(Map<Object, Object> param);
 
+    /**
+     * 列表
+     * @param param
+     * @return
+     */
     List<Map<String, Object>> selectListPaging(Map<Object, Object> param);
+
     PetsMatchingList selectByPetListIdAndActive(Integer id);
 
+    /**
+     * 转让已完成列表
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> selectOverPaging(Map<Object, Object> param);
 }
