@@ -144,10 +144,12 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
      * 向下
      */
     private Set<Integer> getReferSetloss(String referId, Set<Integer> userSet) {
-        Users user = usersService.selectByReferID(referId);
-        if(user != null){
-            userSet.add(user.getId());
-            getReferSetloss(user.getUuid(), userSet);
+        List<Users> user = usersService.selectByReferID(referId);
+        for(Users users : user) {
+            if (users != null) {
+                userSet.add(users.getId());
+                getReferSetloss(users.getUuid(), userSet);
+            }
         }
         return userSet;
     }
@@ -156,10 +158,12 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
      * 向上
      */
     private Set<Integer> getReferSetUp(String uuid, Set<Integer> userSet) {
-        Users user = usersService.selectByUUID(uuid);
-        if(user != null){
-            userSet.add(user.getId());
-            getReferSetUp(user.getReferId(), userSet);
+        List<Users> user = usersService.selectByUUIDList(uuid);
+        for(Users users : user) {
+            if (users != null) {
+                userSet.add(users.getId());
+                getReferSetUp(users.getReferId(), userSet);
+            }
         }
         return userSet;
     }

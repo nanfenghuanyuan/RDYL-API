@@ -86,11 +86,17 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Users selectByReferID(String referId) {
+    public List<Users> selectByReferID(String referId) {
         Map<Object, Object> map = new HashMap();
         map.put("referId", referId);
         List<Users> users = selectAll(map);
-        return users == null || users.isEmpty() ? null : users.get(0);
+        return users;
     }
 
+    @Override
+    public List<Users> selectByUUIDList(String uuid) {
+        Map<Object, Object> map = new HashMap();
+        map.put("uuid", uuid);
+        return selectAll(map);
+    }
 }
