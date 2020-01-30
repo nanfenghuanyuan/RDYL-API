@@ -3,7 +3,7 @@
 <mapper namespace="com.zh.module.dao.PetsMatchingListMapper">
   <resultMap id="BaseResultMap" type="com.zh.module.entity.PetsMatchingList">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="pet_list_id" jdbcType="TINYINT" property="petListId" />
+    <result column="pet_list_id" jdbcType="INTEGER" property="petListId" />
     <result column="level" jdbcType="TINYINT" property="level" />
     <result column="buy_user_id" jdbcType="INTEGER" property="buyUserId" />
     <result column="sale_user_id" jdbcType="INTEGER" property="saleUserId" />
@@ -30,7 +30,7 @@
       pay_time, inactive_time, appointment_start_time, 
       appointment_end_time, img_url, create_time, 
       update_time)
-    values (#{petListId,jdbcType=TINYINT}, #{level,jdbcType=TINYINT}, #{buyUserId,jdbcType=INTEGER}, 
+    values (#{petListId,jdbcType=INTEGER}, #{level,jdbcType=TINYINT}, #{buyUserId,jdbcType=INTEGER},
       #{saleUserId,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{state,jdbcType=TINYINT}, 
       #{payTime,jdbcType=VARCHAR}, #{inactiveTime,jdbcType=TIMESTAMP}, #{appointmentStartTime,jdbcType=VARCHAR}, 
       #{appointmentEndTime,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
@@ -84,7 +84,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="petListId != null">
-        #{petListId,jdbcType=TINYINT},
+        #{petListId,jdbcType=INTEGER},
       </if>
       <if test="level != null">
         #{level,jdbcType=TINYINT},
@@ -126,7 +126,7 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.zh.module.entity.PetsMatchingList">
     update pets_matching_list
-    set pet_list_id = #{petListId,jdbcType=TINYINT},
+    set pet_list_id = #{petListId,jdbcType=INTEGER},
       level = #{level,jdbcType=TINYINT},
       buy_user_id = #{buyUserId,jdbcType=INTEGER},
       sale_user_id = #{saleUserId,jdbcType=INTEGER},
@@ -145,7 +145,7 @@
     update pets_matching_list
     <set>
       <if test="petListId != null">
-        pet_list_id = #{petListId,jdbcType=TINYINT},
+        pet_list_id = #{petListId,jdbcType=INTEGER},
       </if>
       <if test="level != null">
         level = #{level,jdbcType=TINYINT},
@@ -202,7 +202,7 @@
     from pets_matching_list
     where 1=1 
     <if test="petListId != null">
-       and  pet_list_id = #{petListId,jdbcType=TINYINT}
+       and  pet_list_id = #{petListId,jdbcType=INTEGER}
     </if>
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}
@@ -248,7 +248,7 @@
     from pets_matching_list
     where 1=1 
     <if test="petListId != null">
-       and  pet_list_id = #{petListId,jdbcType=TINYINT}
+       and  pet_list_id = #{petListId,jdbcType=INTEGER}
     </if>
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}
@@ -293,7 +293,7 @@
     from pets_matching_list 
     where 1=1 
     <if test="petListId != null">
-       and  pet_list_id = #{petListId,jdbcType=TINYINT}
+       and  pet_list_id = #{petListId,jdbcType=INTEGER}
     </if>
     <if test="level != null">
        and  level = #{level,jdbcType=TINYINT}

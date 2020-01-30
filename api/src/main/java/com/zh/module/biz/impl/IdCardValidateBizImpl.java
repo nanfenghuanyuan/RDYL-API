@@ -50,6 +50,7 @@ public class IdCardValidateBizImpl implements IdCardValidateBiz {
     public Integer getByUserByIdcard(String identificationnumber) {
         Map<Object, Object> map = new HashMap<>();
         map.put("identificationnumber", identificationnumber);
+        map.put("state", 1);
         List<IdcardValidate> idcardValidates = this.idcardValidateService.selectAll(map);
         if(idcardValidates.size() == 0){
            return null;

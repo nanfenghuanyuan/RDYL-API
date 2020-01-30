@@ -12,7 +12,7 @@ public class CoinType {
     public static String getCoinName(Integer coinType){
         switch (coinType){
             case 0 : return "CNY";
-            case 1 : return "OS";
+            case 1 : return "MEPC";
             default: return null;
         }
     }

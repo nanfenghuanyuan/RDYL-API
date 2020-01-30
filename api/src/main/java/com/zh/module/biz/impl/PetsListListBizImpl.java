@@ -106,7 +106,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         }
         boolean isBuyer = false;
         Pets pets = petsService.selectByLevel(petsMatchingList.getLevel().intValue());
-        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId().intValue());
+        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId());
         if(users.getId().equals(petsMatchingList.getBuyUserId())){
             isBuyer = true;
         }
@@ -159,7 +159,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         petsOrderModel.setCancelBtn(cancelBtn);
         petsOrderModel.setPayInfoModels(payInfoModels);
         petsOrderModel.setName(pets.getName());
-        petsOrderModel.setNumber(petsList.getPetsNumber());
+        petsOrderModel.setNumber(petsList.getPetsNumber() == null ? "" : petsList.getPetsNumber());
         petsOrderModel.setPrice(petsList.getPrice());
         petsOrderModel.setProfit(petsList.getProfitDays() + "天/" + new BigDecimal(petsList.getProfitRate().toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         petsOrderModel.setTransTime(DateUtils.getDateFormate(petsList.getCreateTime()));
@@ -176,7 +176,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         }
         PetsMatchingList petsMatchingList = petsMatchingListService.selectByPrimaryKey(id);
 
-        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId().intValue());
+        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId());
         //判断订单状态 仅有转让中和未确认未付款状态可行
         if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAITING){
             return Result.toResult(ResultCode.PETS_STATE_ERROR);
@@ -229,7 +229,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             return Result.toResult(ResultCode.USER_STATE_ERROR);
         }
         PetsMatchingList petsMatchingList = petsMatchingListService.selectByPrimaryKey(id);
-        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId().intValue());
+        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId());
         //判断订单状态 仅有转让中和未确认未付款状态可行
         if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAITING){
             return Result.toResult(ResultCode.PETS_STATE_ERROR);
@@ -509,7 +509,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         this.petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
 
         //修改宠物状态
-        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId().intValue());
+        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId());
         petsList.setTransferUserId(-1);
         petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAIT);
         petsListService.updateByPrimaryKeySelective(petsList);
@@ -581,7 +581,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
 
     @Override
     public void cancelNoConfirm(Users users, PetsMatchingList petsMatchingList) {
-        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId().intValue());
+        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId());
         //判断订单状态 仅有转让中和未确认未付款状态可行
         if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAITING){
             return;
@@ -630,7 +630,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             return Result.toResult(ResultCode.USER_STATE_ERROR);
         }
         PetsMatchingList petsMatchingList = petsMatchingListService.selectByPrimaryKey(id);
-        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId().intValue());
+        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId());
         //判断订单状态 仅有转让中和未确认未付款状态可行
         if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAITING){
             return Result.toResult(ResultCode.PETS_STATE_ERROR);

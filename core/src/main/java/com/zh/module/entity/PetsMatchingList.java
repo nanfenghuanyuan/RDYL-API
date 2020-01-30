@@ -9,7 +9,7 @@ public class PetsMatchingList implements Serializable {
 
     private Integer id;
 
-    private Byte petListId;
+    private Integer petListId;
 
     private Byte level;
 
@@ -43,11 +43,11 @@ public class PetsMatchingList implements Serializable {
         this.id = id;
     }
 
-    public Byte getPetListId() {
+    public Integer getPetListId() {
         return petListId;
     }
 
-    public void setPetListId(Byte petListId) {
+    public void setPetListId(Integer petListId) {
         this.petListId = petListId;
     }
 

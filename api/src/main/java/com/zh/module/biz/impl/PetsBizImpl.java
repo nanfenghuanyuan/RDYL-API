@@ -78,7 +78,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         petsMatchingList.setAmount(appointmentAmount);
         petsMatchingList.setBuyUserId(userId);
         petsMatchingList.setLevel(level.byteValue());
-        petsMatchingList.setPetListId((byte) GlobalParams.DEFAULT_PETS_ID);
+        petsMatchingList.setPetListId(GlobalParams.DEFAULT_PETS_ID);
         petsMatchingList.setSaleUserId(GlobalParams.DEFAULT_PETS_ID);
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
         petsMatchingList.setAppointmentStartTime(DateUtils.getCurrentTimeStr());
@@ -114,8 +114,20 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
         }
-        Pets pets = petsService.selectByLevel(level);
         Integer userId = users.getId();
+        //每个人只允许持有一个
+        Map<Object, Object> params = new HashMap<>();
+        params.put("buyUserId", userId);
+        params.put("level", level);
+        params.put("state", GlobalParams.PET_MATCHING_STATE_NOPAY);
+        int counts = petsMatchingListService.selectCount(params);
+        params.put("state", GlobalParams.PET_MATCHING_STATE_PAYED);
+        counts = counts + petsMatchingListService.selectCount(params);
+        if(counts != 0){
+            return Result.toResult(ResultCode.PERSON_HAS_PETS);
+        }
+
+        Pets pets = petsService.selectByLevel(level);
         //是否在允许的时间范围内
         if(!checkIsDateLimit(level, true)){
             return Result.toResult(ResultCode.TIME_ERROR);
@@ -131,7 +143,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         List<PetsList> petsLists = petsListService.selectAll(param);
         //若没有待转让的宠物 返回失败
         if(petsLists.size() == 0){
-            Map<Object, Object> params = new HashMap<>();
+            params = new HashMap<>();
             params.put("level", level);
             params.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
             List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(params);
@@ -187,7 +199,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                 petsMatchingList.setAmount(appointmentAmount);
                 petsMatchingList.setBuyUserId(userId);
                 petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_NOPAY);
-                petsMatchingList.setPetListId(petsList.getId().byteValue());
+                petsMatchingList.setPetListId(petsList.getId());
                 petsMatchingList.setSaleUserId(saleUserId);
                 petsMatchingList.setInactiveTime(inactiveTime);
                 petsMatchingList.setAppointmentStartTime(DateUtils.getCurrentTimeStr());
@@ -205,7 +217,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                 PetsMatchingList petsMatchingList = petsMatchingLists.size() == 0 ? null : petsMatchingLists.get(0);
                 if (petsMatchingList != null) {
                     petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_NOPAY);
-                    petsMatchingList.setPetListId(petsList.getId().byteValue());
+                    petsMatchingList.setPetListId(petsList.getId());
                     petsMatchingList.setSaleUserId(saleUserId);
                     petsMatchingList.setInactiveTime(inactiveTime);
                     petsMatchingList.setAppointmentStartTime(DateUtils.getCurrentTimeStr());
