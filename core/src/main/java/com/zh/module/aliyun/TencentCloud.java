@@ -21,8 +21,8 @@ import java.util.*;
 @Component
 public class TencentCloud {
 
-    private static String appId = "TIDAJjRB";
-    private static String secret = "l1So1Bd2uZeIRLQozuxvZ38KKZKgBXFRzEy8LyLdAGFMdAeAUvbYKGJeNS2pqD0V";
+    private static String appId = "IDAQDHj5";
+    private static String secret = "W9wTDoAVJ5R5i3ONdEFKCjayRqieNPDw8OoFbDl3IxXQ0cNJrFEdLMWFm2rIfeTa";
 
     /**
      * 获取url
