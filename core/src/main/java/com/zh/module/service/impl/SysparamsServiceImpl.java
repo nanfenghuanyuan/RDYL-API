@@ -74,17 +74,8 @@ public class SysparamsServiceImpl implements SysparamsService {
     }
     @Override
     public Sysparams getValByKey(String key) {
-        String redisKey = String.format(RedisKey.SYSTEM_PARAM, key);
-        Sysparams systemParam = RedisUtil.searchStringObj(redis, redisKey, Sysparams.class);
-        if(systemParam == null){
-            systemParam = sysparamsMapper.selectByKey(key);
-            if(systemParam!=null){
-                RedisUtil.addStringObj(redis, redisKey, systemParam);
-            }
-            return systemParam;
-        }else{
-            return systemParam;
-        }
+
+        return sysparamsMapper.selectByKey(key);
     }
     @Override
     public String getValStringByKey(String key) {
