@@ -23,6 +23,7 @@
     id, user_id, transfer_user_id, level, pets_number, price, profit_days, profit_rate, 
     profit_coin, profit_coin_rate, start_time, end_time, state, source_from, create_time, 
     update_time
+  </sql>
   <sql id="Base_Column_List2">
     pl.id, pl.user_id, pl.transfer_user_id, pl.level, pl.pets_number, pl.price, pl.profit_days, pl.profit_rate,
     pl.profit_coin, pl.profit_coin_rate, pl.start_time, pl.end_time, pl.state, pl.source_from, pl.create_time,
@@ -418,9 +419,9 @@
     from pets_list
     where user_id = #{id}
   </select>
-  <select id="selectDoBuy" parameterType="java.lang.Integer" resultType="string">
-    SELECT <include refid="Base_Column_List2" /> FROM `pets_list` pl
-    LEFT JOIN `pets_matching_list` pm ON pm.`pet_list_id`=pl.`id`
-    WHERE pl.`state`=#{state} AND pl.`level`=#{level} AND pm.`state` != 1 AND pm.`state` != 2
+  <select id="selectDoBuy" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List2" /> FROM pets_list pl
+    LEFT JOIN pets_matching_list pm ON pm.pet_list_id=pl.id
+    WHERE pl.state=#{state} AND pl.level=#{level} AND pm.state != 1 AND pm.state != 2
   </select>
 </mapper>

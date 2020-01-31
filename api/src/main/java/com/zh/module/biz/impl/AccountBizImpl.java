@@ -244,7 +244,9 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     @Override
     public String withdraw(Users users, Integer coinType, String amount, String password){
         String start = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_TIME_LIMIT_START);
+        start = DateUtils.getCurrentDateStr() + " " + start;
         String end = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_TIME_LIMIT_END);
+        end = DateUtils.getCurrentDateStr() + " " + end;
         if(DateUtils.minBetween(start) >= 0 && DateUtils.minBetween(end) < 0) {
             Integer userId = users.getId();
             /*校验交易密码*/
