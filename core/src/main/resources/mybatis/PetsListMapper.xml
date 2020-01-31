@@ -422,6 +422,6 @@
   <select id="selectDoBuy" parameterType="java.util.Map" resultMap="BaseResultMap">
     SELECT <include refid="Base_Column_List2" /> FROM pets_list pl
     LEFT JOIN pets_matching_list pm ON pm.pet_list_id=pl.id
-    WHERE pl.state=#{state} AND pl.level=#{level} AND pm.state != 1 AND pm.state != 2
+    WHERE pl.state=#{state} AND pl.level=#{level}
   </select>
 </mapper>

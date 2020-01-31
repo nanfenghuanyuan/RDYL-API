@@ -244,7 +244,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     @Override
     public String withdraw(Users users, Integer coinType, String amount, String password){
         String onoff = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_ONOFF);
-        if(onoff.equals(GlobalParams.INACTIVE)){
+        if(Integer.parseInt(onoff) == GlobalParams.INACTIVE){
             return Result.toResult(ResultCode.PERMISSION_NO_ACCESS);
         }
         String start = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_TIME_LIMIT_START);

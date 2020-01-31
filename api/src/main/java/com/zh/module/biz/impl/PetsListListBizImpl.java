@@ -520,10 +520,21 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
 
         //删除redis预约记录
         String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, petsMatchingList.getLevel(), userId);
+
+        accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, petsMatchingList.getAmount(), BigDecimal.ZERO, userId, "预约取消返还", petsMatchingList.getId());
+
+        //保存预约记录
+        Pets pets = petsService.selectByLevel(petsMatchingList.getLevel().intValue());
+        AppointmentRecord appointmentRecord = new AppointmentRecord();
+        appointmentRecord.setName("预约返还" + pets.getName());
+        appointmentRecord.setSpend(petsMatchingList.getAmount());
+        appointmentRecord.setUserId(userId);
+        appointmentRecordService.insertSelective(appointmentRecord);
+
         RedisUtil.deleteKey(redis, redisKey);
         //未付款处罚开关开启
         String noPayPunish = sysparamsService.getValStringByKey(SystemParams.NO_PAY_PUNISH);
-        if(noPayPunish.equals(GlobalParams.ACTIVE)){
+        if(Integer.parseInt(noPayPunish) == GlobalParams.ACTIVE){
             String amount;
             String number = RedisUtil.searchString(redis, String.format(RedisKey.PUNISH_NOPAY, userId));
             //无记录 则保存记录，账号冻结，直接扣除一定量的MEPC
