@@ -1,5 +1,6 @@
 package com.zh.module.biz.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zh.module.biz.TeamBiz;
 import com.zh.module.constants.GlobalParams;
 import com.zh.module.constants.TeamType;
@@ -9,6 +10,7 @@ import com.zh.module.enums.ResultCode;
 import com.zh.module.model.PageModel;
 import com.zh.module.model.TeamListModel;
 import com.zh.module.service.*;
+import com.zh.module.utils.DateUtils;
 import com.zh.module.utils.StrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -42,16 +44,19 @@ public class TeamBizImpl implements TeamBiz {
     public String init(Users users, Integer type, PageModel pageModel) {
         Map<String, Object> result = new HashMap<>();
         Map<Object, Object> param = new HashMap<>();
-        param.put("referId", users.getUuid());
-        //直推人数
-        int personAmount = usersService.selectCount(param);
-        result.put("personAmount", personAmount);
-        //有效人数
-        param.put("effective", GlobalParams.ACTIVE);
-        personAmount = usersService.selectCount(param);
-        result.put("effectiveAmount", personAmount);
-        String profit = profitRecordService.selectSumAmount(users.getId(), GlobalParams.PROFIT_RECORD_TEAM);
-        result.put("profit", StrUtils.isBlank(profit) ? "0" : profit);
+        //团队
+        JSONObject jsonObject = getTeam(new JSONObject(), users.getUuid());
+        List<Integer> team = new LinkedList<>();
+        team.add(jsonObject.getIntValue("allNumber"));
+        team.add(jsonObject.getIntValue("activeNumber"));
+        team.add(jsonObject.getIntValue("effectiveNumber"));
+        result.put("team", team);
+        //一级
+        List<Integer> one = getOne(users.getUuid());
+        result.put("one", one);
+        //二级
+        List<Integer> two = getTwo(users.getUuid());
+        result.put("two", two);
         List<TeamListModel> models = new LinkedList<>();
         param = new HashMap<>();
         param.put("referId", users.getUuid());
@@ -61,11 +66,10 @@ public class TeamBizImpl implements TeamBiz {
         if(type == 1){
             for(Users user : usersList){
                 TeamListModel teamListModel = new TeamListModel();
-                teamListModel.setPhone(user.getPhone());
+                teamListModel.setName(user.getNickName());
+                teamListModel.setTime(DateUtils.getDateFormate2(user.getCreateTime()));
+                teamListModel.setPhone(user.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
                 teamListModel.setIdStatus(user.getIdStatus().intValue());
-                teamListModel.setLevel(TeamType.getCoinName(user.getTeamLevel().intValue()));
-                profit = profitRecordService.selectSumAmount(user.getId(), GlobalParams.PROFIT_RECORD_TEAM);
-                teamListModel.setAmount(profit);
                 models.add(teamListModel);
             }
         }else if(type == 2){
@@ -75,11 +79,10 @@ public class TeamBizImpl implements TeamBiz {
                 List<Users> referUserList = usersService.selectAll(param);
                 for(Users referUser : referUserList) {
                     TeamListModel teamListModel = new TeamListModel();
-                    teamListModel.setPhone(referUser.getPhone());
+                    teamListModel.setName(referUser.getNickName());
+                    teamListModel.setTime(DateUtils.getDateFormate2(referUser.getCreateTime()));
+                    teamListModel.setPhone(referUser.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
                     teamListModel.setIdStatus(referUser.getIdStatus().intValue());
-                    teamListModel.setLevel(TeamType.getCoinName(referUser.getTeamLevel().intValue()));
-                    profit = profitRecordService.selectSumAmount(referUser.getId(), GlobalParams.PROFIT_RECORD_TEAM);
-                    teamListModel.setAmount(profit);
                     models.add(teamListModel);
                 }
             }
@@ -88,5 +91,73 @@ public class TeamBizImpl implements TeamBiz {
         }
         result.put("list", models);
         return Result.toResult(ResultCode.SUCCESS, result);
+    }
+
+    private List<Integer> getTwo(String uuid) {
+        List<Integer> integers = new LinkedList<>();
+        List<Users> list = usersService.selectByReferID(uuid);
+        int activeNumber = 0;
+        int effectiveNumber = 0;
+        int allNumber = 0;
+        for(Users users : list){
+            List<Users> lists = usersService.selectByReferID(users.getUuid());
+            for(Users users1: lists){
+                if(users1.getIdStatus() == GlobalParams.ACTIVE){
+                    activeNumber ++;
+                }
+                if(users1.getEffective() == GlobalParams.ACTIVE){
+                    effectiveNumber ++;
+                }
+                allNumber ++;
+            }
+        }
+        integers.add(allNumber);
+        integers.add(activeNumber);
+        integers.add(effectiveNumber);
+        return integers;
+    }
+
+    private List<Integer> getOne(String uuid) {
+        List<Integer> integers = new LinkedList<>();
+        List<Users> list = usersService.selectByReferID(uuid);
+        int activeNumber = 0;
+        int effectiveNumber = 0;
+        for(Users users : list){
+            if(users.getIdStatus() == GlobalParams.ACTIVE){
+                activeNumber ++;
+            }
+            if(users.getEffective() == GlobalParams.ACTIVE){
+                effectiveNumber ++;
+            }
+        }
+        integers.add(list.size());
+        integers.add(activeNumber);
+        integers.add(effectiveNumber);
+        return integers;
+    }
+
+    private JSONObject getTeam(JSONObject json, String uuid){
+
+        List<Users> list = usersService.selectByReferID(uuid);
+        if(list.size() == 0){
+            return json;
+        }
+        for(Users users : list){
+            int allNumber = 0;
+            int activeNumber = 0;
+            int effectiveNumber = 0;
+            if(users.getIdStatus() == GlobalParams.ACTIVE){
+                activeNumber ++;
+            }
+            if(users.getEffective() == GlobalParams.ACTIVE){
+                effectiveNumber ++;
+            }
+            allNumber ++;
+            json.put("allNumber", json.getIntValue("allNumber") + allNumber);
+            json.put("activeNumber", json.getIntValue("activeNumber") + activeNumber);
+            json.put("effectiveNumber", json.getIntValue("effectiveNumber") + effectiveNumber);
+            getTeam(json, users.getUuid());
+        }
+        return json;
     }
 }

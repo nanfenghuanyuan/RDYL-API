@@ -267,6 +267,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         petsMatchingList.setUpdateTime(DateUtils.getCurrentDate());
         petsMatchingListService.insertSelective(petsMatchingList);
 
+
         /*短信通知买家*/
         Integer buyUserId = petsMatchingList.getBuyUserId();
         Users buyUser = usersService.selectByPrimaryKey(buyUserId);

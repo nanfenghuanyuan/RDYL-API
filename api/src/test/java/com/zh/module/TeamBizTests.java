@@ -1,6 +1,7 @@
 package com.zh.module;
 
 import com.zh.module.biz.TeamBiz;
+import com.zh.module.biz.UsersBiz;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
 import org.junit.Test;
@@ -16,10 +17,11 @@ public class TeamBizTests {
 
     @Autowired
     private TeamBiz teamBiz;
+    @Autowired
+    private UsersBiz usersBiz;
     @Test
     public void init() {
-        Users users = new Users();
-        users.setId(1);
+        Users users = usersBiz.getUser(13);
         PageModel pageModel = new PageModel(1, 10);
         System.out.println(teamBiz.init(users, 2, pageModel));
     }

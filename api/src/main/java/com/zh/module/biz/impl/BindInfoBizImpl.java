@@ -63,7 +63,7 @@ public class BindInfoBizImpl implements BindInfoBiz {
         }
         String url = params.getString("imgUrl");
         String account = params.getString("account");
-        if(StrUtils.isBlank(url) || StrUtils.isBlank(account)){
+        if(StrUtils.isBlank(account)){
             return Result.toResult(ResultCode.PARAM_IS_BLANK);
         }
         BindInfo bindInfo = new BindInfo();

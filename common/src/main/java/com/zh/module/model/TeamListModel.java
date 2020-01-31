@@ -12,20 +12,12 @@ import java.math.BigDecimal;
  **/
 @Data
 public class TeamListModel {
-    /**
-     * 数量
-     */
-    private String amount;
-    /**
-     * 操作
-     */
+
     private String phone;
+    private String name;
+    private String time;
     /**
-     * 等级
-     */
-    private String level;
-    /**
-     * 认证状态
+     * 认证状态 0待激活 1已激活
      */
     private Integer idStatus;
 }

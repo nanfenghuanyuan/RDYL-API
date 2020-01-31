@@ -15,6 +15,7 @@ public class DateUtils {
 
 	private static final String CURRENT_DATE_STR = "yyyy-MM-dd";
 	private static final String CURRENT_TIME_STR = "yyyy-MM-dd HH:mm:ss";
+	private static final String CURRENT_TIME_2_STR = "yyyy-MM-dd";
 
 	public static Date getCurrentDate() {
 		Date date = new Date();
@@ -23,6 +24,10 @@ public class DateUtils {
 
 	public static String getDateFormate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat(CURRENT_TIME_STR);
+		return format.format(date);
+	}
+	public static String getDateFormate2(Date date) {
+		SimpleDateFormat format = new SimpleDateFormat(CURRENT_TIME_2_STR);
 		return format.format(date);
 	}
 
