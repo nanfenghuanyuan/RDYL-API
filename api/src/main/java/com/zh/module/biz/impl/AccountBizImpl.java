@@ -123,6 +123,17 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         accountTransfer.setUserId(users.getId());
         accountTransferService.insertSelective(accountTransfer);
 
+        //下级激活账户
+        if(toUser.getState() == GlobalParams.INACTIVE){
+            String transferAmount = sysparamsService.getValStringByKey(SystemParams.TRANSFER_AMOUNT_ACTIVE);
+            String account = accountService.queryByUserIdAndAccountTypeAndType(toUser.getId());
+            BigDecimal balance = new BigDecimal(account).add(new BigDecimal(amount));
+            if(balance.compareTo(new BigDecimal(transferAmount)) >= 0) {
+                toUser.setState((byte) GlobalParams.ACTIVE);
+                usersService.updateByPrimaryKeySelective(toUser);
+            }
+        }
+
         try {
             accountService.updateAccountAndInsertFlow(toUser.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, new BigDecimal(amount), BigDecimal.ZERO, users.getId(), "转入(" + users.getPhone()+")", 1);
             accountService.updateAccountAndInsertFlow(users.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(new BigDecimal(amount)), BigDecimal.ZERO, users.getId(), "转出(" + phone+")", 1);
@@ -131,11 +142,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
             e.printStackTrace();
             throw new BanlanceNotEnoughException("账户余额不足");
         }
-        //下级激活账户
-        if(toUser.getReferId().equals(users.getUuid()) && toUser.getState() == GlobalParams.INACTIVE){
-            toUser.setState((byte) GlobalParams.ACTIVE);
-            usersService.updateByPrimaryKeySelective(toUser);
-        }
+
 
         return Result.toResult(ResultCode.SUCCESS);
     }

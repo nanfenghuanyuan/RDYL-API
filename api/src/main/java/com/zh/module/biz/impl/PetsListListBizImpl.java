@@ -286,6 +286,10 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             BigDecimal awardTotal = BigDecimal.ZERO;
             users = usersService.selectByUUID(buyUser.getReferId());
             referLevelAward(users, petsList.getPrice(), new BigDecimal(profit), cursor, awardTotal);
+
+            //删除redis预约记录
+            String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, petsMatchingList.getLevel(), users.getId());
+            RedisUtil.deleteKey(redis, redisKey);
         }
         return Result.toResult(ResultCode.SUCCESS);
     }

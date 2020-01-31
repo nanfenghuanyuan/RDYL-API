@@ -104,7 +104,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         appointmentRecordService.insertSelective(appointmentRecord);
 
         String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
-        RedisUtil.addString(redis, redisKey, "-1");
+        RedisUtil.addString(redis, redisKey, interval * 61, "-1");
         return Result.toResult(ResultCode.SUCCESS);
     }
 

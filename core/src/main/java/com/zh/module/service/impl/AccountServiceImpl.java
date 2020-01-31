@@ -151,4 +151,8 @@ public class AccountServiceImpl implements AccountService {
         return this.accountMapper.selectSumAmountByAccountTypeAndCoinType(id, accountType, coinType);
     }
 
+    @Override
+    public String queryByUserIdAndAccountTypeAndType(Integer id) {
+        return this.accountMapper.queryByUserIdAndAccountTypeAndType(id);
+    }
 }

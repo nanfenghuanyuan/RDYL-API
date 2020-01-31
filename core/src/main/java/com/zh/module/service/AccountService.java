@@ -89,4 +89,6 @@ public interface AccountService {
     void updateAccountAndInsertFlow(Integer userId, Integer accountType, Integer coinType,
                                     BigDecimal availIncrement, BigDecimal frozenIncrement, Integer operId, String operType, Integer relateId);
     String selectSumAmountByAccountTypeAndCoinType(Integer id, int accountType, int coinType);
+
+    String queryByUserIdAndAccountTypeAndType(Integer id);
 }

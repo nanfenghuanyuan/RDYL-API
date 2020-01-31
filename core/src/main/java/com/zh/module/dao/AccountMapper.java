@@ -28,4 +28,6 @@ public interface AccountMapper {
     int updateBalance(Account account);
 
     String selectSumAmountByAccountTypeAndCoinType(@Param("userId") Integer id, @Param("accountType") int accountType, @Param("coinType") int coinType);
+
+    String queryByUserIdAndAccountTypeAndType(@Param("id") Integer id);
 }

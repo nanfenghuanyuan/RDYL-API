@@ -81,4 +81,6 @@ public class SystemParams {
 
     //预约提前时间
     public static final String APPOINTMENT_TIME = "APPOINTMENT_TIME";
+    //转币激活所需金币数量
+    public static final String TRANSFER_AMOUNT_ACTIVE = "TRANSFER_AMOUNT_ACTIVE";
 }
