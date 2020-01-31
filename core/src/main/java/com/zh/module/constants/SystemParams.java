@@ -87,4 +87,6 @@ public class SystemParams {
     //提现开始结束时间
     public static final String WITHDRAW_TIME_LIMIT_START = "WITHDRAW_TIME_LIMIT_START";
     public static final String WITHDRAW_TIME_LIMIT_END = "WITHDRAW_TIME_LIMIT_END";
+    //提现开关
+    public static final String WITHDRAW_ONOFF = "WITHDRAW_ONOFF";
 }
