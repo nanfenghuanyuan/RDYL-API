@@ -3,6 +3,8 @@ package com.zh.module.service.impl;
 import com.zh.module.dao.PetsMatchingListMapper;
 import com.zh.module.entity.PetsMatchingList;
 import com.zh.module.service.PetsMatchingListService;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -80,5 +82,12 @@ public class PetsMatchingListServiceImpl implements PetsMatchingListService {
     @Override
     public List<Map<String, Object>> selectOverPaging(Map<Object, Object> param) {
         return this.petsMatchingListMapper.selectOverPaging(param);
+    }
+
+    @Override
+    public List<PetsMatchingList> selectByPetListId(Integer id) {
+        Map<Object, Object> param = new HashMap<>();
+        param.put("petListId", id);
+        return this.petsMatchingListMapper.selectAll(param);
     }
 }

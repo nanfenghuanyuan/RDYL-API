@@ -97,4 +97,6 @@ public interface PetsMatchingListService {
      * @return
      */
     List<Map<String, Object>> selectOverPaging(Map<Object, Object> param);
+
+    List<PetsMatchingList> selectByPetListId(Integer id);
 }

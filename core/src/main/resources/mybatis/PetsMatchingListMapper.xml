@@ -336,7 +336,7 @@
     select
     <include refid="Base_Column_List" />
     from pets_matching_list
-    where pet_list_id = #{id,jdbcType=INTEGER} and state !=0 and state !=3 and state !=4
+    where pet_list_id = #{id,jdbcType=INTEGER} and (state =1 or state =2)
   </select>
 
   <select id="selectListPaging" parameterType="java.util.Map" resultType="map">

@@ -141,6 +141,14 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         param.put("level", level);
         param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
         List<PetsList> petsLists = petsListService.selectDoBuy(param);
+        Iterator<PetsList> iterator = petsLists.iterator();
+        while (iterator.hasNext()){
+            PetsList petsList = iterator.next();
+            PetsMatchingList petsMatchingList = petsMatchingListService.selectByPetListIdAndActive(petsList.getId());
+            if(petsMatchingList != null){
+                iterator.remove();
+            }
+        }
         //若没有待转让的宠物 返回失败
         if(petsLists.size() == 0){
             params = new HashMap<>();
