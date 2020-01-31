@@ -31,4 +31,6 @@ public interface UsersBiz {
     Users getUser(Integer userId);
 
     String getAuthState(Users user);
+
+    Object forgetPassword(String phone, String password, String code, Integer codeId) throws Exception;
 }

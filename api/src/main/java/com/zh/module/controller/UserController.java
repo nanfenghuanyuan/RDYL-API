@@ -111,6 +111,33 @@ public class UserController {
         }
     }
     /**
+     * 忘记密码
+     * @param param
+     * @return
+     */
+    @PostMapping(value = "/forgetPassword", produces = { "application/json;charset=UTF-8"})
+    public Object forgetPassword(@RequestBody String param){
+        try {
+            JSONObject params = JSON.parseObject(param);
+            String phone = params.getString("phone");
+            String password = params.getString("password");
+            String code = params.getString("code");
+            Integer codeId = params.getInteger("codeId");
+            if(StrUtils.isBlank(password) || StrUtils.isBlank(code) || codeId == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            if(!PatternUtil.isDigitalAndWord(password)){
+                return Result.toResult(ResultCode.USER_PWD_TYPE_ERROR);
+            }
+            if(!PatternUtil.isVerificationCode(code)){
+                return Result.toResult(ResultCode.SMS_CHECK_ERROR);
+            }
+            return usersBiz.forgetPassword(phone, password, code, codeId);
+        } catch (Exception e) {
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
      * 修改交易密码
      * @param user
      * @param param
