@@ -119,7 +119,6 @@ public class DateUtils {
 	}
 	/**
 	 * @描述 计算机两个时间相差天数<br>
-	 * @param date
 	 *            字符串格式日期时间,例：XXXX-XX-XX XX:XX:XX
 	 * @return
 	 * @author administrator
@@ -138,7 +137,6 @@ public class DateUtils {
 
 	/**
 	 * @描述 计算机两个时间相差小时数<br>
-	 * @param date
 	 *            字符串格式日期时间,例：XXXX-XX-XX XX:XX:XX
 	 * @return
 	 * @author administrator
@@ -170,6 +168,10 @@ public class DateUtils {
 		long beforeMillis = before.getTime();
 		long between_days = (beforeMillis - afterMillis) / (1000 * 60);
 		return Integer.parseInt(String.valueOf(between_days));
+	}
+
+	public static void main(String[] args) {
+		System.out.println(minBetween("2020-01-31 15:45:00"));
 	}
 
 	/**

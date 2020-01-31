@@ -140,7 +140,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         Map<Object, Object> param = new HashMap<>();
         param.put("level", level);
         param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
-        List<PetsList> petsLists = petsListService.selectAll(param);
+        List<PetsList> petsLists = petsListService.selectDoBuy(param);
         //若没有待转让的宠物 返回失败
         if(petsLists.size() == 0){
             params = new HashMap<>();

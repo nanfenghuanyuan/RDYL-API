@@ -83,4 +83,8 @@ public class SystemParams {
     public static final String APPOINTMENT_TIME = "APPOINTMENT_TIME";
     //转币激活所需金币数量
     public static final String TRANSFER_AMOUNT_ACTIVE = "TRANSFER_AMOUNT_ACTIVE";
+
+    //提现开始结束时间
+    public static final String WITHDRAW_TIME_LIMIT_START = "WITHDRAW_TIME_LIMIT_START";
+    public static final String WITHDRAW_TIME_LIMIT_END = "WITHDRAW_TIME_LIMIT_END";
 }

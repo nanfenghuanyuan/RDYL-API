@@ -97,4 +97,11 @@ public interface PetsListService {
      * @return
      */
     String selectSumAmountByUser(Integer id);
+
+    /**
+     * 可购买宠物i列表
+     * @param param
+     * @return
+     */
+    List<PetsList> selectDoBuy(Map<Object, Object> param);
 }

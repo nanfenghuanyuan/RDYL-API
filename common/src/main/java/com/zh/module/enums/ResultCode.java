@@ -80,6 +80,7 @@ public enum ResultCode {
     TRANS_ROLE(30051, "仅可上下级之间进行转账"),
     BIND_INFO_NONE(30052, "请先完成支付信息绑定"),
     PERSON_HAS_PETS(30053, "您还有未完成的宠物订单，请前去领养记录中查看"),
+    WITHDRAW_TIME_ERROR(30055, "当前时间不可提现"),
 
 
     /* 系统错误：40001-49999 */

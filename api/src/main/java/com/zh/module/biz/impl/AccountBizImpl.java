@@ -243,31 +243,37 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
 
     @Override
     public String withdraw(Users users, Integer coinType, String amount, String password){
-        Integer userId = users.getId();
-        /*校验交易密码*/
-        if(!StrUtils.isBlank(password)){
-            String valiStr = validateOrderPassword(users, password);
-            if(valiStr!=null){
-                return valiStr;
+        String start = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_TIME_LIMIT_START);
+        String end = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_TIME_LIMIT_END);
+        if(DateUtils.minBetween(start) >= 0 && DateUtils.minBetween(end) < 0) {
+            Integer userId = users.getId();
+            /*校验交易密码*/
+            if(!StrUtils.isBlank(password)){
+                String valiStr = validateOrderPassword(users, password);
+                if(valiStr!=null){
+                    return valiStr;
+                }
             }
+            BigDecimal amountBig = new BigDecimal(amount);
+            Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, coinType, userId);
+            if(amountBig.compareTo(account.getAvailbalance()) > 0){
+                return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
+            }
+
+            //保存记录
+            Withdraw withdraw = new Withdraw();
+            withdraw.setAmount(amountBig);
+            withdraw.setCoinType(coinType.byteValue());
+            withdraw.setState((byte) GlobalParams.WITHDRAW_NO_PAY);
+            withdraw.setUserId(userId);
+            withdrawService.insertSelective(withdraw);
+
+            accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, coinType, BigDecimalUtils.plusMinus(amountBig), BigDecimal.ZERO, userId, "提现发起", withdraw.getId());
+
+            return Result.toResult(ResultCode.SUCCESS);
+        }else{
+            return Result.toResult(ResultCode.WITHDRAW_TIME_ERROR);
         }
-        BigDecimal amountBig = new BigDecimal(amount);
-        Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, coinType, userId);
-        if(amountBig.compareTo(account.getAvailbalance()) > 0){
-            return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
-        }
-
-        //保存记录
-        Withdraw withdraw = new Withdraw();
-        withdraw.setAmount(amountBig);
-        withdraw.setCoinType(coinType.byteValue());
-        withdraw.setState((byte) GlobalParams.WITHDRAW_NO_PAY);
-        withdraw.setUserId(userId);
-        withdrawService.insertSelective(withdraw);
-
-        accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, coinType, BigDecimalUtils.plusMinus(amountBig), BigDecimal.ZERO, userId, "提现发起", withdraw.getId());
-
-        return Result.toResult(ResultCode.SUCCESS);
     }
 
     @Override

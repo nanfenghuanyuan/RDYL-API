@@ -28,4 +28,6 @@ public interface PetsListMapper {
     List<Map<String, Object>> selectListPaging(Map<Object, Object> param);
 
     String selectSumAmountByUser(Integer id);
+
+    List<PetsList> selectDoBuy(Map<Object, Object> param);
 }
