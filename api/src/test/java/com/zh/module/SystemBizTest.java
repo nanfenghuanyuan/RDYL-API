@@ -28,4 +28,8 @@ public class SystemBizTest {
     public void custom() {
         System.out.println(systemBiz.getCustomerService());
     }
+    @Test
+    public void checkUpdate() {
+        System.out.println(systemBiz.checkUpdate(1));
+    }
 }

@@ -12,4 +12,6 @@ public interface SystemBiz {
     String getStartupParam();
 
     String getCustomerService();
+
+    String checkUpdate(Integer version);
 }

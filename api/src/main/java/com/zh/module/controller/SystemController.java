@@ -1,5 +1,6 @@
 package com.zh.module.controller;
 
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.zh.module.annotation.UserLoginToken;
 import com.zh.module.biz.SystemBiz;
@@ -44,6 +45,32 @@ public class SystemController {
     public String getCustomerService(){
         try {
             return systemBiz.getCustomerService();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+
+    /**
+     * 检查更新
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="update",method= RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String checkUpdate(Integer version){
+        try {
+            if(version == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            //获取版本信息
+            return systemBiz.checkUpdate(version);
+
+        }catch (NumberFormatException e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);
         }catch (Exception e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);

@@ -45,7 +45,7 @@ public class SystemBizImpl implements SystemBiz {
     @Autowired
     private SysparamsService sysparamsService;
     @Autowired
-    private SmsRecordService smsRecordService;
+    private AppVersionService appVersionService;
     @Autowired
     private NoticeService noticeService;
     @Autowired
@@ -87,6 +87,23 @@ public class SystemBizImpl implements SystemBiz {
         Map<String, Object> map = new HashMap<>();
         map.put("account", wechatAccount);
         map.put("imgUrl", wechatImgUrl);
+        return Result.toResult(ResultCode.SUCCESS, map);
+    }
+
+    @Override
+    public String checkUpdate(Integer version) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        /*版本更新信息*/
+        List<AppVersion> vers = appVersionService.getByVersion(version);
+        if(vers == null || vers.isEmpty()){
+            map.put("updateFlag", false);
+        }else{
+            AppVersion listVersion = vers.get(0);
+            map.put("updateFlag", true);
+            map.put("updateVersion", listVersion.getAppVersion());
+            map.put("url", listVersion.getAddress());
+            map.put("content", listVersion.getContent());
+        }
         return Result.toResult(ResultCode.SUCCESS, map);
     }
 }
