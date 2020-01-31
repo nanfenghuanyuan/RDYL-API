@@ -2,6 +2,8 @@ package com.zh.module.model;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @program: R.D.Y.LMain
  * @description:
@@ -35,6 +37,10 @@ public class PetsModel {
      * 合约收益
      */
     private String profit;
+    /**
+     * 时间戳
+     */
+    private Date timestamp;
     /**
      * 状态 0可预约 1已预约 2可领养 3待领养 4已领养 5成长中 6未开启
      */
