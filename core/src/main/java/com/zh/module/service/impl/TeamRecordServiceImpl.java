@@ -3,6 +3,8 @@ package com.zh.module.service.impl;
 import com.zh.module.dao.TeamRecordMapper;
 import com.zh.module.entity.TeamRecord;
 import com.zh.module.service.TeamRecordService;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -65,5 +67,13 @@ public class TeamRecordServiceImpl implements TeamRecordService {
     @Override
     public int selectCount(Map<Object, Object> param) {
         return this.teamRecordMapper.selectCount(param);
+    }
+
+    @Override
+    public TeamRecord selectByUser(Integer id) {
+        Map<Object, Object> param = new HashMap<>();
+        param.put("userId", id);
+        List<TeamRecord> list = this.teamRecordMapper.selectAll(param);
+        return list.size() == 0 ? null :list.get(0);
     }
 }

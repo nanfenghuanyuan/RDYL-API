@@ -148,6 +148,14 @@ public class GlobalParams {
     public static final int PERSON_LEVEL_2 = 2;
 
     /**
+     * 团队动态等级
+     */
+    public static final int TEAM_LEVEL_0 = 0;
+    public static final int TEAM_LEVEL_1 = 1;
+    public static final int TEAM_LEVEL_2 = 2;
+    public static final int TEAM_LEVEL_3 = 3;
+
+    /**
      * 订单按钮
      */
     public static final int ORDER_BTN_TYPE_NOPAY = 0;

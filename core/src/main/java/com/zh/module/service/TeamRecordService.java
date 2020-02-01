@@ -81,4 +81,6 @@ public interface TeamRecordService {
      * @date: 2020-01-05 20:11:56
      **/ 
     int selectCount(Map<Object, Object> param);
+
+    TeamRecord selectByUser(Integer id);
 }

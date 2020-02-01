@@ -287,12 +287,62 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             BigDecimal awardTotal = BigDecimal.ZERO;
             users = usersService.selectByUUID(buyUser.getReferId());
             referLevelAward(users, petsList.getPrice().multiply(petsList.getProfitRate()), new BigDecimal(profit), cursor, awardTotal);
-
+            //用户等级提升
+            userLevel(buyUser);
             //删除redis预约记录
             String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, petsMatchingList.getLevel(), users.getId());
             RedisUtil.deleteKey(redis, redisKey);
         }
         return Result.toResult(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 等級提升
+     * @param buyUser
+     */
+    private void userLevel(Users buyUser) {
+        List<Users> oneList = usersService.selectByReferID(buyUser.getUuid());
+        int ones = oneList.size();
+        int twos = getTwo(buyUser.getUuid());
+        TeamRecord teamRecord = teamRecordService.selectByUser(buyUser.getId());
+        if(buyUser.getTeamLevel() == GlobalParams.TEAM_LEVEL_0){
+            if(ones >= 50 && twos >= 120 && teamRecord.getAmount().compareTo(new BigDecimal(20000)) >= 0){
+                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_3);
+                usersService.updateByPrimaryKeySelective(buyUser);
+            }else if(ones >= 30 && twos >= 60 && teamRecord.getAmount().compareTo(new BigDecimal(10000)) >= 0){
+                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_2);
+                usersService.updateByPrimaryKeySelective(buyUser);
+            }else if(ones >= 10 && twos >= 30 && teamRecord.getAmount().compareTo(new BigDecimal(2000)) >= 0){
+                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_1);
+                usersService.updateByPrimaryKeySelective(buyUser);
+            }
+        }
+        if(buyUser.getTeamLevel() == GlobalParams.TEAM_LEVEL_1){
+            if(ones >= 50 && twos >= 120 && teamRecord.getAmount().compareTo(new BigDecimal(20000)) >= 0){
+                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_3);
+                usersService.updateByPrimaryKeySelective(buyUser);
+            }else if(ones >= 30 && twos >= 60 && teamRecord.getAmount().compareTo(new BigDecimal(10000)) >= 0){
+                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_2);
+                usersService.updateByPrimaryKeySelective(buyUser);
+            }
+        }
+        if(buyUser.getTeamLevel() == GlobalParams.TEAM_LEVEL_2){
+            if(ones >= 50 && twos >= 120 && teamRecord.getAmount().compareTo(new BigDecimal(20000)) >= 0){
+                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_3);
+                usersService.updateByPrimaryKeySelective(buyUser);
+            }
+        }
+    }
+    private Integer getTwo(String uuid) {
+        List<Users> list = usersService.selectByReferID(uuid);
+        int allNumber = 0;
+        for(Users users : list){
+            List<Users> lists = usersService.selectByReferID(users.getUuid());
+            for(Users users1: lists){
+                allNumber ++;
+            }
+        }
+        return allNumber;
     }
 
     /**
