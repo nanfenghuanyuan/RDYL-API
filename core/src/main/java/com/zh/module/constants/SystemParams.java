@@ -89,4 +89,6 @@ public class SystemParams {
     public static final String WITHDRAW_TIME_LIMIT_END = "WITHDRAW_TIME_LIMIT_END";
     //提现开关
     public static final String WITHDRAW_ONOFF = "WITHDRAW_ONOFF";
+    //IOS下载地址
+    public static final String APP_DOWNLAOD_URL_IOS = "APP_DOWNLAOD_URL_IOS";
 }
