@@ -42,8 +42,10 @@ public class WebController {
     @RequestMapping(value="register",method= RequestMethod.GET,produces="application/json;charset=utf-8")
     public String toRegister(Map<String, Object> map, String uuid){
         String url = sysparamsService.getValStringByKey(SystemParams.APP_DOWNLAOD_URL);
+        String iosUrl = sysparamsService.getValStringByKey(SystemParams.APP_DOWNLAOD_URL_IOS);
         map.put("uuid", uuid);
         map.put("downloadUrl", url);
+        map.put("iosUrl", iosUrl);
         return "register";
     }
     /**
