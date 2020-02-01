@@ -160,7 +160,8 @@ public class DateUtils {
 	/**
 	 * @描述 计算机两个时间相差分钟数<br>
 	 *            字符串格式日期时间,例：XXXX-XX-XX XX:XX:XX
-	 * @return
+	 *
+	 * @return  当前时间-输入输入时间  还未到为负
 	 * @author administrator
 	 * @版本 v1.0.0
 	 * @日期 2017-6-17
@@ -176,7 +177,9 @@ public class DateUtils {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(minBetween("2020-01-31 15:45:00"));
+		String time = "2020-02-01 17:09:00";
+		System.out.println(DateUtils.minBetween(time));
+		System.out.println(DateUtils.minBetween(time) > -2 && DateUtils.minBetween(time) < 0);
 	}
 
 	/**

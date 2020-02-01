@@ -31,5 +31,7 @@ public class RedisKey {
 	//未付款处罚用户
 	public static final String PUNISH_NOPAY = "rdyl:punish:%s";
 	//实名认证用户获取的faceid
-	public static final String REAL_NAME_USER_OBJECT = "rdyl:realname:%S";
+	public static final String REAL_NAME_USER_OBJECT = "rdyl:realname:%s";
+	//待捕捉宠物列表 level
+	public static final String PETS_LIST_WAIT_APPOINTMENT = "rdyl:waitAppointment:%s";
 }

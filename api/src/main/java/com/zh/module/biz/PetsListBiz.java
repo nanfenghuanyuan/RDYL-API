@@ -64,4 +64,9 @@ public interface PetsListBiz {
      * @return
      */
     String cancel(Users users, Integer id, String password);
+
+    /**
+     * 统计
+     */
+    void censusAppointment();
 }

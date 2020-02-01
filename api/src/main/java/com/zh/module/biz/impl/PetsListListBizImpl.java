@@ -718,4 +718,30 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         cancelNoPay(users, id);
         return Result.toResult(ResultCode.SUCCESS);
     }
+
+    @Override
+    public void censusAppointment() {
+        Map<Object, Object> param = new HashMap<>();
+        param.put("state", GlobalParams.ACTIVE);
+        List<Pets> petsList = petsService.selectAll(param);
+        String time;
+        String redisKey;
+        List<PetsList> petsLists;
+        for(Pets pets : petsList){
+            time = DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":00";
+            if(DateUtils.minBetween(time) > -4 && DateUtils.minBetween(time) <= 0) {
+                redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+                RedisUtil.deleteKey(redis, redisKey);
+
+                param = new HashMap<>();
+                param.put("level", pets.getLevel());
+                param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
+                petsLists = petsListService.selectAll(param);
+                for(PetsList petsList1 : petsLists) {
+                    RedisUtil.addListRight(redis, redisKey, petsList1);
+                }
+                log.info(pets.getName() + "==本次参与分配的宠物有" + petsLists.size() + "个");
+            }
+        }
+    }
 }

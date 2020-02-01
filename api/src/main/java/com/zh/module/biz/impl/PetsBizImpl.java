@@ -137,20 +137,9 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             return Result.toResult(ResultCode.BIND_INFO_NONE);
         }
 
-        Map<Object, Object> param = new HashMap<>();
-        param.put("level", level);
-        param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
-        List<PetsList> petsLists = petsListService.selectDoBuy(param);
-        Iterator<PetsList> iterator = petsLists.iterator();
-        while (iterator.hasNext()){
-            PetsList petsList = iterator.next();
-            PetsMatchingList petsMatchingList = petsMatchingListService.selectByPetListIdAndActive(petsList.getId());
-            if(petsMatchingList != null){
-                iterator.remove();
-            }
-        }
-        //若没有待转让的宠物 返回失败
-        if(petsLists.size() == 0){
+        String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, level);
+        PetsList petsList = RedisUtil.leftPopObj(redis, redisKey, PetsList.class);
+        if(petsList == null){
             params = new HashMap<>();
             params.put("level", level);
             params.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
@@ -162,19 +151,11 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                 BigDecimal amount = petsMatchingList.getAmount();
                 accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, amount, BigDecimal.ZERO, userId, "预约取消返还", petsMatchingList.getId());
                 //删除redis预约记录
-                String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, petsMatchingList.getLevel(), userId);
+                redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, petsMatchingList.getLevel(), userId);
                 RedisUtil.deleteKey(redis, redisKey);
             }
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }else {
-            PetsList petsList = new PetsList();
-            //修改宠物信息状态
-            for (PetsList list : petsLists) {
-                if (!list.getUserId().equals(userId)) {
-                    petsList = list;
-                    break;
-                }
-            }
             //自己不能和自己匹配
             if (petsList.getUserId() == null || petsList.getUserId().equals(userId)) {
                 return Result.toResult(ResultCode.PETS_HAS_NONE);
@@ -216,7 +197,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
 
                 accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), BigDecimal.ZERO, userId, "领养消耗", petsMatchingList.getId());
             } else {
-                param = new HashMap<>();
+                Map<Object, Object> param = new HashMap<>();
                 param.put("level", level);
                 param.put("petListId", "-1");
                 param.put("buyUserId", userId);
@@ -235,7 +216,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             }
 
             //删除redis预约记录
-            String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
+            redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
             RedisUtil.deleteKey(redis, redisKey);
             return Result.toResult(ResultCode.SUCCESS);
         }
