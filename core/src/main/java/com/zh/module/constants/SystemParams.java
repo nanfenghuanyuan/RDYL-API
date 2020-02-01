@@ -20,7 +20,7 @@ public class SystemParams {
 	public static final String WECHAT_ACCOUNT = "WECHAT_ACCOUNT";
 	public static final String WECHAT_IMG_URL = "WECHAT_IMG_URL";
 
-	//领养自动取消时间(分钟)
+	//预约自动取消时间(分钟)
 	public static final String PETS_MATCHING_CANCEL_TIME = "PETS_MATCHING_CANCEL_TIME";
 
 	//未付款自动取消时间 （分钟）

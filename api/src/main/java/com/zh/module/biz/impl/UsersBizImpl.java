@@ -364,20 +364,31 @@ public class UsersBizImpl implements UsersBiz {
         if(count != null){
             return Result.toResult(ResultCode.REAL_NAME_IDCARD_EXIST);
         }
-        JSONObject jsonObject = tencentCloud.getStatus(user.getId().toString(), name, idCard, StrUtils.getCharAndNumr(10));
+        Map<String, Object> result = UserAuthUtils.idCardAuth(name, idCard);
+        if(result == null){
+            return Result.toResult(ResultCode.REAL_NAME_FAIL, "身份验证失败");
+        }
+
         IdcardValidate iv = new IdcardValidate();
         iv.setName(name);
         iv.setIdentificationnumber(idCard);
         iv.setUserId(user.getId());
-        //将faceId绑定用户存入redis
-        String faceId = jsonObject.getString("h5faceId");
-        iv.setTaskId(faceId);
+        iv.setTaskId("");
         iv.setState(GlobalParams.REALNAME_STATE_ING);
-        idcardValidateBiz.insert(iv);
-        RedisUtil.addStringObj(redis, String.format(RedisKey.REAL_NAME_USER_OBJECT, user.getId()), jsonObject);
-        Map<String, Object>  map = new HashMap<String, Object>();
-        map.put("url", jsonObject.get("url"));
-        return Result.toResult(ResultCode.SUCCESS, map);
+        if("0000".equals(result.get("code"))){
+            iv.setState(GlobalParams.REALNAME_STATE_SUCCESS);
+            idcardValidateBiz.insert(iv);
+            user.setIdStatus((byte) GlobalParams.REALNAME_STATE_SUCCESS);
+            user.setNickName(result.get("name").toString());
+            usersService.updateByPrimaryKeySelective(user);
+            return Result.toResult(ResultCode.SUCCESS);
+        }else {
+            iv.setState(GlobalParams.REALNAME_STATE_FAIL);
+            idcardValidateBiz.insert(iv);
+            user.setIdStatus((byte) GlobalParams.REALNAME_NEW_STATE_NO);
+            usersService.updateByPrimaryKeySelective(user);
+            return Result.toResult(ResultCode.REAL_NAME_FAIL, result.get("msg"));
+        }
     }
 
     @Override
