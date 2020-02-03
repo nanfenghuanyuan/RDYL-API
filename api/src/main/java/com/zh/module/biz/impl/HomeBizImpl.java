@@ -94,8 +94,8 @@ public class HomeBizImpl implements HomeBiz {
             if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
                 //查看用户是否预约
                 String appointmentState = RedisUtil.searchString(redis, String.format(RedisKey.BUY_APPOINTMENT_USER, pets.getLevel(), users.getId()));
-                //抢购前10分钟
-                if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(startTime) < 0){
+                //抢购前n分钟
+                if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(startTime) <= 0){
                     if(StrUtils.isBlank(appointmentState)) {
                         petsModel.setState(GlobalParams.PET_STATE_0);
                     }else {

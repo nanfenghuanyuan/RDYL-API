@@ -161,7 +161,7 @@ public class DateUtils {
 	 * @描述 计算机两个时间相差分钟数<br>
 	 *            字符串格式日期时间,例：XXXX-XX-XX XX:XX:XX
 	 *
-	 * @return  当前时间-输入输入时间  还未到为负
+	 * @return  当前时间-输入时间  还未到为负
 	 * @author administrator
 	 * @版本 v1.0.0
 	 * @日期 2017-6-17
@@ -175,11 +175,29 @@ public class DateUtils {
 		long between_days = (beforeMillis - afterMillis) / (1000 * 60);
 		return Integer.parseInt(String.valueOf(between_days));
 	}
+	/**
+	 * @描述 计算机两个时间相差秒数<br>
+	 *            字符串格式日期时间,例：XXXX-XX-XX XX:XX:XX
+	 *
+	 * @return  当前时间-输入时间  还未到为负
+	 * @author administrator
+	 * @版本 v1.0.0
+	 * @日期 2017-6-17
+	 */
+	public static int secondBetween(String dateStr) {
+		Date after = strToDate(dateStr);
+		Calendar cal = Calendar.getInstance();
+		Date before = cal.getTime();
+		long afterMillis = after.getTime();
+		long beforeMillis = before.getTime();
+		long between_days = (beforeMillis - afterMillis) / 1000;
+		return Integer.parseInt(String.valueOf(between_days));
+	}
 
 	public static void main(String[] args) {
-		String time = "2020-02-01 17:09:00";
+		String time = "2020-02-03 21:24:00";
 		System.out.println(DateUtils.minBetween(time));
-		System.out.println(DateUtils.minBetween(time) > -2 && DateUtils.minBetween(time) < 0);
+		System.out.println(DateUtils.minBetween(time) > -660 && DateUtils.minBetween(time) <= 0);
 	}
 
 	/**
