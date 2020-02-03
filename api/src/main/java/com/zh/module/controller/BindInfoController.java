@@ -64,4 +64,21 @@ public class BindInfoController {
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }
     }
+    /**
+     * 绑定详情
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="get",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String list(@CurrentUser Users users, Integer type){
+        try {
+            if(type == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            return bindInfoBiz.get(users, type);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
 }

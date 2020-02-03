@@ -91,4 +91,6 @@ public class SystemParams {
     public static final String WITHDRAW_ONOFF = "WITHDRAW_ONOFF";
     //IOS下载地址
     public static final String APP_DOWNLAOD_URL_IOS = "APP_DOWNLAOD_URL_IOS";
+    //待领养等待时间
+    public static final String WAIT_APPOINTMENT_TIME = "WAIT_APPOINTMENT_TIME";
 }

@@ -83,4 +83,6 @@ public interface BindInfoService {
     int selectCount(Map<Object, Object> param);
 
     List<BindInfo> queryByUser(Integer id);
+
+    BindInfo selectByUserAndType(Map<Object, Object> param);
 }

@@ -14,6 +14,7 @@ import com.zh.module.model.PetsMatchingListModel;
 import com.zh.module.service.*;
 import com.zh.module.utils.*;
 import com.zh.module.variables.RedisKey;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ import java.util.*;
  **/
 @Component
 @Transactional
+@Slf4j
 public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     @Autowired
     private PetsMatchingListService petsMatchingListService;
@@ -104,7 +106,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         appointmentRecordService.insertSelective(appointmentRecord);
 
         String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
-        RedisUtil.addString(redis, redisKey, interval * 61, "-1");
+        RedisUtil.addString(redis, redisKey, "-1");
         return Result.toResult(ResultCode.SUCCESS);
     }
 
@@ -141,10 +143,11 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         PetsList petsList = RedisUtil.leftPopObj(redis, redisKey, PetsList.class);
         if(petsList == null){
             params = new HashMap<>();
+            params.put("buyUserId", userId);
             params.put("level", level);
             params.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
             List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(params);
-            if(petsMatchingLists.size() != 0) {
+            if(petsMatchingLists != null && petsMatchingLists.size() != 0) {
                 PetsMatchingList petsMatchingList = petsMatchingLists.get(0);
                 petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_CANCEL);
                 petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
@@ -203,7 +206,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                 param.put("buyUserId", userId);
                 param.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
                 List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(param);
-                PetsMatchingList petsMatchingList = petsMatchingLists.size() == 0 ? null : petsMatchingLists.get(0);
+                PetsMatchingList petsMatchingList =  petsMatchingLists == null || petsMatchingLists.size() == 0 ? null : petsMatchingLists.get(0);
                 if (petsMatchingList != null) {
                     petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_NOPAY);
                     petsMatchingList.setPetListId(petsList.getId());

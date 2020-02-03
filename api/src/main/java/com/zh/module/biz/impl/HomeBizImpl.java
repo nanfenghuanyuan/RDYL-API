@@ -72,17 +72,23 @@ public class HomeBizImpl implements HomeBiz {
             petsModel.setDateSection(dates);
             petsModel.setPriceSection(pets.getAppointmentAmount().setScale(0, BigDecimal.ROUND_HALF_UP) + "/" + pets.getPayAmount().setScale(0, BigDecimal.ROUND_HALF_UP) + " MEPC");
             petsModel.setProfit(pets.getProfitDays() + "天/" + pets.getProfitRate().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP) + "%");
-            petsModel.setTimestamp(DateUtils.strToDate(DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":05"));
+            petsModel.setTimestamp(DateUtils.strToDate(DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":00"));
             String startTime = pets.getStartTime();
             String endTime = pets.getEndTime();
             startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
             endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
 
             String appoinmentTime = sysparamsService.getValStringByKey(SystemParams.APPOINTMENT_TIME);
+            String waitAppointmentTime = sysparamsService.getValStringByKey(SystemParams.WAIT_APPOINTMENT_TIME);
             int time = Integer.parseInt(appoinmentTime);
+            int waiTime = Integer.parseInt(waitAppointmentTime);
 
             if(pets.getState() == GlobalParams.INACTIVE){
                 petsModel.setState(GlobalParams.PET_STATE_6);
+            }else
+            //开始前5分钟 变为待领养 不可操作
+            if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
+                petsModel.setState(GlobalParams.PET_STATE_7);
             }else
             //抢购前10分钟把状态设为可预约状态
             if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
@@ -97,8 +103,13 @@ public class HomeBizImpl implements HomeBiz {
                     }
                 //时间到
                 }else{
-                //如果用户已预约且到领养时间后，则可领养；否则显示已预约
-                    petsModel.setState(GlobalParams.PET_STATE_2);
+                    String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+                    long size = RedisUtil.searchListSize(redis, redisKey);
+                    if(size == 0) {
+                        petsModel.setState(GlobalParams.PET_STATE_5);
+                    }else{
+                        petsModel.setState(GlobalParams.PET_STATE_2);
+                    }
                 }
             }else{
                 petsModel.setState(GlobalParams.PET_STATE_5);

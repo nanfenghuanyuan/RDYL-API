@@ -43,7 +43,7 @@ public class ProfitSchedule {
 		petsListBiz.cancelNoConfirmSchedule();
 	}
 	@PostConstruct
-	@Scheduled(cron="0 0/5 * * * ?")
+	@Scheduled(cron="0/20 * * * * ?")
 	public void censusAppointment(){
 		petsListBiz.censusAppointment();
 	}

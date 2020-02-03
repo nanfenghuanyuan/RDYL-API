@@ -2,16 +2,13 @@ package com.zh.module.biz.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zh.module.biz.BindInfoBiz;
-import com.zh.module.biz.HomeBiz;
 import com.zh.module.constants.GlobalParams;
 import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
 import com.zh.module.encrypt.MD5;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
-import com.zh.module.model.PetsModel;
 import com.zh.module.service.*;
-import com.zh.module.utils.DateUtils;
 import com.zh.module.utils.RedisUtil;
 import com.zh.module.utils.StrUtils;
 import com.zh.module.variables.RedisKey;
@@ -20,9 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -228,5 +223,15 @@ public class BindInfoBizImpl implements BindInfoBiz {
             return 1;
         }
         return Integer.parseInt(val)+1;
+    }
+
+    @Override
+    public String get(Users users, Integer type) {
+        Integer userId = users.getId();
+        Map<Object, Object> param = new HashMap<>();
+        param.put("userId", userId);
+        param.put("type", type);
+        BindInfo bindInfo = bindInfoService.selectByUserAndType(param);
+        return Result.toResult(ResultCode.SUCCESS, bindInfo);
     }
 }

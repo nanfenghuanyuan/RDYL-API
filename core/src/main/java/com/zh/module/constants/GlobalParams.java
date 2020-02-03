@@ -92,6 +92,10 @@ public class GlobalParams {
      * 停用
      */
     public static  final  int PET_STATE_6 = 6;
+    /**
+     * 待领养（不可操作）
+     */
+    public static  final  int PET_STATE_7 = 7;
 
     /**
      * 宠物匹配状态 已预约

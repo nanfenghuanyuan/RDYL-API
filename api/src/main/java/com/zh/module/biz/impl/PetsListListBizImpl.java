@@ -305,31 +305,33 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         int ones = oneList.size();
         int twos = getTwo(buyUser.getUuid());
         TeamRecord teamRecord = teamRecordService.selectByUser(buyUser.getId());
-        if(buyUser.getTeamLevel() == GlobalParams.TEAM_LEVEL_0){
-            if(ones >= 50 && twos >= 120 && teamRecord.getAmount().compareTo(new BigDecimal(20000)) >= 0){
-                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_3);
-                usersService.updateByPrimaryKeySelective(buyUser);
-            }else if(ones >= 30 && twos >= 60 && teamRecord.getAmount().compareTo(new BigDecimal(10000)) >= 0){
-                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_2);
-                usersService.updateByPrimaryKeySelective(buyUser);
-            }else if(ones >= 10 && twos >= 30 && teamRecord.getAmount().compareTo(new BigDecimal(2000)) >= 0){
-                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_1);
-                usersService.updateByPrimaryKeySelective(buyUser);
+        if(teamRecord != null) {
+            if (buyUser.getTeamLevel() == GlobalParams.TEAM_LEVEL_0) {
+                if (ones >= 50 && twos >= 120 && teamRecord.getAmount().compareTo(new BigDecimal(20000)) >= 0) {
+                    buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_3);
+                    usersService.updateByPrimaryKeySelective(buyUser);
+                } else if (ones >= 30 && twos >= 60 && teamRecord.getAmount().compareTo(new BigDecimal(10000)) >= 0) {
+                    buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_2);
+                    usersService.updateByPrimaryKeySelective(buyUser);
+                } else if (ones >= 10 && twos >= 30 && teamRecord.getAmount().compareTo(new BigDecimal(2000)) >= 0) {
+                    buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_1);
+                    usersService.updateByPrimaryKeySelective(buyUser);
+                }
             }
-        }
-        if(buyUser.getTeamLevel() == GlobalParams.TEAM_LEVEL_1){
-            if(ones >= 50 && twos >= 120 && teamRecord.getAmount().compareTo(new BigDecimal(20000)) >= 0){
-                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_3);
-                usersService.updateByPrimaryKeySelective(buyUser);
-            }else if(ones >= 30 && twos >= 60 && teamRecord.getAmount().compareTo(new BigDecimal(10000)) >= 0){
-                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_2);
-                usersService.updateByPrimaryKeySelective(buyUser);
+            if (buyUser.getTeamLevel() == GlobalParams.TEAM_LEVEL_1) {
+                if (ones >= 50 && twos >= 120 && teamRecord.getAmount().compareTo(new BigDecimal(20000)) >= 0) {
+                    buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_3);
+                    usersService.updateByPrimaryKeySelective(buyUser);
+                } else if (ones >= 30 && twos >= 60 && teamRecord.getAmount().compareTo(new BigDecimal(10000)) >= 0) {
+                    buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_2);
+                    usersService.updateByPrimaryKeySelective(buyUser);
+                }
             }
-        }
-        if(buyUser.getTeamLevel() == GlobalParams.TEAM_LEVEL_2){
-            if(ones >= 50 && twos >= 120 && teamRecord.getAmount().compareTo(new BigDecimal(20000)) >= 0){
-                buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_3);
-                usersService.updateByPrimaryKeySelective(buyUser);
+            if (buyUser.getTeamLevel() == GlobalParams.TEAM_LEVEL_2) {
+                if (ones >= 50 && twos >= 120 && teamRecord.getAmount().compareTo(new BigDecimal(20000)) >= 0) {
+                    buyUser.setTeamLevel((byte) GlobalParams.TEAM_LEVEL_3);
+                    usersService.updateByPrimaryKeySelective(buyUser);
+                }
             }
         }
     }
@@ -725,19 +727,22 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         param.put("state", GlobalParams.ACTIVE);
         List<Pets> petsList = petsService.selectAll(param);
         String time;
+        String endTime;
         String redisKey;
         List<PetsList> petsLists;
         for(Pets pets : petsList){
             time = DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":00";
-            if(DateUtils.minBetween(time) > -4 && DateUtils.minBetween(time) <= 0) {
+            endTime = DateUtils.getCurrentDateStr() + " " + pets.getEndTime() + ":00";
+            if(DateUtils.minBetween(time) > -1 && DateUtils.minBetween(endTime) < 0) {
                 redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
-                RedisUtil.deleteKey(redis, redisKey);
-
                 param = new HashMap<>();
                 param.put("level", pets.getLevel());
                 param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
                 petsLists = petsListService.selectAll(param);
-                for(PetsList petsList1 : petsLists) {
+                if (petsLists.size() != 0) {
+                    RedisUtil.deleteKey(redis, redisKey);
+                }
+                for (PetsList petsList1 : petsLists) {
                     RedisUtil.addListRight(redis, redisKey, petsList1);
                 }
                 log.info(pets.getName() + "==本次参与分配的宠物有" + petsLists.size() + "个");

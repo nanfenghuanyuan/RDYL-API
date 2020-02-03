@@ -32,4 +32,6 @@ public interface BindInfoBiz {
      * @return
      */
     String cancel(Users users, JSONObject params);
+
+    String get(Users users, Integer type);
 }

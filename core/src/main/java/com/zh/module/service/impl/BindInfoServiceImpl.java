@@ -76,4 +76,10 @@ public class BindInfoServiceImpl implements BindInfoService {
         map.put("state",1);
         return bindInfoMapper.selectAll(map);
     }
+
+    @Override
+    public BindInfo selectByUserAndType(Map<Object, Object> param) {
+        List<BindInfo> bindInfos =  bindInfoMapper.selectAll(param);
+        return bindInfos.size() == 0 ? null : bindInfos.get(0);
+    }
 }

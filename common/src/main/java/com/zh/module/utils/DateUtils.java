@@ -230,21 +230,38 @@ public class DateUtils {
 	}
 	/**
 	 * @描述 获取N分钟前/后的日期时间<br>
-	 * @param days 分钟(负数为当前时间的前段时间)
+	 * @param minute 分钟(负数为当前时间的前段时间)
 	 * @return 日期时间
 	 * @author administrator
 	 * @版本 v1.0.0
 	 * @日期 2017-8-31
 	 */
-	public static String getSomeMinutes(int days, Date time){
+	public static String getSomeMinutes(int minute, Date time){
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(time);
-		calendar.add(Calendar.MINUTE, days);
+		calendar.add(Calendar.MINUTE, minute);
 		String date = format.format(calendar.getTime());
 		return date;
 	}
-	
+
+	/**
+	 * @描述 获取N秒前/后的日期时间<br>
+	 * @param second 分钟(负数为当前时间的前段时间)
+	 * @return 日期时间
+	 * @author administrator
+	 * @版本 v1.0.0
+	 * @日期 2017-8-31
+	 */
+	public static String getSomeSecond(int second, Date time){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(time);
+		calendar.add(Calendar.SECOND, second);
+		String date = format.format(calendar.getTime());
+		return date;
+	}
+
 	/**
 	 * 根据出生日期计算年龄
 	 * @param birth 'yyyyMMdd' 字符串
