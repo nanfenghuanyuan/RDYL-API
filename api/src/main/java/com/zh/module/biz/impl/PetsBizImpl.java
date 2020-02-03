@@ -244,12 +244,12 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             int time = Integer.parseInt(appoinmentTime);
             Pets pets = petsService.selectByLevel(level);
             String startTime = pets.getStartTime();
-            String endTime = pets.getEndTime();
+            String endTime;
             String today = DateUtils.getCurrentTimeStr();
             startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
             startTime = DateUtils.dateAddTime(startTime, -time * 60 * 1000);
-            endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
-            return DateUtils.minBetween(startTime) >= 0 && DateUtils.minBetween(endTime) <= 0;
+            endTime = new StringBuilder(today).replace(11, 16, pets.getStartTime()).toString();
+            return DateUtils.minBetween(startTime) >= 0 && DateUtils.secondBetween(endTime) < 0;
         }
     }
 
