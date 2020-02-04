@@ -75,13 +75,15 @@ public class HomeBizImpl implements HomeBiz {
             petsModel.setTimestamp(DateUtils.strToDate(DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":00"));
             String startTime = pets.getStartTime();
             String endTime = pets.getEndTime();
-            startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
-            endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
+            startTime = new StringBuilder(today).replace(11, 16, startTime).replace(17, 19,"00").toString();
+            endTime = new StringBuilder(today).replace(11, 16, endTime).replace(17, 19,"00").toString();
 
             String appoinmentTime = sysparamsService.getValStringByKey(SystemParams.APPOINTMENT_TIME);
             String waitAppointmentTime = sysparamsService.getValStringByKey(SystemParams.WAIT_APPOINTMENT_TIME);
+            String canBuyTime = sysparamsService.getValStringByKey(SystemParams.CAN_BUY_TIME);
             int time = Integer.parseInt(appoinmentTime);
             int waiTime = Integer.parseInt(waitAppointmentTime);
+            int buyTime = Integer.parseInt(canBuyTime);
 
             if(pets.getState() == GlobalParams.INACTIVE){
                 petsModel.setState(GlobalParams.PET_STATE_6);
@@ -89,6 +91,10 @@ public class HomeBizImpl implements HomeBiz {
             //开始前5分钟 变为待领养 不可操作
             if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
                 petsModel.setState(GlobalParams.PET_STATE_7);
+            }else
+            //开始后n分钟 变为可领养
+            if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
+                petsModel.setState(GlobalParams.PET_STATE_2);
             }else
             //抢购前10分钟把状态设为可预约状态
             if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){

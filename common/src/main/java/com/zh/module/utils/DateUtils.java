@@ -195,7 +195,7 @@ public class DateUtils {
 	}
 
 	public static void main(String[] args) {
-		String startTime = "2020-02-04 09:55:00";
+		String startTime = "2020-02-04 11:22:10";
 		System.out.println(DateUtils.secondBetween(startTime));
 		System.out.println(DateUtils.secondBetween(startTime) <= 15 && DateUtils.secondBetween(startTime) > 0);
 	}
