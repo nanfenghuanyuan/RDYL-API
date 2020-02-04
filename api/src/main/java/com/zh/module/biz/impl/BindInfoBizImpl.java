@@ -61,25 +61,47 @@ public class BindInfoBizImpl implements BindInfoBiz {
         if(StrUtils.isBlank(account)){
             return Result.toResult(ResultCode.PARAM_IS_BLANK);
         }
-        BindInfo bindInfo = new BindInfo();
         Integer type = params.getInteger("type");
-        bindInfo.setType(type.byteValue());
-        bindInfo.setUserId(users.getId());
-        bindInfo.setState((byte) GlobalParams.ACTIVE);
-        bindInfo.setImgUrl(url);
-        bindInfo.setAccount(account);
-        String name = params.getString("name");
-        bindInfo.setName(name);
-        if(type.equals(GlobalParams.PAY_BANK)){
-            if(!name.equals(users.getNickName())){
-                return Result.toResult(ResultCode.USER_IDSTATE_ERROR);
+        Map<Object, Object> param = new HashMap<>();
+        param.put("userId", users.getId());
+        param.put("type", type);
+        BindInfo bindInfo = bindInfoService.selectByUserAndType(param);
+        if(bindInfo == null){
+            bindInfo = new BindInfo();
+            bindInfo.setType(type.byteValue());
+            bindInfo.setUserId(users.getId());
+            bindInfo.setState((byte) GlobalParams.ACTIVE);
+            bindInfo.setImgUrl(url);
+            bindInfo.setAccount(account);
+            String name = params.getString("name");
+            bindInfo.setName(name);
+            if(type.equals(GlobalParams.PAY_BANK)){
+                if(!name.equals(users.getNickName())){
+                    return Result.toResult(ResultCode.USER_IDSTATE_ERROR);
+                }
+                String bankName = params.getString("bankName");
+                bindInfo.setBankName(bankName);
+                String branchName = params.getString("branchName");
+                bindInfo.setBranchName(branchName);
             }
-            String bankName = params.getString("bankName");
-            bindInfo.setBankName(bankName);
-            String branchName = params.getString("branchName");
-            bindInfo.setBranchName(branchName);
+            bindInfoService.insertSelective(bindInfo);
+        }else{
+            bindInfo.setState((byte) GlobalParams.ACTIVE);
+            bindInfo.setImgUrl(url);
+            bindInfo.setAccount(account);
+            String name = params.getString("name");
+            bindInfo.setName(name);
+            if(type.equals(GlobalParams.PAY_BANK)){
+                if(!name.equals(users.getNickName())){
+                    return Result.toResult(ResultCode.USER_IDSTATE_ERROR);
+                }
+                String bankName = params.getString("bankName");
+                bindInfo.setBankName(bankName);
+                String branchName = params.getString("branchName");
+                bindInfo.setBranchName(branchName);
+            }
+            bindInfoService.updateByPrimaryKeySelective(bindInfo);
         }
-        bindInfoService.insertSelective(bindInfo);
         return Result.toResult(ResultCode.SUCCESS);
     }
 
