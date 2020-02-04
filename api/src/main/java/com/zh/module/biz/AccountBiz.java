@@ -12,7 +12,7 @@ import com.zh.module.model.PageModel;
 public interface AccountBiz {
     String init(Users users);
 
-    String transfer(Users users, String phone, String amount, String password);
+    String transfer(Users users, String phone, String amount, String password) throws Exception;
 
     /**
      * 收益记录 个人/动态
@@ -39,13 +39,13 @@ public interface AccountBiz {
      * @param password
      * @return
      */
-    String withdraw(Users users, Integer coinType, String amount, String password);
+    String withdraw(Users users, Integer coinType, String amount, String password) throws Exception;
 
     String getAvailBalance(Users users, Integer coinType, byte accountType);
 
     String withdrawList(Users users, Integer coinType, PageModel pageModel);
 
-    String recharge(Users users, Integer coinType, String amount, String address, String password);
+    String recharge(Users users, Integer coinType, String amount, String address, String password) throws Exception;
 
     String rechargeList(Users users, Integer coinType, PageModel pageModel);
 

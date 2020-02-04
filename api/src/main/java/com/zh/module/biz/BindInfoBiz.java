@@ -23,7 +23,7 @@ public interface BindInfoBiz {
      * @param params
      * @return
      */
-    String binding(Users users, JSONObject params);
+    String binding(Users users, JSONObject params) throws Exception;
 
     /**
      * 取消绑定

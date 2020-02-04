@@ -25,7 +25,7 @@ public class AccountBizTests {
         System.out.println(accountBiz.init(users));
     }
     @Test
-    public void transfer() {
+    public void transfer() throws Exception {
         Users users = usersBiz.getUser(1);
         System.out.println(accountBiz.transfer(users, "13165555555", "10", "123456"));
     }
@@ -43,14 +43,14 @@ public class AccountBizTests {
         System.out.println(accountBiz.appointmentRecord(users, pageModel));
     }
     @Test
-    public void withdraw() {
+    public void withdraw() throws Exception {
         Users users = new Users();
         users.setId(1);
         PageModel pageModel = new PageModel(1, 10);
         System.out.println(accountBiz.withdraw(users, 1, "10", "940916"));
     }
     @Test
-    public void recharge() {
+    public void recharge() throws Exception {
         Users users = new Users();
         users.setId(1);
         users.setOrderPwd("e10adc3949ba59abbe56e057f20f883e");

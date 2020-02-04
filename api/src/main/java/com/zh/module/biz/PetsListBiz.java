@@ -15,9 +15,9 @@ public interface PetsListBiz {
 
     String get(Users users, Integer id);
 
-    String confirmPay(Users users, Integer id, String password, String imgUrl);
+    String confirmPay(Users users, Integer id, String password, String imgUrl) throws Exception;
 
-    String confirmReceipt(Users users, Integer id, String password);
+    String confirmReceipt(Users users, Integer id, String password) throws Exception;
 
     /**
      * 定时分发收益
@@ -63,7 +63,7 @@ public interface PetsListBiz {
      * @param password
      * @return
      */
-    String cancel(Users users, Integer id, String password);
+    String cancel(Users users, Integer id, String password) throws Exception;
 
     /**
      * 统计

@@ -83,7 +83,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     }
 
     @Override
-    public String transfer(Users users, String phone, String amount, String password) {
+    public String transfer(Users users, String phone, String amount, String password) throws Exception {
         //验证用户状态
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
@@ -242,7 +242,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     }
 
     @Override
-    public String withdraw(Users users, Integer coinType, String amount, String password){
+    public String withdraw(Users users, Integer coinType, String amount, String password) throws Exception {
         String onoff = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_ONOFF);
         if(Integer.parseInt(onoff) == GlobalParams.INACTIVE){
             return Result.toResult(ResultCode.PERMISSION_NO_ACCESS);
@@ -346,7 +346,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     }
 
     @Override
-    public String recharge(Users users, Integer coinType, String amount, String address, String password) {
+    public String recharge(Users users, Integer coinType, String amount, String address, String password) throws Exception {
         /*校验交易密码*/
         if(!StrUtils.isBlank(password)){
             String valiStr = validateOrderPassword(users, password);
