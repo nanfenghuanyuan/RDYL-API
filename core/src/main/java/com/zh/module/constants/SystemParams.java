@@ -93,4 +93,6 @@ public class SystemParams {
     public static final String APP_DOWNLAOD_URL_IOS = "APP_DOWNLAOD_URL_IOS";
     //待领养等待时间
     public static final String WAIT_APPOINTMENT_TIME = "WAIT_APPOINTMENT_TIME";
+	//多显示可捕捉时间（秒）
+	public static final String CAN_BUY_TIME = "CAN_BUY_TIME";
 }

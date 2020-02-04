@@ -191,13 +191,13 @@ public class DateUtils {
 		long afterMillis = after.getTime();
 		long beforeMillis = before.getTime();
 		long between_days = (beforeMillis - afterMillis) / 1000;
-		return Integer.parseInt(String.valueOf(between_days));
+		return (int) between_days;
 	}
 
 	public static void main(String[] args) {
-		String time = "2020-02-03 21:24:00";
-		System.out.println(DateUtils.minBetween(time));
-		System.out.println(DateUtils.minBetween(time) > -660 && DateUtils.minBetween(time) <= 0);
+		String startTime = "2020-02-04 09:55:00";
+		System.out.println(DateUtils.secondBetween(startTime));
+		System.out.println(DateUtils.secondBetween(startTime) <= 15 && DateUtils.secondBetween(startTime) > 0);
 	}
 
 	/**

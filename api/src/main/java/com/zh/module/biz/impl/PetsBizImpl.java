@@ -238,7 +238,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             String today = DateUtils.getCurrentTimeStr();
             startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
             endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
-            return DateUtils.minBetween(startTime) >= 0 && DateUtils.minBetween(endTime) <= 0;
+            return DateUtils.secondBetween(startTime) >= 0 && DateUtils.secondBetween(endTime) < 0;
         }else{
             String appoinmentTime = sysparamsService.getValStringByKey(SystemParams.APPOINTMENT_TIME);
             int time = Integer.parseInt(appoinmentTime);
