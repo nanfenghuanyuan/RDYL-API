@@ -71,12 +71,12 @@ public class PetsBizTests {
         System.out.println(petsListBiz.get(users, 1));
     }
     @Test
-    public void confirmPay() {
+    public void confirmPay() throws Exception {
         Users users = usersService.selectByPrimaryKey(1);
         System.out.println(petsListBiz.confirmPay(users, 1, "123456", "1"));
     }
     @Test
-    public void confirmReceipt() {
+    public void confirmReceipt() throws Exception {
         Users users = usersService.selectByPrimaryKey(1);
         System.out.println(petsListBiz.confirmReceipt(users, 1, "123456"));
     }

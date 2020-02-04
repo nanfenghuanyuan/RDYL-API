@@ -169,7 +169,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     }
 
     @Override
-    public String confirmPay(Users users, Integer id, String password, String imgUrl) {
+    public String confirmPay(Users users, Integer id, String password, String imgUrl) throws Exception {
         //验证用户状态
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
@@ -223,7 +223,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     }
 
     @Override
-    public String confirmReceipt(Users users, Integer id, String password) {
+    public String confirmReceipt(Users users, Integer id, String password) throws Exception {
         //验证用户状态
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
@@ -692,7 +692,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     }
 
     @Override
-    public String cancel(Users users, Integer id, String password) {
+    public String cancel(Users users, Integer id, String password) throws Exception {
         //验证用户状态
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
