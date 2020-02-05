@@ -138,8 +138,14 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         if(bindInfos.size() == 0){
             return Result.toResult(ResultCode.BIND_INFO_NONE);
         }
-
-        String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, level);
+        String startTime = new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString();
+        //距离开始秒数
+        int intervals = DateUtils.secondBetween(startTime);
+        //购买间隔 秒
+        String buysInterval = sysparamsService.getValStringByKey(SystemParams.PETS_BUYS_INTERVAL);
+        //期数
+        int number = intervals / Integer.parseInt(buysInterval);
+        String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel(), number);
         PetsList petsList = RedisUtil.leftPopObj(redis, redisKey, PetsList.class);
         if(petsList == null){
             params = new HashMap<>();

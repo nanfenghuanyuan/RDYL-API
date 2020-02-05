@@ -42,6 +42,10 @@ public class ProfitSchedule {
 	public void cancelNoConfirm(){
 		petsListBiz.cancelNoConfirmSchedule();
 	}
+
+	/**
+	 * 待领养队列
+	 */
 	@PostConstruct
 	@Scheduled(cron="0/20 * * * * ?")
 	public void censusAppointment(){

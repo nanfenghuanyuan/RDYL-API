@@ -109,12 +109,22 @@ public class HomeBizImpl implements HomeBiz {
                     }
                 //时间到
                 }else{
-                    String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
-                    long size = RedisUtil.searchListSize(redis, redisKey);
-                    if(size == 0) {
-                        petsModel.setState(GlobalParams.PET_STATE_5);
+                    if(DateUtils.secondBetween(startTime) >= 0 && DateUtils.secondBetween(endTime) < 0) {
+                        //距离开始秒数
+                        int interval = DateUtils.secondBetween(startTime);
+                        //购买间隔 秒
+                        String buysInterval = sysparamsService.getValStringByKey(SystemParams.PETS_BUYS_INTERVAL);
+                        //期数
+                        int number = interval / Integer.parseInt(buysInterval);
+                        String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel(), number);
+                        long size = RedisUtil.searchListSize(redis, redisKey);
+                        if (size == 0) {
+                            petsModel.setState(GlobalParams.PET_STATE_5);
+                        } else {
+                            petsModel.setState(GlobalParams.PET_STATE_2);
+                        }
                     }else{
-                        petsModel.setState(GlobalParams.PET_STATE_2);
+                        petsModel.setState(GlobalParams.PET_STATE_5);
                     }
                 }
             }else{

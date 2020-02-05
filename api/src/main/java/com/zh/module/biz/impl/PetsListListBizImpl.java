@@ -730,20 +730,36 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         String endTime;
         String redisKey;
         List<PetsList> petsLists;
+        //宠物捕捉分发次数
+        String distributionNumber = sysparamsService.getValStringByKey(SystemParams.DISTRIBUTION_NUMBER);
+        List<PetsList> disList = new LinkedList<>();
         for(Pets pets : petsList){
             time = DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":00";
             endTime = DateUtils.getCurrentDateStr() + " " + pets.getEndTime() + ":00";
-            if(DateUtils.minBetween(time) > -1 && DateUtils.minBetween(endTime) < 0) {
-                redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+            if(DateUtils.secondBetween(time) > -60 && DateUtils.secondBetween(endTime) < 0) {
                 param = new HashMap<>();
                 param.put("level", pets.getLevel());
                 param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
                 petsLists = petsListService.selectAll(param);
-                if (petsLists.size() != 0) {
-                    RedisUtil.deleteKey(redis, redisKey);
-                }
+                //分块计数
+                int tally = 0;
+                //foreach计数游标
+                int i = 0;
+                //每组分配个数
+                int disAmount = petsLists.size() / Integer.parseInt(distributionNumber);
                 for (PetsList petsList1 : petsLists) {
-                    RedisUtil.addListRight(redis, redisKey, petsList1);
+                    disList.add(petsList1);
+                    //当达到既定人数时
+                    if(disList.size() == disAmount || i == petsLists.size()){
+                        redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel(), tally);
+                        if (petsLists.size() != 0) {
+                            RedisUtil.deleteKey(redis, redisKey);
+                        }
+                        RedisUtil.addListRight(redis, redisKey, disList);
+                        disList.clear();
+                        tally ++;
+                    }
+                    i ++;
                 }
                 log.info(pets.getName() + "==本次参与分配的宠物有" + petsLists.size() + "个");
             }

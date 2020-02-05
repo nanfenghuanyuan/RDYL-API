@@ -95,4 +95,9 @@ public class SystemParams {
     public static final String WAIT_APPOINTMENT_TIME = "WAIT_APPOINTMENT_TIME";
 	//多显示可捕捉时间（秒）
 	public static final String CAN_BUY_TIME = "CAN_BUY_TIME";
+
+	//宠物捕捉分发次数
+    public static final String DISTRIBUTION_NUMBER = "DISTRIBUTION_NUMBER";
+    //宠物分发间隔时间 （单位：秒）
+    public static final String PETS_BUYS_INTERVAL = "PETS_BUYS_INTERVAL";
 }
