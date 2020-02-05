@@ -58,10 +58,14 @@ public class BindInfoBizImpl implements BindInfoBiz {
         }
         String url = params.getString("imgUrl");
         String account = params.getString("account");
-        if(StrUtils.isBlank(account)){
-            return Result.toResult(ResultCode.PARAM_IS_BLANK);
-        }
         Integer type = params.getInteger("type");
+        String name = params.getString("name");
+        if(type != GlobalParams.PAY_BANK) {
+            if (StrUtils.isBlank(account) || StrUtils.isBlank(name)) {
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+        }
+
         Map<Object, Object> param = new HashMap<>();
         param.put("userId", users.getId());
         param.put("type", type);
@@ -73,7 +77,6 @@ public class BindInfoBizImpl implements BindInfoBiz {
             bindInfo.setState((byte) GlobalParams.ACTIVE);
             bindInfo.setImgUrl(url);
             bindInfo.setAccount(account);
-            String name = params.getString("name");
             bindInfo.setName(name);
             if(type.equals(GlobalParams.PAY_BANK)){
                 if(!name.equals(users.getNickName())){
@@ -89,7 +92,6 @@ public class BindInfoBizImpl implements BindInfoBiz {
             bindInfo.setState((byte) GlobalParams.ACTIVE);
             bindInfo.setImgUrl(url);
             bindInfo.setAccount(account);
-            String name = params.getString("name");
             bindInfo.setName(name);
             if(type.equals(GlobalParams.PAY_BANK)){
                 if(!name.equals(users.getNickName())){
