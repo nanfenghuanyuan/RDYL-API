@@ -64,10 +64,10 @@ public class SystemParams {
     public static final String PERSON_AWARD_ONE="PERSON_AWARD_ONE";
     public static final String PERSON_AWARD_TWO="PERSON_AWARD_TWO";
 
-    //团队收益
-    public static final String TEAM_AWARD_ONE="TEAM_AWARD_ONE";
-    public static final String TEAM_AWARD_TWO="PERSON_AWARD_TWO";
-    public static final String TEAM_AWARD_THREE="TEAM_AWARD_THREE";
+	//团队收益等级提升所需金额
+	public static final String TEAM_LEVEL_ONE="TEAM_LEVEL_ONE";
+	public static final String TEAM_LEVEL_TWO="TEAM_LEVEL_TWO";
+	public static final String TEAM_LEVEL_THREE="TEAM_LEVEL_THREE";
 
     //未付款惩罚开关
     public static final String NO_PAY_PUNISH="NO_PAY_PUNISH";
@@ -97,7 +97,10 @@ public class SystemParams {
 	public static final String CAN_BUY_TIME = "CAN_BUY_TIME";
 
 	//宠物捕捉分发次数
-    public static final String DISTRIBUTION_NUMBER = "DISTRIBUTION_NUMBER";
+    public static final String DISTRIBUTION_NUMBER_1 = "DISTRIBUTION_NUMBER_1";
     //宠物分发间隔时间 （单位：秒）
-    public static final String PETS_BUYS_INTERVAL = "PETS_BUYS_INTERVAL";
+    public static final String PETS_BUYS_INTERVAL_1 = "PETS_BUYS_INTERVAL_1";
+
+    //MEPC转账最小金额
+    public static final String TRANSFER_MIN_AMOUNT = "TRANSFER_MIN_AMOUNT";
 }

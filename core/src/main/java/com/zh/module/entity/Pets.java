@@ -1,9 +1,12 @@
 package com.zh.module.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
 public class Pets implements Serializable {
     private static final long serialVersionUID = -3547475199239531124L;
 
@@ -45,158 +48,12 @@ public class Pets implements Serializable {
 
     private Date updateTime;
 
-    public Integer getId() {
-        return id;
+    public static String getDistribution(Integer level){
+        return "DISTRIBUTION_NUMBER_" + level;
     }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public static String getInterval(Integer level){
+        return "PETS_BUYS_INTERVAL_" + level;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public Byte getSeque() {
-        return seque;
-    }
-
-    public void setSeque(Byte seque) {
-        this.seque = seque;
-    }
-
-    public Byte getLevel() {
-        return level;
-    }
-
-    public void setLevel(Byte level) {
-        this.level = level;
-    }
-
-    public BigDecimal getPriceMin() {
-        return priceMin;
-    }
-
-    public void setPriceMin(BigDecimal priceMin) {
-        this.priceMin = priceMin;
-    }
-
-    public BigDecimal getPriceMix() {
-        return priceMix;
-    }
-
-    public void setPriceMix(BigDecimal priceMix) {
-        this.priceMix = priceMix;
-    }
-
-    public BigDecimal getAppointmentAmount() {
-        return appointmentAmount;
-    }
-
-    public void setAppointmentAmount(BigDecimal appointmentAmount) {
-        this.appointmentAmount = appointmentAmount;
-    }
-
-    public BigDecimal getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(BigDecimal payAmount) {
-        this.payAmount = payAmount;
-    }
-
-    public Integer getProfitDays() {
-        return profitDays;
-    }
-
-    public void setProfitDays(Integer profitDays) {
-        this.profitDays = profitDays;
-    }
-
-    public BigDecimal getProfitRate() {
-        return profitRate;
-    }
-
-    public void setProfitRate(BigDecimal profitRate) {
-        this.profitRate = profitRate;
-    }
-
-    public String getProfitCoin() {
-        return profitCoin;
-    }
-
-    public void setProfitCoin(String profitCoin) {
-        this.profitCoin = profitCoin == null ? null : profitCoin.trim();
-    }
-
-    public String getProfitCoinRate() {
-        return profitCoinRate;
-    }
-
-    public void setProfitCoinRate(String profitCoinRate) {
-        this.profitCoinRate = profitCoinRate == null ? null : profitCoinRate.trim();
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl == null ? null : imgUrl.trim();
-    }
-
-    public Byte getUpgradeId() {
-        return upgradeId;
-    }
-
-    public void setUpgradeId(Byte upgradeId) {
-        this.upgradeId = upgradeId;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime == null ? null : startTime.trim();
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime == null ? null : endTime.trim();
-    }
-
-    public Byte getState() {
-        return state;
-    }
-
-    public void setState(Byte state) {
-        this.state = state;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

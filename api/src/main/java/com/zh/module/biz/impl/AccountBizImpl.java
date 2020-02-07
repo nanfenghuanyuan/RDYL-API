@@ -95,6 +95,12 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
                 return valiStr;
             }
         }
+        //最小转增金额
+        String transferMinAmount = sysparamsService.getValStringByKey(SystemParams.TRANSFER_MIN_AMOUNT);
+        Account accounts = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, users.getId());
+        if(accounts != null && accounts.getAvailbalance().compareTo(new BigDecimal(transferMinAmount)) < 0){
+            return Result.toResultFormat(ResultCode.TRANSFER_MIN_AMOUNT, transferMinAmount);
+        }
         String transferRole = sysparamsService.getValStringByKey(SystemParams.TRANSFER_ROLE);
         Users toUser = usersService.selectByPhone(phone);
         //检查是否仅上下级进行转账

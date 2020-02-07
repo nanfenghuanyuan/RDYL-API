@@ -81,6 +81,7 @@ public enum ResultCode {
     BIND_INFO_NONE(30052, "请先完成支付信息绑定"),
     PERSON_HAS_PETS(30053, "您还有未完成的宠物订单，请前去领养记录中查看"),
     WITHDRAW_TIME_ERROR(30055, "每天提现时间为上午8点到10点"),
+    TRANSFER_MIN_AMOUNT(30056, "当可用余额小于%s时不能进行转赠操作"),
 
 
     /* 系统错误：40001-49999 */
