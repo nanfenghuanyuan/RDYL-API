@@ -1,6 +1,8 @@
 package com.zh.module.dao;
 
 import com.zh.module.entity.PetsMatchingList;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +30,6 @@ public interface PetsMatchingListMapper {
     PetsMatchingList selectByPetListIdAndActive(Integer id);
 
     List<Map<String, Object>> selectOverPaging(Map<Object, Object> param);
+
+    String consumeTodayAmount(@Param("start") String start, @Param("end") String end);
 }

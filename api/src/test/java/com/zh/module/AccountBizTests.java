@@ -1,6 +1,7 @@
 package com.zh.module;
 
 import com.zh.module.biz.AccountBiz;
+import com.zh.module.biz.DailyCountBiz;
 import com.zh.module.biz.UsersBiz;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
@@ -16,6 +17,8 @@ public class AccountBizTests {
 
     @Autowired
     private AccountBiz accountBiz;
+    @Autowired
+    private DailyCountBiz dailyCountBiz;
     @Autowired
     private UsersBiz usersBiz;
     @Test
@@ -86,6 +89,10 @@ public class AccountBizTests {
         byte accountType = 0;
         Integer coinType = 0;
         System.out.println(accountBiz.getWithdrawBalance(users,coinType,accountType));
+    }
+    @Test
+    public void get2() {
+        dailyCountBiz.consume();
     }
 
 }

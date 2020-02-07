@@ -357,5 +357,8 @@
     where sale_user_id = #{userId} and pm.state = 5
     order by pm.id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
   </select>
+  <select id="consumeTodayAmount" resultType="string" parameterType="string">
+    SELECT SUM(amount) total FROM pets_matching_list pm WHERE state = 3 AND pay_time &gt; #{start} and pay_time &lt; #{end}
+  </select>
 
 </mapper>

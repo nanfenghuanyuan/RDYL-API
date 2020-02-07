@@ -99,4 +99,12 @@ public interface PetsMatchingListService {
     List<Map<String, Object>> selectOverPaging(Map<Object, Object> param);
 
     List<PetsMatchingList> selectByPetListId(Integer id);
+
+    /**
+     * 统计每日MEPC消耗数量
+     * @return
+     * @param date
+     * @param end
+     */
+    String consumeTodayAmount(String date, String end);
 }

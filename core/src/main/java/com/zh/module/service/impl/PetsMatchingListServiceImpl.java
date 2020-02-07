@@ -90,4 +90,9 @@ public class PetsMatchingListServiceImpl implements PetsMatchingListService {
         param.put("petListId", id);
         return this.petsMatchingListMapper.selectAll(param);
     }
+
+    @Override
+    public String consumeTodayAmount(String date, String end) {
+        return this.petsMatchingListMapper.consumeTodayAmount(date, end);
+    }
 }
