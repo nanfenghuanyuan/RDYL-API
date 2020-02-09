@@ -1,5 +1,6 @@
 package com.zh.module.service.impl;
 
+import com.zh.module.constants.GlobalParams;
 import com.zh.module.dao.UsersMapper;
 import com.zh.module.entity.Users;
 import com.zh.module.service.UsersService;
@@ -98,5 +99,14 @@ public class UsersServiceImpl implements UsersService {
         Map<Object, Object> map = new HashMap();
         map.put("uuid", uuid);
         return selectAll(map);
+    }
+
+    @Override
+    public List<Users> selectByReferIDAndActive(String referId) {
+        Map<Object, Object> map = new HashMap();
+        map.put("referId", referId);
+        map.put("effective", GlobalParams.ACTIVE);
+        List<Users> users = selectAll(map);
+        return users;
     }
 }

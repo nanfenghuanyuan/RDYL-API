@@ -56,7 +56,7 @@ public class DailyCountBizImpl implements DailyCountBiz {
         List<DailyCount> dailyCounts = dailyCountService.selectPaging(map);
         DailyCount dailyCount = new DailyCount();
         dailyCount.setCoinType((byte) CoinType.OS);
-        dailyCount.setDailtConsume(todayAmount);
+        dailyCount.setDailtConsume(StrUtils.isBlank(todayAmount) ? "0" : todayAmount);
         if(dailyCounts != null && dailyCounts.size() != 0){
             DailyCount dailyCount1 = dailyCounts.get(0);
             if(StrUtils.isBlank(dailyCount1.getTotalConsume())){
