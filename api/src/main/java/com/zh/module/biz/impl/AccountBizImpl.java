@@ -421,6 +421,6 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     public String getWithdrawBalance(Users users, Integer coinType, byte accountType) {
         Integer userId = users.getId();
         Account account = accountService.selectByUserIdAndAccountTypeAndType(accountType, coinType, userId);
-        return Result.toResult(ResultCode.SUCCESS, account.getAvailbalance().stripTrailingZeros().toPlainString());
+        return Result.toResult(ResultCode.SUCCESS, account.getAvailbalance().setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString());
     }
 }

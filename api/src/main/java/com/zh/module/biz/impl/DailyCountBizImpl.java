@@ -46,7 +46,7 @@ public class DailyCountBizImpl implements DailyCountBiz {
 
     @Override
     public void consume() {
-        String date = DateUtils.getCurrentDateStr();
+        String date = DateUtils.getSomeDay1(-1);
         String start = date + " 00:00:00";
         String end = date + " 23:59:59";
         String todayAmount = petsMatchingListService.consumeTodayAmount(start, end);

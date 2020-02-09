@@ -246,6 +246,13 @@ public class DateUtils {
 		String date = format.format(calendar.getTime());
 		return date + " 00:00:00";
 	}
+	public static String getSomeDay1(int days){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, days);
+		String date = format.format(calendar.getTime());
+		return date;
+	}
 	/**
 	 * @描述 获取N分钟前/后的日期时间<br>
 	 * @param minute 分钟(负数为当前时间的前段时间)
