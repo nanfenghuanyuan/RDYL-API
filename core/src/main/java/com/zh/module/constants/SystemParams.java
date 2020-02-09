@@ -103,4 +103,6 @@ public class SystemParams {
 
     //MEPC转账最小金额
     public static final String TRANSFER_MIN_AMOUNT = "TRANSFER_MIN_AMOUNT";
+    //自动提现开关
+    public static final String AUTO_WITHDRAW = "AUTO_WITHDRAW";
 }

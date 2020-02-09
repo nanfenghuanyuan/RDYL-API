@@ -54,6 +54,8 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     @Autowired
     private PetsListService petsListService;
     @Autowired
+    private PetsService petsService;
+    @Autowired
     private PetsMatchingListService petsMatchingListService;
     @Autowired
     private RedisTemplate<String,String> redis;
@@ -272,17 +274,41 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
                 return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
             }
 
-            //保存记录
-            Withdraw withdraw = new Withdraw();
-            withdraw.setAmount(amountBig);
-            withdraw.setCoinType(coinType.byteValue());
-            withdraw.setState((byte) GlobalParams.WITHDRAW_NO_PAY);
-            withdraw.setUserId(userId);
-            withdrawService.insertSelective(withdraw);
+            String autoWithdraw = sysparamsService.getValStringByKey(SystemParams.AUTO_WITHDRAW);
+            if(!StrUtils.isBlank(autoWithdraw) && "1".equals(autoWithdraw)){
+                Pets pets = petsService.selectByPrice(amount);
+                if(pets != null) {
+                    PetsList petsList = new PetsList();
+                    petsList.setLevel(pets.getLevel());
+                    petsList.setPrice(amountBig);
+                    petsList.setProfitCoin("0");
+                    petsList.setProfitCoinRate("1");
+                    petsList.setPetsNumber("NO" + System.currentTimeMillis());
+                    petsList.setProfitDays(pets.getProfitDays());
+                    petsList.setProfitRate(pets.getProfitRate());
+                    petsList.setSourceFrom((byte) 1);
+                    petsList.setState((byte) 1);
+                    petsList.setStartTime(DateUtils.getCurrentTimeStr());
+                    petsList.setEndTime(DateUtils.getCurrentTimeStr());
+                    petsList.setTransferUserId(-1);
+                    petsList.setUserId(userId);
+                    petsListService.insertSelective(petsList);
+                    accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, coinType, BigDecimalUtils.plusMinus(amountBig), BigDecimal.ZERO, userId, "提现兑换", petsList.getId());
+                    return Result.toResult(ResultCode.SUCCESS);
+                }
+                return Result.toResult(ResultCode.WITHDRAW_ERROR);
+            }else {
+                //保存记录
+                Withdraw withdraw = new Withdraw();
+                withdraw.setAmount(amountBig);
+                withdraw.setCoinType(coinType.byteValue());
+                withdraw.setState((byte) GlobalParams.WITHDRAW_NO_PAY);
+                withdraw.setUserId(userId);
+                withdrawService.insertSelective(withdraw);
+                accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, coinType, BigDecimalUtils.plusMinus(amountBig), BigDecimal.ZERO, userId, "提现发起", withdraw.getId());
 
-            accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, coinType, BigDecimalUtils.plusMinus(amountBig), BigDecimal.ZERO, userId, "提现发起", withdraw.getId());
-
-            return Result.toResult(ResultCode.SUCCESS);
+                return Result.toResult(ResultCode.SUCCESS);
+            }
         }else{
             return Result.toResult(ResultCode.WITHDRAW_TIME_ERROR);
         }

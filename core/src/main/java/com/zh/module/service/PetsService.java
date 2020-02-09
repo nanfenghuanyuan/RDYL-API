@@ -95,4 +95,6 @@ public interface PetsService {
      * @return
      */
     Pets selectByLevel(Integer level);
+
+    Pets selectByPrice(String amount);
 }

@@ -81,4 +81,9 @@ public class PetsServiceImpl implements PetsService {
         List<Pets> petsList = this.petsMapper.selectAll(param);
         return petsList.size() == 0 ? null : petsList.get(0);
     }
+
+    @Override
+    public Pets selectByPrice(String amount) {
+        return this.petsMapper.selectByPrice(amount);
+    }
 }

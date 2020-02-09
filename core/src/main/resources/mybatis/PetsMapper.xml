@@ -384,6 +384,11 @@
     WHERE p.state=1
     ORDER BY p.seque ASC
   </select>
+  <select id="selectByPrice"  resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM pets  WHERE #{amount} &lt;= price_mix AND #{amount} &gt;= price_min
+  </select>
   <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
     select count(*) 
     from pets 

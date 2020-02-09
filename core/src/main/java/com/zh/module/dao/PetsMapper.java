@@ -1,6 +1,8 @@
 package com.zh.module.dao;
 
 import com.zh.module.entity.Pets;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -24,4 +26,6 @@ public interface PetsMapper {
     int selectCount(Map<Object, Object> param);
 
     List<Pets> homePageInitPets();
+
+    Pets selectByPrice(@Param("amount") String amount);
 }
