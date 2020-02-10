@@ -72,7 +72,7 @@ public class HomeBizImpl implements HomeBiz {
             petsModel.setDateSection(dates);
             petsModel.setPriceSection(pets.getAppointmentAmount().setScale(0, BigDecimal.ROUND_HALF_UP) + "/" + pets.getPayAmount().setScale(0, BigDecimal.ROUND_HALF_UP) + " MEPC");
             petsModel.setProfit(pets.getProfitDays() + "天/" + pets.getProfitRate().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP) + "%");
-            petsModel.setTimestamp(DateUtils.strToDate(DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":01"));
+            petsModel.setTimestamp(DateUtils.strToDate(DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":02"));
             String startTime = pets.getStartTime();
             String endTime = pets.getEndTime();
             startTime = new StringBuilder(today).replace(11, 16, startTime).replace(17, 19,"00").toString();
@@ -88,48 +88,38 @@ public class HomeBizImpl implements HomeBiz {
             if(pets.getState() == GlobalParams.INACTIVE){
                 petsModel.setState(GlobalParams.PET_STATE_6);
             }else
-            //开始前5分钟 变为待领养 不可操作
-            if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
-                petsModel.setState(GlobalParams.PET_STATE_7);
-            }else
-            //开始后n分钟 变为可领养
-            if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
-                petsModel.setState(GlobalParams.PET_STATE_2);
-            }else
-            //抢购前10分钟把状态设为可预约状态
-            if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
-                //查看用户是否预约
-                String appointmentState = RedisUtil.searchString(redis, String.format(RedisKey.BUY_APPOINTMENT_USER, pets.getLevel(), users.getId()));
-                //抢购前n分钟
-                if(DateUtils.minBetween(startTime) > -time && DateUtils.secondBetween(startTime) < 0){
-                    if(StrUtils.isBlank(appointmentState)) {
-                        petsModel.setState(GlobalParams.PET_STATE_0);
-                    }else {
-                        petsModel.setState(GlobalParams.PET_STATE_1);
-                    }
-                //时间到
-                }else{
-                    if(DateUtils.secondBetween(startTime) >= 0 && DateUtils.secondBetween(endTime) < 0) {
-                        //距离开始秒数
-                        int interval = DateUtils.secondBetween(startTime);
-                        //购买间隔 秒
-                        String buysInterval = sysparamsService.getValStringByKey(SystemParams.PETS_BUYS_INTERVAL);
-                        //期数
-                        int number = interval / Integer.parseInt(buysInterval);
-                        String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel(), number);
-                        long size = RedisUtil.searchListSize(redis, redisKey);
-                        if (size == 0) {
+                //开始前5分钟 变为待领养 不可操作
+                if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
+                    petsModel.setState(GlobalParams.PET_STATE_7);
+                }else
+                    //开始后n分钟 变为可领养
+                    if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
+                        petsModel.setState(GlobalParams.PET_STATE_2);
+                    }else
+                        //抢购前10分钟把状态设为可预约状态
+                        if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
+                            //查看用户是否预约
+                            String appointmentState = RedisUtil.searchString(redis, String.format(RedisKey.BUY_APPOINTMENT_USER, pets.getLevel(), users.getId()));
+                            //抢购前n分钟
+                            if(DateUtils.minBetween(startTime) > -time && DateUtils.secondBetween(startTime) < 0){
+                                if(StrUtils.isBlank(appointmentState)) {
+                                    petsModel.setState(GlobalParams.PET_STATE_0);
+                                }else {
+                                    petsModel.setState(GlobalParams.PET_STATE_1);
+                                }
+                                //时间到
+                            }else{
+                                String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+                                long size = RedisUtil.searchListSize(redis, redisKey);
+                                if(size == 0) {
+                                    petsModel.setState(GlobalParams.PET_STATE_5);
+                                }else{
+                                    petsModel.setState(GlobalParams.PET_STATE_2);
+                                }
+                            }
+                        }else{
                             petsModel.setState(GlobalParams.PET_STATE_5);
-                        } else {
-                            petsModel.setState(GlobalParams.PET_STATE_2);
                         }
-                    }else{
-                        petsModel.setState(GlobalParams.PET_STATE_5);
-                    }
-                }
-            }else{
-                petsModel.setState(GlobalParams.PET_STATE_5);
-            }
             models.add(petsModel);
         }
         result.put("pets", models);

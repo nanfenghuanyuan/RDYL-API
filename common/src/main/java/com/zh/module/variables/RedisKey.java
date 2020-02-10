@@ -33,6 +33,6 @@ public class RedisKey {
 	//实名认证用户获取的faceid
 	public static final String REAL_NAME_USER_OBJECT = "rdyl:realname:%s";
 	//待捕捉宠物列表 level 阶段
-	public static final String PETS_LIST_WAIT_APPOINTMENT = "rdyl:waitAppointment:%s:%s";
+	public static final String PETS_LIST_WAIT_APPOINTMENT = "rdyl:waitAppointment:%s";
 
 }
