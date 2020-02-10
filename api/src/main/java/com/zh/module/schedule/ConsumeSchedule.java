@@ -21,7 +21,7 @@ public class ConsumeSchedule {
 	/**
 	 * 每日统计
 	 */
-	@Scheduled(cron="0 1 * * * ?")
+	@Scheduled(cron="0 1 1 * * ?")
 	public void getProfit(){
 		dailyCountBiz.consume();
 	}

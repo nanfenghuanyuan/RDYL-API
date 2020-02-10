@@ -301,7 +301,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
      * @param buyUser
      */
     private void userLevel(Users buyUser) {
-        List<Users> oneList = usersService.selectByReferID(buyUser.getUuid());
+        List<Users> oneList = usersService.selectByReferIDAndActive(buyUser.getUuid());
         int ones = oneList.size();
         int twos = getTwo(buyUser.getUuid());
         TeamRecord teamRecord = teamRecordService.selectByUser(buyUser.getId());
@@ -339,10 +339,10 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         }
     }
     private Integer getTwo(String uuid) {
-        List<Users> list = usersService.selectByReferID(uuid);
+        List<Users> list = usersService.selectByReferIDAndActive(uuid);
         int allNumber = 0;
         for(Users users : list){
-            List<Users> lists = usersService.selectByReferID(users.getUuid());
+            List<Users> lists = usersService.selectByReferIDAndActive(users.getUuid());
             for(Users users1: lists){
                 allNumber ++;
             }
