@@ -40,7 +40,7 @@ public class PetsModel {
     /**
      * 时间戳
      */
-    private Date timestamp;
+    private int timestamp;
     /**
      * 状态 0可预约 1已预约 2可领养 3待领养 4已领养 5成长中 6未开启
      */
