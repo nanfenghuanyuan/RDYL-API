@@ -47,10 +47,8 @@ public class AccountBizTests {
     }
     @Test
     public void withdraw() throws Exception {
-        Users users = new Users();
-        users.setId(1);
-        PageModel pageModel = new PageModel(1, 10);
-        System.out.println(accountBiz.withdraw(users, 1, "10", "940916"));
+        Users users = usersBiz.getUser(25);
+        System.out.println(accountBiz.withdraw(users, 1, "500", "123456"));
     }
     @Test
     public void recharge() throws Exception {

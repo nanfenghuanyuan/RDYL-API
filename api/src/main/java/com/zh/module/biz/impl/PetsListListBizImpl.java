@@ -455,7 +455,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     }
 
     @Override
-    public void getProfit() {
+    public void   getProfit() {
         String date = DateUtils.getCurrentTimeStr();
         Map<Object, Object> param = new HashMap<>();
         param.put("state", GlobalParams.PET_LIST_STATE_PROFITING);
@@ -733,20 +733,23 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         String endTime;
         String redisKey;
         List<PetsList> petsLists;
+        List<PetsList> disList = new LinkedList<>();
         for(Pets pets : petsList){
             time = DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":00";
             endTime = DateUtils.getCurrentDateStr() + " " + pets.getEndTime() + ":00";
-            if(DateUtils.minBetween(time) > -1 && DateUtils.minBetween(endTime) < 0) {
-                redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+            if(DateUtils.secondBetween(time) > -60 && DateUtils.secondBetween(endTime) < 0) {
                 param = new HashMap<>();
                 param.put("level", pets.getLevel());
                 param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
                 petsLists = petsListService.selectAll(param);
-                if (petsLists.size() != 0) {
-                    RedisUtil.deleteKey(redis, redisKey);
-                }
                 for (PetsList petsList1 : petsLists) {
-                    RedisUtil.addListRight(redis, redisKey, petsList1);
+                    disList.add(petsList1);
+                    redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+                    if (petsLists.size() != 0) {
+                        RedisUtil.deleteKey(redis, redisKey);
+                    }
+
+                    RedisUtil.addListRight(redis, redisKey, disList);
                 }
                 log.info(pets.getName() + "==本次参与分配的宠物有" + petsLists.size() + "个");
             }

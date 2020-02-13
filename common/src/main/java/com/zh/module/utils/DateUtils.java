@@ -193,11 +193,29 @@ public class DateUtils {
 		long between_days = (beforeMillis - afterMillis) / 1000;
 		return (int) between_days;
 	}
+	/**
+	 * @描述 计算机两个时间相差秒数<br>
+	 *            字符串格式日期时间,例：XXXX-XX-XX XX:XX:XX
+	 *
+	 * @return  后减前 为正
+	 * @author administrator
+	 * @版本 v1.0.0
+	 * @日期 2017-6-17
+	 */
+	public static int secondBetween(String start, String end) {
+		Date after = strToDate(end);
+		long afterMillis = after.getTime();
+		long beforeMillis = DateUtils.strToDate(start).getTime();
+		long between_days = (afterMillis - beforeMillis) / 1000;
+		return (int) between_days;
+	}
 
 	public static void main(String[] args) {
 		String startTime = "2020-02-04 11:22:10";
-		System.out.println(DateUtils.secondBetween(startTime));
+		String end = "2020-02-04 12:22:10";
+		System.out.println(DateUtils.secondBetween(startTime, end));
 		System.out.println(DateUtils.secondBetween(startTime) <= 15 && DateUtils.secondBetween(startTime) > 0);
+
 	}
 
 	/**

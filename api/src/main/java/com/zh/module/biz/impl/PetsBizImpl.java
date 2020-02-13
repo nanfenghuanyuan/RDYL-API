@@ -113,6 +113,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
 
     @Override
     public String buy(Users users, Integer level) throws ParseException {
+        String redisKey;
         //验证用户状态
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
@@ -139,25 +140,22 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         if(bindInfos.size() == 0){
             return Result.toResult(ResultCode.BIND_INFO_NONE);
         }
+        //保留购买时间
+        String buysInterval = sysparamsService.getValStringByKey(Pets.getBuysRetainTimes(pets.getLevel().intValue()));
 
-        String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, level);
+        int second = DateUtils.secondBetween(pets.getEndTime());
+        String flag = "";
+        //当不处于保留购买时间时
+        if(0 - second < Integer.parseInt(buysInterval)){
+            //是否可购买 为空可买
+            redisKey = String.format(RedisKey.PETS_LIST_BUY_FLAG, pets.getLevel());
+            flag = RedisUtil.searchString(redis, redisKey);
+        }
+
+        //购买库存列表
+        redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
         PetsList petsList = RedisUtil.leftPopObj(redis, redisKey, PetsList.class);
-        if(petsList == null){
-            params = new HashMap<>();
-            params.put("buyUserId", userId);
-            params.put("level", level);
-            params.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
-            List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(params);
-            if(petsMatchingLists != null && petsMatchingLists.size() != 0) {
-                PetsMatchingList petsMatchingList = petsMatchingLists.get(0);
-                petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_CANCEL);
-                petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
-                BigDecimal amount = petsMatchingList.getAmount();
-                accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, amount, BigDecimal.ZERO, userId, "预约取消返还", petsMatchingList.getId());
-                //删除redis预约记录
-                redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, petsMatchingList.getLevel(), userId);
-                RedisUtil.deleteKey(redis, redisKey);
-            }
+        if(petsList == null || !StrUtils.isBlank(flag)){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }else {
             //自己不能和自己匹配
@@ -176,7 +174,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
 
             /*设置失效时间*/
             int interval = 10;
-            Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_PAY_CANCEL_TIME);
+            Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_CONFIRM_CANCEL_TIME);
             if(param1 != null){
                 interval = Integer.parseInt(param1.getKeyval());
             }
@@ -222,6 +220,10 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             //删除redis预约记录
             redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
             RedisUtil.deleteKey(redis, redisKey);
+
+            //已购买标记
+            redisKey = String.format(RedisKey.PETS_LIST_BUY_FLAG, pets.getLevel());
+            RedisUtil.addString(redis, redisKey, Integer.parseInt(buysInterval), "-1");
             return Result.toResult(ResultCode.SUCCESS);
         }
     }
