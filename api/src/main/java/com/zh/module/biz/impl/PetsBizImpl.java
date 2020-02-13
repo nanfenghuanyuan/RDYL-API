@@ -91,6 +91,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             interval = Integer.parseInt(param1.getKeyval());
         }
         Calendar current = Calendar.getInstance();
+        current.setTime(DateUtils.strToDate(new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString()));
         current.add(Calendar.MINUTE, interval);
         petsMatchingList.setAppointmentEndTime(DateUtils.getDateFormate(new Timestamp(current.getTimeInMillis())));
         petsMatchingList.setInactiveTime(new Timestamp(current.getTimeInMillis()));

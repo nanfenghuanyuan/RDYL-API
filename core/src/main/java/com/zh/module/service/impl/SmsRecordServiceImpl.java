@@ -26,7 +26,7 @@ public class SmsRecordServiceImpl implements SmsRecordService {
 
     @Override
     public int insert(SmsRecord record) {
-        return this.smsRecordMapper.insert(record);
+        return this.smsRecordMapper.insertSelective(record);
     }
 
     @Override
