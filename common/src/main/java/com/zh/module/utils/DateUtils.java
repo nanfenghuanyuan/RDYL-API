@@ -1,5 +1,6 @@
 package com.zh.module.utils;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -213,7 +214,7 @@ public class DateUtils {
 	public static void main(String[] args) {
 		String startTime = "2020-02-04 11:22:10";
 		String end = "2020-02-04 12:22:10";
-		System.out.println(DateUtils.secondBetween(startTime, end));
+		System.out.println(5/2);
 		System.out.println(DateUtils.secondBetween(startTime) <= 15 && DateUtils.secondBetween(startTime) > 0);
 
 	}

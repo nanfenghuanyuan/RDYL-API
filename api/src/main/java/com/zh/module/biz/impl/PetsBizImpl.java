@@ -221,9 +221,17 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
             RedisUtil.deleteKey(redis, redisKey);
 
+            //总时间
+            int seconds = DateUtils.secondBetween(new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getEndTime()).replace(17, 19,"00").toString(), new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString());
+            redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+            //总数量
+            long size = RedisUtil.searchListSize(redis, redisKey);
+            //单词分得时间间隔
+            long time = seconds/size;
+
             //已购买标记
             redisKey = String.format(RedisKey.PETS_LIST_BUY_FLAG, pets.getLevel());
-            RedisUtil.addString(redis, redisKey, Integer.parseInt(buysInterval), "-1");
+            RedisUtil.addString(redis, redisKey, time, "-1");
             return Result.toResult(ResultCode.SUCCESS);
         }
     }
