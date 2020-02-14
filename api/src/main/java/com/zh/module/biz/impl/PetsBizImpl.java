@@ -141,12 +141,12 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             return Result.toResult(ResultCode.BIND_INFO_NONE);
         }
         //保留购买时间
-        String buysInterval = sysparamsService.getValStringByKey(Pets.getBuysRetainTimes(pets.getLevel().intValue()));
+        String buysInterval = sysparamsService.getValStringByKey(SystemParams.PETS_BUYS_DISTRIBUTE_TIME);
 
-        int second = DateUtils.secondBetween(pets.getEndTime());
+        int second = DateUtils.secondBetween(pets.getStartTime());
         String flag = "";
-        //当不处于保留购买时间时
-        if(0 - second < Integer.parseInt(buysInterval)){
+        //当处于间隔购买时间时
+        if(second < Integer.parseInt(buysInterval)){
             //是否可购买 为空可买
             redisKey = String.format(RedisKey.PETS_LIST_BUY_FLAG, pets.getLevel());
             flag = RedisUtil.searchString(redis, redisKey);
@@ -222,7 +222,8 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             RedisUtil.deleteKey(redis, redisKey);
 
             //总时间
-            int seconds = DateUtils.secondBetween(new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getEndTime()).replace(17, 19,"00").toString(), new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString());
+//            int seconds = DateUtils.secondBetween(new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getEndTime()).replace(17, 19,"00").toString(), new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString());
+            int seconds = Integer.parseInt(buysInterval);
             redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
             //总数量
             long size = RedisUtil.searchListSize(redis, redisKey);

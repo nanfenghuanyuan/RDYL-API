@@ -96,8 +96,8 @@ public class SystemParams {
 	//多显示可捕捉时间（秒）
 	public static final String CAN_BUY_TIME = "CAN_BUY_TIME";
 
-    //宠物保底分发时间 （单位：秒）
-    public static final String PETS_BUYS_RETAIN_TIME_1 = "PETS_BUYS_RETAIN_TIME_1";
+    //宠物有间隔分发时间 （单位：秒）
+    public static final String PETS_BUYS_DISTRIBUTE_TIME = "PETS_BUYS_DISTRIBUTE_TIME";
 
     //MEPC转账最小金额
     public static final String TRANSFER_MIN_AMOUNT = "TRANSFER_MIN_AMOUNT";

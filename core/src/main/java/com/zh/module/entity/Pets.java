@@ -78,7 +78,4 @@ public class Pets implements Serializable {
         return sb.toString();
     }
 
-    public static String getBuysRetainTimes(Integer level){
-            return "PETS_BUYS_RETAIN_TIME_" + level;
-    }
 }
