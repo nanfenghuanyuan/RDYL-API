@@ -34,6 +34,8 @@ public class RedisKey {
 	public static final String REAL_NAME_USER_OBJECT = "rdyl:realname:%s";
 	//待捕捉宠物列表 level
 	public static final String PETS_LIST_WAIT_APPOINTMENT = "rdyl:waitAppointment:%s";
+	//带捕捉宠物数量
+	public static final String PETS_LIST_WAIT_APPOINTMENT_AMOUNT = "rdyl:waitAppointment:amount:%s";
 	//宠物是否可买标志 存在不可买  等级
 	public static final String PETS_LIST_BUY_FLAG = "rdyl:buyflag:%s";
 

@@ -143,7 +143,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         //保留购买时间
         String buysInterval = sysparamsService.getValStringByKey(SystemParams.PETS_BUYS_DISTRIBUTE_TIME);
 
-        int second = DateUtils.secondBetween(pets.getStartTime());
+        int second = DateUtils.secondBetween(DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":00");
         String flag = "";
         //当处于间隔购买时间时
         if(second < Integer.parseInt(buysInterval)){

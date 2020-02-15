@@ -752,6 +752,8 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
                     RedisUtil.addListRight(redis, redisKey, disList);
                 }
                 log.info(pets.getName() + "==本次参与分配的宠物有" + petsLists.size() + "个");
+                redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_AMOUNT, pets.getLevel());
+                RedisUtil.addString(redis, redisKey, String.valueOf(petsLists.size()));
             }
         }
     }
