@@ -484,6 +484,18 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAIT);
             petsListService.updateByPrimaryKeySelective(petsList);
 
+            //删除对应已完成记录
+            param = new HashMap<>();
+            param.put("petListId", petsList.getId());
+            param.put("level", petsList.getLevel());
+            param.put("buyUserId", petsList.getUserId());
+            param.put("state", GlobalParams.PET_MATCHING_STATE_COMPLIETE);
+            List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(param);
+            PetsMatchingList petsMatchingList = petsMatchingLists.size() == 0 ? null : petsMatchingLists.get(0);
+            if(petsMatchingList != null) {
+                petsMatchingListService.deleteByPrimaryKey(petsMatchingList.getId());
+            }
+
             account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.CNY, petsList.getUserId());
             //插入收益流水
             flow.setUserId(petsList.getUserId());
