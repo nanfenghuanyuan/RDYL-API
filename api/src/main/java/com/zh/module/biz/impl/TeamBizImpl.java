@@ -69,7 +69,7 @@ public class TeamBizImpl implements TeamBiz {
                 teamListModel.setName(user.getNickName());
                 teamListModel.setTime(DateUtils.getDateFormate2(user.getCreateTime()));
                 teamListModel.setPhone(user.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
-                teamListModel.setIdStatus(user.getIdStatus().intValue());
+                teamListModel.setIdStatus(user.getState().intValue());
                 models.add(teamListModel);
             }
         }else if(type == 2){
@@ -82,7 +82,7 @@ public class TeamBizImpl implements TeamBiz {
                     teamListModel.setName(referUser.getNickName());
                     teamListModel.setTime(DateUtils.getDateFormate2(referUser.getCreateTime()));
                     teamListModel.setPhone(referUser.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
-                    teamListModel.setIdStatus(referUser.getIdStatus().intValue());
+                    teamListModel.setIdStatus(referUser.getState().intValue());
                     models.add(teamListModel);
                 }
             }
