@@ -455,7 +455,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     }
 
     @Override
-    public void   getProfit() {
+    public void getProfit() {
         String date = DateUtils.getCurrentTimeStr();
         Map<Object, Object> param = new HashMap<>();
         param.put("state", GlobalParams.PET_LIST_STATE_PROFITING);

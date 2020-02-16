@@ -174,7 +174,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
 
             /*设置失效时间*/
             int interval = 10;
-            Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_CONFIRM_CANCEL_TIME);
+            Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_PAY_CANCEL_TIME);
             if(param1 != null){
                 interval = Integer.parseInt(param1.getKeyval());
             }
@@ -224,11 +224,11 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             //总时间
 //            int seconds = DateUtils.secondBetween(new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getEndTime()).replace(17, 19,"00").toString(), new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString());
             int seconds = Integer.parseInt(buysInterval);
-            redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+            redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_AMOUNT, pets.getLevel());
             //总数量
-            long size = RedisUtil.searchListSize(redis, redisKey);
+            String size = RedisUtil.searchString(redis, redisKey);
             //单词分得时间间隔
-            long time = seconds/size;
+            long time = seconds/Integer.parseInt(size);
 
             //已购买标记
             redisKey = String.format(RedisKey.PETS_LIST_BUY_FLAG, pets.getLevel());
