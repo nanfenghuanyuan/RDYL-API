@@ -251,12 +251,15 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
 
     @Override
     public String withdraw(Users users, Integer coinType, String amount, String password) throws Exception {
+        //校验提现开关
         String onoff = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_ONOFF);
         if(Integer.parseInt(onoff) == GlobalParams.INACTIVE){
             return Result.toResult(ResultCode.PERMISSION_NO_ACCESS);
         }
+        //提现开始时间
         String start = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_TIME_LIMIT_START);
         start = DateUtils.getCurrentDateStr() + " " + start;
+        //提现结束时间
         String end = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_TIME_LIMIT_END);
         end = DateUtils.getCurrentDateStr() + " " + end;
         if(DateUtils.minBetween(start) >= 0 && DateUtils.minBetween(end) < 0) {
@@ -274,6 +277,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
                 return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
             }
 
+            //自动生成宠物开关
             String autoWithdraw = sysparamsService.getValStringByKey(SystemParams.AUTO_WITHDRAW);
             if(!StrUtils.isBlank(autoWithdraw) && "1".equals(autoWithdraw)){
                 Pets pets = petsService.selectByPrice(amount);

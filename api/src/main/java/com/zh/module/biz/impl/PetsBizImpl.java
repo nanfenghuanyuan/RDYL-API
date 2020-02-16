@@ -50,6 +50,8 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     @Autowired
     private BindInfoService bindInfoService;
     @Autowired
+    private BlackListService blackListService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -119,6 +121,11 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             return Result.toResult(ResultCode.USER_STATE_ERROR);
         }
         Integer userId = users.getId();
+        //判断是否在黑名单
+        BlackList blackList = blackListService.selectByUserId(userId);
+        if(blackList != null){
+            return Result.toResult(ResultCode.PETS_HAS_NONE);
+        }
         //每个人只允许持有一个
         Map<Object, Object> params = new HashMap<>();
         params.put("buyUserId", userId);
