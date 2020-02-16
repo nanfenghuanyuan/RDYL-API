@@ -48,12 +48,6 @@ public class Pets implements Serializable {
 
     private Date updateTime;
 
-    public static String getDistribution(Integer level){
-        return "DISTRIBUTION_NUMBER_" + level;
-    }
-    public static String getInterval(Integer level){
-        return "PETS_BUYS_INTERVAL_" + level;
-    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -83,4 +77,5 @@ public class Pets implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
 }

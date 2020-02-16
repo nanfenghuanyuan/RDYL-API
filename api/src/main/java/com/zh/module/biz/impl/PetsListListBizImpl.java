@@ -484,6 +484,18 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAIT);
             petsListService.updateByPrimaryKeySelective(petsList);
 
+            //删除对应已完成记录
+            param = new HashMap<>();
+            param.put("petListId", petsList.getId());
+            param.put("level", petsList.getLevel());
+            param.put("buyUserId", petsList.getUserId());
+            param.put("state", GlobalParams.PET_MATCHING_STATE_COMPLIETE);
+            List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(param);
+            PetsMatchingList petsMatchingList = petsMatchingLists.size() == 0 ? null : petsMatchingLists.get(0);
+            if(petsMatchingList != null) {
+                petsMatchingListService.deleteByPrimaryKey(petsMatchingList.getId());
+            }
+
             account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.CNY, petsList.getUserId());
             //插入收益流水
             flow.setUserId(petsList.getUserId());
@@ -740,22 +752,27 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         String endTime;
         String redisKey;
         List<PetsList> petsLists;
+        List<PetsList> disList = new LinkedList<>();
         for(Pets pets : petsList){
             time = DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":00";
             endTime = DateUtils.getCurrentDateStr() + " " + pets.getEndTime() + ":00";
-            if(DateUtils.minBetween(time) > -1 && DateUtils.minBetween(endTime) < 0) {
-                redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+            if(DateUtils.secondBetween(time) > -60 && DateUtils.secondBetween(endTime) < 0) {
                 param = new HashMap<>();
                 param.put("level", pets.getLevel());
                 param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
                 petsLists = petsListService.selectAll(param);
-                if (petsLists.size() != 0) {
-                    RedisUtil.deleteKey(redis, redisKey);
-                }
                 for (PetsList petsList1 : petsLists) {
-                    RedisUtil.addListRight(redis, redisKey, petsList1);
+                    disList.add(petsList1);
+                    redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+                    if (petsLists.size() != 0) {
+                        RedisUtil.deleteKey(redis, redisKey);
+                    }
+
+                    RedisUtil.addListRight(redis, redisKey, disList);
                 }
                 log.info(pets.getName() + "==本次参与分配的宠物有" + petsLists.size() + "个");
+                redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_AMOUNT, pets.getLevel());
+                RedisUtil.addString(redis, redisKey, String.valueOf(petsLists.size()));
             }
         }
     }

@@ -40,7 +40,7 @@ public class NoticeBizTests {
     }
     @Test
     public void get2() throws InterruptedException {
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 4; i++) {
             PetsList petsList = new PetsList();
             petsList.setLevel((byte) 2);
             petsList.setPrice(new BigDecimal(301));

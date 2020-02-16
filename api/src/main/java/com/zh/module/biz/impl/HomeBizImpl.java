@@ -88,38 +88,42 @@ public class HomeBizImpl implements HomeBiz {
             if(pets.getState() == GlobalParams.INACTIVE){
                 petsModel.setState(GlobalParams.PET_STATE_6);
             }else
-                //开始前5分钟 变为待领养 不可操作
-                if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
-                    petsModel.setState(GlobalParams.PET_STATE_7);
-                }else
-                    //开始后n分钟 变为可领养
-                    if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
-                        petsModel.setState(GlobalParams.PET_STATE_2);
-                    }else
-                        //抢购前10分钟把状态设为可预约状态
-                        if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
-                            //查看用户是否预约
-                            String appointmentState = RedisUtil.searchString(redis, String.format(RedisKey.BUY_APPOINTMENT_USER, pets.getLevel(), users.getId()));
-                            //抢购前n分钟
-                            if(DateUtils.minBetween(startTime) > -time && DateUtils.secondBetween(startTime) < 0){
-                                if(StrUtils.isBlank(appointmentState)) {
-                                    petsModel.setState(GlobalParams.PET_STATE_0);
-                                }else {
-                                    petsModel.setState(GlobalParams.PET_STATE_1);
-                                }
-                                //时间到
-                            }else{
-                                String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
-                                long size = RedisUtil.searchListSize(redis, redisKey);
-                                if(size == 0) {
-                                    petsModel.setState(GlobalParams.PET_STATE_5);
-                                }else{
-                                    petsModel.setState(GlobalParams.PET_STATE_2);
-                                }
-                            }
-                        }else{
+            //开始前5分钟 变为待领养 不可操作
+            if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
+                petsModel.setState(GlobalParams.PET_STATE_7);
+            }else
+            //开始后n分钟 变为可领养
+            if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
+                petsModel.setState(GlobalParams.PET_STATE_2);
+            }else
+            //抢购前10分钟把状态设为可预约状态
+            if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
+                //查看用户是否预约
+                String appointmentState = RedisUtil.searchString(redis, String.format(RedisKey.BUY_APPOINTMENT_USER, pets.getLevel(), users.getId()));
+                //抢购前n分钟
+                if(DateUtils.minBetween(startTime) > -time && DateUtils.secondBetween(startTime) < 0){
+                    if(StrUtils.isBlank(appointmentState)) {
+                        petsModel.setState(GlobalParams.PET_STATE_0);
+                    }else {
+                        petsModel.setState(GlobalParams.PET_STATE_1);
+                    }
+                //时间到
+                }else{
+                    if(DateUtils.secondBetween(startTime) >= 0 && DateUtils.secondBetween(endTime) < 0) {
+                        String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+                        long size = RedisUtil.searchListSize(redis, redisKey);
+                        if (size == 0) {
                             petsModel.setState(GlobalParams.PET_STATE_5);
+                        } else {
+                            petsModel.setState(GlobalParams.PET_STATE_2);
                         }
+                    }else{
+                        petsModel.setState(GlobalParams.PET_STATE_5);
+                    }
+                }
+            }else{
+                petsModel.setState(GlobalParams.PET_STATE_5);
+            }
             models.add(petsModel);
         }
         result.put("pets", models);

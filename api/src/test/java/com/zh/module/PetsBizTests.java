@@ -81,6 +81,10 @@ public class PetsBizTests {
         System.out.println(petsListBiz.confirmReceipt(users, 1, "123456"));
     }
     @Test
+    public void getProfit(){
+        petsListBiz.getProfit();
+    }
+    @Test
     public void confirmReceipt1() {
         FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
         feigeSmsUtils.sendTemplatesSms("13165373280", SmsTemplateCode.SMS_C2C_PAY_NOTICE, "");
