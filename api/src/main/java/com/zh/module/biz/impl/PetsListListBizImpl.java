@@ -672,6 +672,13 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
         petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
 
+        //留存转让记录
+        petsMatchingList.setId(null);
+        petsMatchingList.setSaleUserId(petsMatchingList.getSaleUserId());
+        petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_OVER);
+        petsMatchingList.setUpdateTime(DateUtils.getCurrentDate());
+        petsMatchingListService.insertSelective(petsMatchingList);
+
         /*短信通知买家*/
         Integer buyUserId = petsMatchingList.getBuyUserId();
         Users buyUser = usersService.selectByPrimaryKey(buyUserId);
