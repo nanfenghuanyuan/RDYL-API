@@ -93,9 +93,9 @@ public class HomeBizImpl implements HomeBiz {
                 petsModel.setState(GlobalParams.PET_STATE_7);
             }else
             //开始后n分钟 变为可领养
-            if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
+            /*if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
                 petsModel.setState(GlobalParams.PET_STATE_2);
-            }else
+            }else*/
             //抢购前10分钟把状态设为可预约状态
             if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
                 //查看用户是否预约
