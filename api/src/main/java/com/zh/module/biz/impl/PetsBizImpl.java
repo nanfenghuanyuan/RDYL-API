@@ -126,6 +126,14 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         if(blackList != null){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }
+
+        //如果是20秒整购买 直接返回失败（定时任务冲突)
+        String today = DateUtils.getCurrentTimeStr();
+        String times = new StringBuilder(today).replace(17, 19,  "00").toString();
+        if(DateUtils.secondBetween(times) % 20 == 0){
+            return Result.toResult(ResultCode.PETS_HAS_NONE);
+        }
+
         //每个人只允许持有一个
         Map<Object, Object> params = new HashMap<>();
         params.put("buyUserId", userId);
