@@ -166,11 +166,14 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             redisKey = String.format(RedisKey.PETS_LIST_BUY_FLAG, pets.getLevel());
             flag = RedisUtil.searchString(redis, redisKey);
         }
+        if(!StrUtils.isBlank(flag)){
+            return Result.toResult(ResultCode.PETS_HAS_NONE);
+        }
 
         //购买库存列表
         redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
         PetsList petsList = RedisUtil.leftPopObj(redis, redisKey, PetsList.class);
-        if(petsList == null || !StrUtils.isBlank(flag)){
+        if(petsList == null){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }else {
             //自己不能和自己匹配
