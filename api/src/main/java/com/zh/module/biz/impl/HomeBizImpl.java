@@ -83,7 +83,7 @@ public class HomeBizImpl implements HomeBiz {
             String canBuyTime = sysparamsService.getValStringByKey(SystemParams.CAN_BUY_TIME);
             int time = Integer.parseInt(appoinmentTime);
             int waiTime = Integer.parseInt(waitAppointmentTime);
-            int buyTime = Integer.parseInt(canBuyTime);
+//            int buyTime = Integer.parseInt(canBuyTime);
 
             if(pets.getState() == GlobalParams.INACTIVE){
                 petsModel.setState(GlobalParams.PET_STATE_6);

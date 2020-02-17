@@ -4,18 +4,31 @@ import com.zh.module.biz.PetsBiz;
 import com.zh.module.biz.PetsListBiz;
 import com.zh.module.biz.PetsMatchingListBiz;
 import com.zh.module.biz.UsersBiz;
+import com.zh.module.constants.GlobalParams;
 import com.zh.module.constants.SmsTemplateCode;
+import com.zh.module.entity.Pets;
+import com.zh.module.entity.PetsList;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
+import com.zh.module.service.PetsListService;
+import com.zh.module.service.PetsService;
 import com.zh.module.service.UsersService;
+import com.zh.module.utils.DateUtils;
 import com.zh.module.utils.FeigeSmsUtils;
+import com.zh.module.utils.RedisUtil;
+import com.zh.module.variables.RedisKey;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,6 +44,13 @@ public class PetsBizTests {
     private UsersService usersService;
     @Autowired
     private UsersBiz usersBiz;
+    @Autowired
+    private PetsService petsService;
+    @Autowired
+    private PetsListService petsListService;
+    @Autowired
+    private RedisTemplate<String, String> redis;
+
     @Test
     public void buy() throws ParseException {
         Users users = new Users();
@@ -88,6 +108,37 @@ public class PetsBizTests {
     public void confirmReceipt1() {
         FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
         feigeSmsUtils.sendTemplatesSms("13165373280", SmsTemplateCode.SMS_C2C_PAY_NOTICE, "");
+    }
+
+    @Test
+    public void confirmReceipt2() {
+        Map<Object, Object> param = new HashMap<>();
+        param.put("state", GlobalParams.ACTIVE);
+        List<Pets> petsList = petsService.selectAll(param);
+        String time;
+        String endTime;
+        String redisKey;
+        List<PetsList> petsLists;
+        List<PetsList> disList = new LinkedList<>();
+        for(Pets pets : petsList){
+            endTime = DateUtils.getCurrentDateStr() + " " + pets.getEndTime() + ":00";
+                param = new HashMap<>();
+                param.put("level", pets.getLevel());
+                param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
+                petsLists = petsListService.selectAll(param);
+                for (PetsList petsList1 : petsLists) {
+                    disList.add(petsList1);
+                    redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+                    if (petsLists.size() != 0) {
+                        RedisUtil.deleteKey(redis, redisKey);
+                    }
+
+                    RedisUtil.addListRight(redis, redisKey, disList);
+                }
+                System.out.println(pets.getName() + "==本次参与分配的宠物有" + petsLists.size() + "个");
+                redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_AMOUNT, pets.getLevel());
+                RedisUtil.addString(redis, redisKey, String.valueOf(petsLists.size()));
+        }
     }
 
 }
