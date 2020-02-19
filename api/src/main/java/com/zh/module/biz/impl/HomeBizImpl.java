@@ -129,4 +129,65 @@ public class HomeBizImpl implements HomeBiz {
         result.put("pets", models);
         return Result.toResult(ResultCode.SUCCESS, result);
     }
+
+    @Override
+    public String get(Users users, Integer id) {
+        Pets pets = petsService.selectByLevel(id);
+        PetsModel petsModel = new PetsModel();
+        petsModel.setLevel(pets.getLevel().intValue());
+        petsModel.setImgUrl(pets.getImgUrl());
+        petsModel.setName(pets.getName());
+        petsModel.setPayPrice(pets.getPriceMin().setScale(0, BigDecimal.ROUND_HALF_UP) + "-" + pets.getPriceMix().setScale(0, BigDecimal.ROUND_HALF_UP));
+        String dates = pets.getStartTime() + "-" + pets.getEndTime();
+        petsModel.setDateSection(dates);
+        petsModel.setPriceSection(pets.getAppointmentAmount().setScale(0, BigDecimal.ROUND_HALF_UP) + "/" + pets.getPayAmount().setScale(0, BigDecimal.ROUND_HALF_UP) + " MEPC");
+        petsModel.setProfit(pets.getProfitDays() + "天/" + pets.getProfitRate().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP) + "%");
+        petsModel.setTimestamp(0 - DateUtils.secondBetween(DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":02"));
+        String startTime = pets.getStartTime();
+        String endTime = pets.getEndTime();
+        String today = DateUtils.getCurrentTimeStr();
+        startTime = new StringBuilder(today).replace(11, 16, startTime).replace(17, 19,"00").toString();
+        endTime = new StringBuilder(today).replace(11, 16, endTime).replace(17, 19,"00").toString();
+        String appoinmentTime = sysparamsService.getValStringByKey(SystemParams.APPOINTMENT_TIME);
+        String waitAppointmentTime = sysparamsService.getValStringByKey(SystemParams.WAIT_APPOINTMENT_TIME);
+        String canBuyTime = sysparamsService.getValStringByKey(SystemParams.CAN_BUY_TIME);
+        int time = Integer.parseInt(appoinmentTime);
+        int waiTime = Integer.parseInt(waitAppointmentTime);
+        if(pets.getState() == GlobalParams.INACTIVE){
+            petsModel.setState(GlobalParams.PET_STATE_6);
+        }else
+        //开始前5分钟 变为待领养 不可操作
+        if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
+            petsModel.setState(GlobalParams.PET_STATE_7);
+        }else
+        //抢购前10分钟把状态设为可预约状态
+        if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
+            //查看用户是否预约
+            String appointmentState = RedisUtil.searchString(redis, String.format(RedisKey.BUY_APPOINTMENT_USER, pets.getLevel(), users.getId()));
+            //抢购前n分钟
+            if(DateUtils.minBetween(startTime) > -time && DateUtils.secondBetween(startTime) < 0){
+                if(StrUtils.isBlank(appointmentState)) {
+                    petsModel.setState(GlobalParams.PET_STATE_0);
+                }else {
+                    petsModel.setState(GlobalParams.PET_STATE_1);
+                }
+                //时间到
+            }else{
+                if(DateUtils.secondBetween(startTime) >= 0 && DateUtils.secondBetween(endTime) < 0) {
+                    String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
+                    long size = RedisUtil.searchListSize(redis, redisKey);
+                    if (size == 0) {
+                        petsModel.setState(GlobalParams.PET_STATE_5);
+                    } else {
+                        petsModel.setState(GlobalParams.PET_STATE_2);
+                    }
+                }else{
+                    petsModel.setState(GlobalParams.PET_STATE_5);
+                }
+            }
+        }else{
+            petsModel.setState(GlobalParams.PET_STATE_5);
+        }
+        return Result.toResult(ResultCode.SUCCESS, petsModel);
+    }
 }

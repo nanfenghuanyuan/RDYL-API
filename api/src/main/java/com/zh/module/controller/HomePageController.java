@@ -8,10 +8,7 @@ import com.zh.module.dto.Result;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @description:
@@ -30,6 +27,17 @@ public class HomePageController {
     public String init(@CurrentUser Users users){
         try {
             return homeBiz.init(users);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    @ResponseBody
+    @RequestMapping(value="{id}",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String list(@CurrentUser Users users, @PathVariable("id") Integer id){
+        try {
+
+            return homeBiz.get(users, id);
         }catch (Exception e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);

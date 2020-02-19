@@ -10,4 +10,6 @@ import com.zh.module.entity.Users;
  **/
 public interface HomeBiz {
     String init(Users users);
+
+    String get(Users users, Integer id);
 }

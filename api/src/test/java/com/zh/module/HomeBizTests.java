@@ -33,5 +33,10 @@ public class HomeBizTests {
         Users users = usersBiz.getUser(43);
         System.out.println(bindInfoBiz.get(users, 0));
     }
+    @Test
+    public void get(){
+        Users users = usersBiz.getUser(43);
+        System.out.println(homeBiz.get(users, 1));
+    }
 
 }
