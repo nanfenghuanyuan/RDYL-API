@@ -80,10 +80,8 @@ public class HomeBizImpl implements HomeBiz {
 
             String appoinmentTime = sysparamsService.getValStringByKey(SystemParams.APPOINTMENT_TIME);
             String waitAppointmentTime = sysparamsService.getValStringByKey(SystemParams.WAIT_APPOINTMENT_TIME);
-            String canBuyTime = sysparamsService.getValStringByKey(SystemParams.CAN_BUY_TIME);
             int time = Integer.parseInt(appoinmentTime);
             int waiTime = Integer.parseInt(waitAppointmentTime);
-//            int buyTime = Integer.parseInt(canBuyTime);
 
             if(pets.getState() == GlobalParams.INACTIVE){
                 petsModel.setState(GlobalParams.PET_STATE_6);
@@ -92,16 +90,12 @@ public class HomeBizImpl implements HomeBiz {
             if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
                 petsModel.setState(GlobalParams.PET_STATE_7);
             }else
-            //开始后n分钟 变为可领养
-            /*if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
-                petsModel.setState(GlobalParams.PET_STATE_2);
-            }else*/
             //抢购前10分钟把状态设为可预约状态
-            if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
+            if(DateUtils.minBetween(endTime) < 0){
                 //查看用户是否预约
                 String appointmentState = RedisUtil.searchString(redis, String.format(RedisKey.BUY_APPOINTMENT_USER, pets.getLevel(), users.getId()));
-                //抢购前n分钟
-                if(DateUtils.minBetween(startTime) > -time && DateUtils.secondBetween(startTime) < 0){
+                //抢购前
+                if(DateUtils.secondBetween(startTime) < 0){
                     if(StrUtils.isBlank(appointmentState)) {
                         petsModel.setState(GlobalParams.PET_STATE_0);
                     }else {
