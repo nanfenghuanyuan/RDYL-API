@@ -83,6 +83,7 @@ public enum ResultCode {
     WITHDRAW_TIME_ERROR(30055, "每天提现时间为上午8点到10点"),
     TRANSFER_MIN_AMOUNT(30056, "当可用余额小于%s时不能进行转赠操作"),
     WITHDRAW_ERROR(30057, "提现金额不正确，请更换后重试"),
+    WITHDRAW_QUOTA_NONE(30058, "提现额度不足，请完成一次交易后重试"),
 
 
     /* 系统错误：40001-49999 */

@@ -58,6 +58,8 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
     @Autowired
     private PetsMatchingListService petsMatchingListService;
     @Autowired
+    private WithdrawQuoteService withdrawQuoteService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -263,10 +265,37 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         String end = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_TIME_LIMIT_END);
         end = DateUtils.getCurrentDateStr() + " " + end;
         if(DateUtils.minBetween(start) >= 0 && DateUtils.minBetween(end) < 0) {
+            //检查金额是否正确
+            String result = checkAmount(amount, users);
+            if(result != null){
+                return result;
+            }
+            Integer userId = users.getId();
+            /*校验提现额度*/
+            WithdrawQuote withdrawQuote = withdrawQuoteService.selectByUser(userId);
+            if(withdrawQuote == null){
+                return Result.toResult(ResultCode.WITHDRAW_QUOTA_NONE);
+            }
+            if(new BigDecimal(amount).compareTo(withdrawQuote.getAmount()) > 0){
+                return Result.toResult(ResultCode.WITHDRAW_QUOTA_NONE);
+            }else{
+                withdrawQuote.setAmount(withdrawQuote.getAmount().subtract(new BigDecimal(amount)));
+                withdrawQuoteService.updateByPrimaryKeySelective(withdrawQuote);
+
+                Flow flow = new Flow();
+                flow.setAccountType(AccountType.ACCOUNT_TYPE_ACTIVE);
+                flow.setAmount(new BigDecimal(amount));
+                flow.setCoinType(coinType);
+                flow.setOperId(userId);
+                flow.setOperType("提现消耗额度");
+                flow.setRelateId(withdrawQuote.getId());
+                flow.setResultAmount(withdrawQuote.getAmount().toPlainString());
+                flow.setUserId(userId);
+                flowService.insertSelective(flow);
+            }
             //获取等级对应日最多提现金额
             String amountLevel = sysparamsService.getValStringByKey(Users.getWithdrawLevel(users.getTeamLevel().intValue()));
             amountLevel = StrUtils.isBlank(amountLevel) ? "0" : amountLevel;
-            Integer userId = users.getId();
             String today = DateUtils.getCurrentDateStr();
             //今日提现总金额
             String dayAmount = withdrawService.totalDayAmount(userId, coinType, today);
@@ -327,6 +356,25 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         }else{
             return Result.toResult(ResultCode.WITHDRAW_TIME_ERROR);
         }
+    }
+
+    private String checkAmount(String amount, Users users) {
+        BigDecimal decimal = new BigDecimal(amount);
+        String amountMin = sysparamsService.getValStringByKey(SystemParams.AMOUNT_WITHDRAW_MIN_AMOUNT);
+        String amountMax = sysparamsService.getValStringByKey(Users.getWithdrawMaxAmount(users.getTeamLevel().intValue()));
+        String numbers = sysparamsService.getValStringByKey(Users.getWithdrawNumber(users.getTeamLevel().intValue()));
+        if(decimal.compareTo(new BigDecimal(amountMin)) > 0 && decimal.compareTo(new BigDecimal(amountMax)) <= 0){
+            Map<Object, Object> param = new HashMap<>();
+            param.put("userId", users.getId());
+            param.put("coinType", CoinType.OS);
+            int count = withdrawService.selectCount(param);
+            if(count < Integer.parseInt(numbers)){
+                return null;
+            }else{
+                return Result.toResult(ResultCode.WITHDRAW_COUNT_LIMINT);
+            }
+        }
+        return Result.toResult(ResultCode.WITHDRAW_ERROR);
     }
 
     @Override

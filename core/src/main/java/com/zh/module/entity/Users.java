@@ -44,6 +44,14 @@ public class Users implements Serializable {
     public static String getWithdrawLevel(Integer level){
         return "AMOUNT_WITHDRAW_LEVEL_" + level;
     }
+    //等级对应提现次数
+    public static String getWithdrawNumber(Integer level){
+        return "AMOUNT_WITHDRAW_NUMBER_" + level;
+    }
+    //等级对应提现最大值
+    public static String getWithdrawMaxAmount(Integer level){
+        return "AMOUNT_WITHDRAW_MAX_AMOUNT_" + level;
+    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

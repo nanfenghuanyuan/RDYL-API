@@ -58,6 +58,8 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     @Autowired
     private ProfitRecordService profitRecordService;
     @Autowired
+    private WithdrawQuoteService withdrawQuoteService;
+    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -289,11 +291,42 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             referLevelAward(users, petsList.getPrice().multiply(petsList.getProfitRate()), new BigDecimal(profit), cursor, awardTotal);
             //用户等级提升
             userLevel(buyUser);
+            //增加提现额度
+            changeWithdrawQuota(buyUserId, petsList.getPrice());
             //删除redis预约记录
             String redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, petsMatchingList.getLevel(), users.getId());
             RedisUtil.deleteKey(redis, redisKey);
         }
         return Result.toResult(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 增加提现额度
+     * @param userId
+     * @param amount
+     */
+    private void changeWithdrawQuota(Integer userId, BigDecimal amount) {
+        WithdrawQuote withdrawQuote = withdrawQuoteService.selectByUser(userId);
+        if(withdrawQuote == null){
+            withdrawQuote = new WithdrawQuote();
+            withdrawQuote.setAmount(amount);
+            withdrawQuote.setCoinType((byte) CoinType.OS);
+            withdrawQuote.setUserId(userId);
+            withdrawQuoteService.insertSelective(withdrawQuote);
+        }else{
+            withdrawQuote.setAmount(withdrawQuote.getAmount().add(amount));
+            withdrawQuoteService.updateByPrimaryKeySelective(withdrawQuote);
+        }
+        Flow flow = new Flow();
+        flow.setAccountType(AccountType.ACCOUNT_TYPE_ACTIVE);
+        flow.setAmount(amount);
+        flow.setCoinType(CoinType.OS);
+        flow.setOperId(userId);
+        flow.setOperType("提现增加额度");
+        flow.setRelateId(withdrawQuote.getId());
+        flow.setResultAmount(withdrawQuote.getAmount().toPlainString());
+        flow.setUserId(userId);
+        flowService.insertSelective(flow);
     }
 
     /**

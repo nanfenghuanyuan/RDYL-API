@@ -106,4 +106,10 @@ public class SystemParams {
 
     //等级对应日最多提现金额
     public static final String AMOUNT_WITHDRAW_LEVEL_0 = "AMOUNT_WITHDRAW_LEVEL_0";
+    //等级对应提现次数
+    public static final String AMOUNT_WITHDRAW_NUMBER_0 = "AMOUNT_WITHDRAW_NUMBER_0";
+    //等级对应提现最大值
+    public static final String AMOUNT_WITHDRAW_MAX_AMOUNT_0 = "AMOUNT_WITHDRAW_MAX_AMOUNT_0";
+    //单次提现最小额度
+    public static final String AMOUNT_WITHDRAW_MIN_AMOUNT = "AMOUNT_WITHDRAW_MIN_AMOUNT";
 }
