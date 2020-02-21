@@ -207,4 +207,7 @@
        and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
   </select>
+    <select id="totalDayAmount" resultType="java.lang.String">
+      SELECT SUM(amount) total FROM withdraw w WHERE w.user_id=#{userId} and w.coin_type=#{coinType} and w.create_time &lt; CONCAT(#{time},' 23:59:59') and w.create_time &gt; CONCAT(#{time},' 00:00:00')
+    </select>
 </mapper>

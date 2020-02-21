@@ -103,4 +103,7 @@ public class SystemParams {
     public static final String TRANSFER_MIN_AMOUNT = "TRANSFER_MIN_AMOUNT";
     //自动提现开关
     public static final String AUTO_WITHDRAW = "AUTO_WITHDRAW";
+
+    //等级对应日最多提现金额
+    public static final String AMOUNT_WITHDRAW_LEVEL_0 = "AMOUNT_WITHDRAW_LEVEL_0";
 }

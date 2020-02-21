@@ -263,7 +263,18 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         String end = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_TIME_LIMIT_END);
         end = DateUtils.getCurrentDateStr() + " " + end;
         if(DateUtils.minBetween(start) >= 0 && DateUtils.minBetween(end) < 0) {
+            //获取等级对应日最多提现金额
+            String amountLevel = sysparamsService.getValStringByKey(Users.getWithdrawLevel(users.getTeamLevel().intValue()));
+            amountLevel = StrUtils.isBlank(amountLevel) ? "0" : amountLevel;
             Integer userId = users.getId();
+            String today = DateUtils.getCurrentDateStr();
+            //今日提现总金额
+            String dayAmount = withdrawService.totalDayAmount(userId, coinType, today);
+            dayAmount = StrUtils.isBlank(dayAmount) ? "0" : dayAmount;
+            //若限额小于日提现金额
+            if(new BigDecimal(amountLevel).compareTo(new BigDecimal(dayAmount)) < 0){
+                return Result.toResult(ResultCode.WITHDRAW_SUM_LIMIT);
+            }
             /*校验交易密码*/
             if(!StrUtils.isBlank(password)){
                 String valiStr = validateOrderPassword(users, password);

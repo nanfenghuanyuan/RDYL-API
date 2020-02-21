@@ -1,8 +1,11 @@
 package com.zh.module.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
+@Data
 public class Users implements Serializable {
     private static final long serialVersionUID = -2094706037865333813L;
 
@@ -37,135 +40,10 @@ public class Users implements Serializable {
     private Date createTime;
 
     private Date updateTime;
-
-    public Integer getId() {
-        return id;
+    //等级对应日最多提现金额
+    public static String getWithdrawLevel(Integer level){
+        return "AMOUNT_WITHDRAW_LEVEL_" + level;
     }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account == null ? null : account.trim();
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName == null ? null : nickName.trim();
-    }
-
-    public String getOrderPwd() {
-        return orderPwd;
-    }
-
-    public void setOrderPwd(String orderPwd) {
-        this.orderPwd = orderPwd == null ? null : orderPwd.trim();
-    }
-
-    public Integer getContribution() {
-        return contribution;
-    }
-
-    public void setContribution(Integer contribution) {
-        this.contribution = contribution;
-    }
-
-    public Byte getTeamLevel() {
-        return teamLevel;
-    }
-
-    public void setTeamLevel(Byte teamLevel) {
-        this.teamLevel = teamLevel;
-    }
-
-    public Byte getPersonLevel() {
-        return personLevel;
-    }
-
-    public void setPersonLevel(Byte personLevel) {
-        this.personLevel = personLevel;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
-    }
-
-    public String getReferId() {
-        return referId;
-    }
-
-    public void setReferId(String referId) {
-        this.referId = referId == null ? null : referId.trim();
-    }
-
-    public Byte getState() {
-        return state;
-    }
-
-    public void setState(Byte state) {
-        this.state = state;
-    }
-
-    public Byte getIdStatus() {
-        return idStatus;
-    }
-
-    public void setIdStatus(Byte idStatus) {
-        this.idStatus = idStatus;
-    }
-
-    public Byte getEffective() {
-        return effective;
-    }
-
-    public void setEffective(Byte effective) {
-        this.effective = effective;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

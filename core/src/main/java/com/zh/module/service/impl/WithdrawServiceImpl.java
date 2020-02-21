@@ -66,4 +66,9 @@ public class WithdrawServiceImpl implements WithdrawService {
     public int selectCount(Map<Object, Object> param) {
         return this.withdrawMapper.selectCount(param);
     }
+
+    @Override
+    public String totalDayAmount(Integer userId, Integer coinType, String today) {
+        return this.withdrawMapper.totalDayAmount(userId, coinType, today);
+    }
 }

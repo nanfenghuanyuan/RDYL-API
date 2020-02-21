@@ -81,4 +81,7 @@ public interface WithdrawService {
      * @date: 2019-12-31 15:47:24
      **/ 
     int selectCount(Map<Object, Object> param);
+
+    //统计当日金额
+    String totalDayAmount(Integer userId, Integer coinType, String today);
 }
