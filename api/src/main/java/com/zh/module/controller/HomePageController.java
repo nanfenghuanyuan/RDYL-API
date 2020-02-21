@@ -33,11 +33,11 @@ public class HomePageController {
         }
     }
     @ResponseBody
-    @RequestMapping(value="{id}",method=RequestMethod.GET,produces="application/json;charset=utf-8")
-    public String list(@CurrentUser Users users, @PathVariable("id") Integer id){
+    @RequestMapping(value="{level}",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String list(@CurrentUser Users users, @PathVariable("level") Integer level){
         try {
 
-            return homeBiz.get(users, id);
+            return homeBiz.get(users, level);
         }catch (Exception e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
