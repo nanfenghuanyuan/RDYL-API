@@ -84,4 +84,6 @@ public interface WithdrawService {
 
     //统计当日金额
     String totalDayAmount(Integer userId, Integer coinType, String today);
+
+    int selectCounts(Map<Object, Object> param);
 }

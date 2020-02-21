@@ -26,4 +26,6 @@ public interface WithdrawMapper {
     int selectCount(Map<Object, Object> param);
 
     String totalDayAmount(@Param("userId") Integer userId, @Param("coinType") Integer coinType, @Param("time") String today);
+
+    int selectCounts(Map<Object, Object> param);
 }

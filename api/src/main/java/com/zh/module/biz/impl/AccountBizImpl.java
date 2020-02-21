@@ -365,9 +365,11 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         String numbers = sysparamsService.getValStringByKey(Users.getWithdrawNumber(users.getTeamLevel().intValue()));
         if(decimal.compareTo(new BigDecimal(amountMin)) > 0 && decimal.compareTo(new BigDecimal(amountMax)) <= 0){
             Map<Object, Object> param = new HashMap<>();
+            String today = DateUtils.getCurrentDateStr();
             param.put("userId", users.getId());
             param.put("coinType", CoinType.OS);
-            int count = withdrawService.selectCount(param);
+            param.put("time", today);
+            int count = withdrawService.selectCounts(param);
             if(count < Integer.parseInt(numbers)){
                 return null;
             }else{
