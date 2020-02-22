@@ -78,9 +78,7 @@ public class HomeBizImpl implements HomeBiz {
             startTime = new StringBuilder(today).replace(11, 16, startTime).replace(17, 19,"00").toString();
             endTime = new StringBuilder(today).replace(11, 16, endTime).replace(17, 19,"00").toString();
 
-            String appoinmentTime = sysparamsService.getValStringByKey(SystemParams.APPOINTMENT_TIME);
             String waitAppointmentTime = sysparamsService.getValStringByKey(SystemParams.WAIT_APPOINTMENT_TIME);
-            int time = Integer.parseInt(appoinmentTime);
             int waiTime = Integer.parseInt(waitAppointmentTime);
 
             if(pets.getState() == GlobalParams.INACTIVE){
