@@ -78,9 +78,7 @@ public class HomeBizImpl implements HomeBiz {
             startTime = new StringBuilder(today).replace(11, 16, startTime).replace(17, 19,"00").toString();
             endTime = new StringBuilder(today).replace(11, 16, endTime).replace(17, 19,"00").toString();
 
-            String appoinmentTime = sysparamsService.getValStringByKey(SystemParams.APPOINTMENT_TIME);
             String waitAppointmentTime = sysparamsService.getValStringByKey(SystemParams.WAIT_APPOINTMENT_TIME);
-            int time = Integer.parseInt(appoinmentTime);
             int waiTime = Integer.parseInt(waitAppointmentTime);
 
             if(pets.getState() == GlobalParams.INACTIVE){
@@ -142,10 +140,8 @@ public class HomeBizImpl implements HomeBiz {
         String today = DateUtils.getCurrentTimeStr();
         startTime = new StringBuilder(today).replace(11, 16, startTime).replace(17, 19,"00").toString();
         endTime = new StringBuilder(today).replace(11, 16, endTime).replace(17, 19,"00").toString();
-        String appoinmentTime = sysparamsService.getValStringByKey(SystemParams.APPOINTMENT_TIME);
         String waitAppointmentTime = sysparamsService.getValStringByKey(SystemParams.WAIT_APPOINTMENT_TIME);
         String canBuyTime = sysparamsService.getValStringByKey(SystemParams.CAN_BUY_TIME);
-        int time = Integer.parseInt(appoinmentTime);
         int waiTime = Integer.parseInt(waitAppointmentTime);
         if(pets.getState() == GlobalParams.INACTIVE){
             petsModel.setState(GlobalParams.PET_STATE_6);
@@ -155,11 +151,11 @@ public class HomeBizImpl implements HomeBiz {
             petsModel.setState(GlobalParams.PET_STATE_7);
         }else
         //抢购前10分钟把状态设为可预约状态
-        if(DateUtils.minBetween(startTime) > -time && DateUtils.minBetween(endTime) < 0){
+        if(DateUtils.minBetween(endTime) < 0){
             //查看用户是否预约
             String appointmentState = RedisUtil.searchString(redis, String.format(RedisKey.BUY_APPOINTMENT_USER, pets.getLevel(), users.getId()));
             //抢购前n分钟
-            if(DateUtils.minBetween(startTime) > -time && DateUtils.secondBetween(startTime) < 0){
+            if(DateUtils.secondBetween(startTime) < 0){
                 if(StrUtils.isBlank(appointmentState)) {
                     petsModel.setState(GlobalParams.PET_STATE_0);
                 }else {
