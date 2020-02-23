@@ -306,6 +306,8 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
      * @param amount
      */
     private void changeWithdrawQuota(Integer userId, BigDecimal amount) {
+        String withdrawRadio = sysparamsService.getValStringByKey(SystemParams.WITHDRAW_QUOTA_RADIO);
+        amount = amount.multiply(new BigDecimal(withdrawRadio));
         WithdrawQuote withdrawQuote = withdrawQuoteService.selectByUser(userId);
         if(withdrawQuote == null){
             withdrawQuote = new WithdrawQuote();

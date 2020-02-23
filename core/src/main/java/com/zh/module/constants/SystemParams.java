@@ -112,4 +112,6 @@ public class SystemParams {
     public static final String AMOUNT_WITHDRAW_MAX_AMOUNT_0 = "AMOUNT_WITHDRAW_MAX_AMOUNT_0";
     //单次提现最小额度
     public static final String AMOUNT_WITHDRAW_MIN_AMOUNT = "AMOUNT_WITHDRAW_MIN_AMOUNT";
+    //提现额度系数
+    public static final String WITHDRAW_QUOTA_RADIO = "WITHDRAW_QUOTA_RADIO";
 }
