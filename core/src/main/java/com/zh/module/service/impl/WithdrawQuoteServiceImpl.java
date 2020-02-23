@@ -1,5 +1,6 @@
 package com.zh.module.service.impl;
 
+import com.zh.module.constants.CoinType;
 import com.zh.module.dao.WithdrawQuoteMapper;
 import com.zh.module.entity.WithdrawQuote;
 import com.zh.module.service.WithdrawQuoteService;
@@ -73,6 +74,7 @@ public class WithdrawQuoteServiceImpl implements WithdrawQuoteService {
     public WithdrawQuote selectByUser(Integer userId) {
         Map<Object, Object> param = new HashMap<>();
         param.put("userId", userId);
+        param.put("coinType", CoinType.CNY);
         List<WithdrawQuote> list = this.withdrawQuoteMapper.selectAll(param);
         return list == null || list.size() == 0 ? null : list.get(0);
     }

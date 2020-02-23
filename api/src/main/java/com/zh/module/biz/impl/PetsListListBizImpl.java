@@ -316,7 +316,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         if(withdrawQuote == null){
             withdrawQuote = new WithdrawQuote();
             withdrawQuote.setAmount(amount);
-            withdrawQuote.setCoinType((byte) CoinType.OS);
+            withdrawQuote.setCoinType((byte) CoinType.CNY);
             withdrawQuote.setUserId(userId);
             withdrawQuoteService.insertSelective(withdrawQuote);
         }else{
@@ -326,7 +326,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         Flow flow = new Flow();
         flow.setAccountType(AccountType.ACCOUNT_TYPE_ACTIVE);
         flow.setAmount(amount);
-        flow.setCoinType(CoinType.OS);
+        flow.setCoinType(CoinType.CNY);
         flow.setOperId(userId);
         flow.setOperType("提现增加额度");
         flow.setRelateId(withdrawQuote.getId());
