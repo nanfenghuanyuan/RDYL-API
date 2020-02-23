@@ -39,6 +39,10 @@ public class PetsMatchingListModel {
      * 领养结束时间
      */
     private String appointmentEndTime;
+    /**
+     * 过期时间
+     */
+    private String inactiveTime;
 
     /**
      * 转让时间

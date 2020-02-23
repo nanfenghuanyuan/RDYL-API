@@ -68,11 +68,12 @@ public class PetsMatchingListListBizImpl implements PetsMatchingListBiz {
             price = map.get("price") == null ? BigDecimal.ZERO : new BigDecimal(map.get("price").toString());
             petsMatchingListModel.setPrice(price);
             petsMatchingListModel.setState((Integer) map.get("state"));
-            if(state == GlobalParams.PET_MATCHING_STATE_APPOINTMENTING){
+            if(state == 0){
                 appStartTime =map.get("appointment_start_time").toString();
                 petsMatchingListModel.setAppointmentStartTime(appStartTime);
                 appEndTime =map.get("appointment_end_time").toString();
-                petsMatchingListModel.setAppointmentEndTime(appEndTime);
+                int time = DateUtils.secondBetween(appEndTime);
+                petsMatchingListModel.setAppointmentEndTime(String.valueOf(-time));
             }else{
                 appointmentTime =map.get("start_time").toString();
                 petsMatchingListModel.setAppointmentTime(appointmentTime);

@@ -77,6 +77,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         }
         List<PetsMatchingListModel> listModels = new LinkedList<>();
         String transferTime;
+        String inactiveTime;
         BigDecimal price;
         for(Map<String, Object> map : lists){
             PetsMatchingListModel petsMatchingListModel = new PetsMatchingListModel();
@@ -91,7 +92,10 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
                 petsMatchingListModel.setAppointmentTime(map.get("start_time").toString());
             }else{
                 transferTime = DateUtils.getDateFormate((Date) map.get("update_time"));
+                inactiveTime = map.get("inactive_time").toString();
+                int time = DateUtils.secondBetween(inactiveTime);
                 petsMatchingListModel.setTransferTime(transferTime);
+                petsMatchingListModel.setInactiveTime(String.valueOf(-time));
             }
             petsMatchingListModel.setProfited(price.multiply(new BigDecimal(map.get("profit_rate").toString()).setScale(2, BigDecimal.ROUND_HALF_UP)));
             petsMatchingListModel.setProfit(map.get("profit_days").toString() + "天/" + new BigDecimal(map.get("profit_rate").toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
