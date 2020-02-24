@@ -508,6 +508,9 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         Account account;
         for(PetsList petsList : petsLists){
             pets = petsService.selectByLevel(petsList.getLevel().intValue());
+            if(pets.getState() == GlobalParams.INACTIVE){
+                continue;
+            }
             profitAmount = petsList.getProfitRate().multiply(petsList.getPrice());
             priceMax = pets.getPriceMix();
             //如果收益后价格超出上限，则宠物升级
