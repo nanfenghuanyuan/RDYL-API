@@ -35,6 +35,8 @@ public class BindInfoBizImpl implements BindInfoBiz {
     @Autowired
     private SysparamsService sysparamsService;
     @Autowired
+    private SmsRecordService smsRecordService;
+    @Autowired
     private RedisTemplate<String,String> redis;
     @Override
     public String getBindInfo(Users users) {
@@ -59,6 +61,7 @@ public class BindInfoBizImpl implements BindInfoBiz {
         Integer type = params.getInteger("type");
         Map<Object, Object> param = new HashMap<>();
         param.put("userId", users.getId());
+        String account = params.getString("account");
         //必须先绑定备用手机
         if(type != GlobalParams.PAY_PHONE){
             param.put("type", GlobalParams.PAY_PHONE);
@@ -66,13 +69,39 @@ public class BindInfoBizImpl implements BindInfoBiz {
             if(bindInfo == null){
                 return Result.toResult(ResultCode.BIND_PHONE_MUST);
             }
+        }else{
+            String code = params.getString("code");
+            Integer codeId = params.getInteger("codeId");
+            if(StrUtils.isBlank(code) || codeId == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            /*校验验证码是否正确*/
+            SmsRecord sms = smsRecordService.getByIdAndPhone(codeId, account);
+            if (sms == null || !code.equals(sms.getCode())) {
+                if (validateErrorTimesOfSms(codeId)) {
+                    return Result.toResult(ResultCode.SMS_CHECK_ERROR);
+                } else {
+                    return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
+                }
+            }
+            /*校验验证码有效期*/
+            Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
+            int interval = (int) ((System.currentTimeMillis() - sms.getCreateTime().getTime()) / (1000 * 60));
+            if (timeLimit == null || sms.getTimes() != GlobalParams.ACTIVE || interval >= Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)) {
+                return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
+            }
         }
         String url = params.getString("imgUrl");
-        String account = params.getString("account");
         String name = params.getString("name");
         if(type != GlobalParams.PAY_BANK) {
-            if (StrUtils.isBlank(account) || StrUtils.isBlank(name)) {
-                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            if(type != GlobalParams.PAY_PHONE) {
+                if (StrUtils.isBlank(account) || StrUtils.isBlank(name)) {
+                    return Result.toResult(ResultCode.PARAM_IS_BLANK);
+                }
+            }else{
+                if (StrUtils.isBlank(account)) {
+                    return Result.toResult(ResultCode.PARAM_IS_BLANK);
+                }
             }
         }
         param.put("type", type);
@@ -112,6 +141,50 @@ public class BindInfoBizImpl implements BindInfoBiz {
             bindInfoService.updateByPrimaryKeySelective(bindInfo);
         }
         return Result.toResult(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 验证验证码的错误次数
+     * @param codeId
+     * @return int
+     * @date 2018-2-2
+     * @author lina
+     */
+    public boolean validateErrorTimesOfSms(Integer codeId){
+        String key = String.format(RedisKey.SMS_ERROR_TIMES, codeId);
+        String val = RedisUtil.searchString(redis, key);
+        int next = 1;
+        if(StrUtils.isBlank(val)){
+            RedisUtil.addString(redis, key, 60*10, next+"");
+        }else{
+            next = Integer.parseInt(val)+1;
+            RedisUtil.addString(redis, key, 60*10,next+"" );
+
+            Sysparams countLimit = sysparamsService.getValByKey(SystemParams.SMS_COUNTS_LIMIT);
+            if(countLimit!=null){
+                int limit = Integer.parseInt(countLimit.getKeyval());
+                if(next>limit){
+                    return false;
+                }
+            }
+
+        }
+        return true;
+    }
+    private boolean validataStateOfSms(Integer codeId){
+        String key = String.format(RedisKey.SMS_ERROR_TIMES, codeId);
+        String val = RedisUtil.searchString(redis, key);
+        if(StrUtils.isBlank(val)){
+            return true;
+        }else{
+            Sysparams countLimit = sysparamsService.getValByKey(SystemParams.SMS_COUNTS_LIMIT);
+            if(countLimit!=null){
+                if(Integer.parseInt(val)>Integer.parseInt(countLimit.getKeyval())){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override

@@ -362,7 +362,7 @@ public class UsersBizImpl implements UsersBiz {
         }
         Integer count = idcardValidateBiz.getByUserByIdcard(idCard);
         //同一个身份证信息可以注册三个账号
-        if(count > 3){
+        if(count != null && count > 3){
             return Result.toResult(ResultCode.REAL_NAME_IDCARD_EXIST);
         }
         Map<String, Object> result = UserAuthUtils.idCardAuth(name, idCard);

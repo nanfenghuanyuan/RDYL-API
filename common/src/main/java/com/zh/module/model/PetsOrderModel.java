@@ -62,8 +62,6 @@ public class PetsOrderModel {
      */
     private boolean cancelBtn;
     private String spareBuyPhone;
-    private String spareBuyName;
     private String spareSalePhone;
-    private String spareSaleName;
 
 }

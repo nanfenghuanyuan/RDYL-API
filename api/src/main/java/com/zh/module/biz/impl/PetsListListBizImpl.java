@@ -92,10 +92,12 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
                 petsMatchingListModel.setAppointmentTime(map.get("start_time").toString());
             }else{
                 transferTime = DateUtils.getDateFormate((Date) map.get("update_time"));
-                inactiveTime = map.get("inactive_time").toString();
-                int time = DateUtils.secondBetween(inactiveTime);
+                if(state == 2) {
+                    inactiveTime = map.get("inactive_time").toString();
+                    int time = DateUtils.secondBetween(inactiveTime);
+                    petsMatchingListModel.setInactiveTime(String.valueOf(-time));
+                }
                 petsMatchingListModel.setTransferTime(transferTime);
-                petsMatchingListModel.setInactiveTime(String.valueOf(-time));
             }
             petsMatchingListModel.setProfited(price.multiply(new BigDecimal(map.get("profit_rate").toString()).setScale(2, BigDecimal.ROUND_HALF_UP)));
             petsMatchingListModel.setProfit(map.get("profit_days").toString() + "天/" + new BigDecimal(map.get("profit_rate").toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
@@ -177,13 +179,12 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         param.put("type", GlobalParams.PAY_PHONE);
         BindInfo buyInfo = bindInfoService.selectByUserAndType(param);
         if(buyInfo != null) {
-            petsOrderModel.setBuyName(buyInfo.getName());
             petsOrderModel.setSpareBuyPhone(buyInfo.getAccount());
             param.put("userId", petsMatchingList.getSaleUserId());
         }
+        param.put("userId", petsMatchingList.getSaleUserId());
         buyInfo = bindInfoService.selectByUserAndType(param);
         if(buyInfo != null) {
-            petsOrderModel.setSaleName(buyInfo.getName());
             petsOrderModel.setSpareSalePhone(buyInfo.getAccount());
         }
         return Result.toResult(ResultCode.SUCCESS, petsOrderModel);

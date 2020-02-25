@@ -71,9 +71,10 @@ public class PetsMatchingListListBizImpl implements PetsMatchingListBiz {
             if(state == 0){
                 appStartTime =map.get("appointment_start_time").toString();
                 petsMatchingListModel.setAppointmentStartTime(appStartTime);
-                appEndTime =map.get("appointment_end_time").toString();
+                appEndTime = map.get("appointment_end_time").toString();
+                petsMatchingListModel.setAppointmentEndTime(appEndTime);
                 int time = DateUtils.secondBetween(appEndTime);
-                petsMatchingListModel.setAppointmentEndTime(String.valueOf(-time));
+                petsMatchingListModel.setInactiveTime(String.valueOf(-time));
             }else{
                 appointmentTime =map.get("start_time").toString();
                 petsMatchingListModel.setAppointmentTime(appointmentTime);
