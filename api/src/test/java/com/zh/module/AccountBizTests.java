@@ -1,15 +1,24 @@
 package com.zh.module;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zh.module.biz.AccountBiz;
 import com.zh.module.biz.DailyCountBiz;
 import com.zh.module.biz.UsersBiz;
+import com.zh.module.entity.BindInfo;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
+import com.zh.module.model.PayInfoModel;
+import com.zh.module.service.BindInfoService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -18,7 +27,7 @@ public class AccountBizTests {
     @Autowired
     private AccountBiz accountBiz;
     @Autowired
-    private DailyCountBiz dailyCountBiz;
+    private BindInfoService bindInfoService;
     @Autowired
     private UsersBiz usersBiz;
     @Test
@@ -90,7 +99,21 @@ public class AccountBizTests {
     }
     @Test
     public void get2() {
-        dailyCountBiz.consume();
+        List<BindInfo> bindInfos = bindInfoService.queryByUser(23);
+        List<PayInfoModel> payInfoModels = new ArrayList<>();
+        for(BindInfo bindInfo : bindInfos){
+            PayInfoModel payInfoModel = new PayInfoModel();
+            payInfoModel.setAccount(bindInfo.getAccount());
+            payInfoModel.setImgUrl(bindInfo.getImgUrl());
+            payInfoModel.setName(bindInfo.getName());
+            payInfoModel.setType(bindInfo.getType().intValue());
+            payInfoModel.setBankName(bindInfo.getBankName());
+            payInfoModel.setBranchName(bindInfo.getBranchName());
+            payInfoModels.add(payInfoModel);
+        }
+        System.out.println(JSONObject.toJSONString(payInfoModels));
+        payInfoModels = payInfoModels.stream().sorted(Comparator.comparing(PayInfoModel::getType)).collect(Collectors.toList());
+        System.out.println(JSONObject.toJSONString(payInfoModels));
     }
 
 }

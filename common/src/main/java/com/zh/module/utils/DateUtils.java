@@ -1,10 +1,11 @@
 package com.zh.module.utils;
 
+import com.sun.xml.internal.ws.spi.db.BindingInfo;
+
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  * @描述 日期时间工具<br>
@@ -218,7 +219,20 @@ public class DateUtils {
 		System.out.println(DateUtils.secondBetween(times));
 		System.out.println(DateUtils.secondBetween(times) % 20);
 		System.out.println(DateUtils.secondBetween(times) % 20 == 0);
-
+		System.out.println(-30 % 10);
+		List<Integer> list = new ArrayList<>();
+		list.add(0);
+		list.add(9);
+		list.add(10);
+		list.add(19);
+		list.add(20);
+		list.add(29);
+		list.add(30);
+		list.add(39);
+		list.add(40);
+		list.add(59);
+		System.out.println(list);
+		System.out.println(list.contains(21));
 	}
 
 	/**

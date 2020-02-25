@@ -9,7 +9,7 @@ import lombok.Data;
  * @create: 2019-12-23 20:03
  **/
 @Data
-public class PayInfoModel {
+public class PayInfoModel implements Comparable<PayInfoModel> {
     /**
      * 账户
      */
@@ -31,4 +31,9 @@ public class PayInfoModel {
     private String bankName;
 
     private String branchName;
+
+    @Override
+    public int compareTo(PayInfoModel o) {
+        return this.type.compareTo(o.getType());
+    }
 }

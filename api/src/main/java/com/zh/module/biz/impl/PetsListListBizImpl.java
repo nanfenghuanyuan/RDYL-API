@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @program: R.D.Y.LMain
@@ -153,15 +154,18 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             }
         }
         for(BindInfo bindInfo : bindInfos){
-            PayInfoModel payInfoModel = new PayInfoModel();
-            payInfoModel.setAccount(bindInfo.getAccount());
-            payInfoModel.setImgUrl(bindInfo.getImgUrl());
-            payInfoModel.setName(bindInfo.getName());
-            payInfoModel.setType(bindInfo.getType().intValue());
-            payInfoModel.setBankName(bindInfo.getBankName());
-            payInfoModel.setBranchName(bindInfo.getBranchName());
-            payInfoModels.add(payInfoModel);
+            if(bindInfo.getType() == GlobalParams.PAY_BANK) {
+                PayInfoModel payInfoModel = new PayInfoModel();
+                payInfoModel.setAccount(bindInfo.getAccount());
+                payInfoModel.setImgUrl(bindInfo.getImgUrl());
+                payInfoModel.setName(bindInfo.getName());
+                payInfoModel.setType(bindInfo.getType().intValue());
+                payInfoModel.setBankName(bindInfo.getBankName());
+                payInfoModel.setBranchName(bindInfo.getBranchName());
+                payInfoModels.add(payInfoModel);
+            }
         }
+        payInfoModels = payInfoModels.stream().sorted(Comparator.comparing(PayInfoModel::getType)).collect(Collectors.toList());
         petsOrderModel.setBtnType(btnType);
         petsOrderModel.setImgUrl(petsMatchingList.getImgUrl());
         petsOrderModel.setCancelBtn(cancelBtn);

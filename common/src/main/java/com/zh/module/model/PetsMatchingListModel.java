@@ -30,6 +30,10 @@ public class PetsMatchingListModel {
      * 领养时间
      */
     private String appointmentTime;
+    /**
+     * 时间戳
+     */
+    private String timestamp;
 
     /**
      * 领养开始时间
