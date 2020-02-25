@@ -60,6 +60,14 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
         }
+        /*先完成备用手机的绑定*/
+        Map<Object, Object> param = new HashMap<>();
+        param.put("userId", users.getId());
+        param.put("type", GlobalParams.PAY_PHONE);
+        BindInfo buyInfo = bindInfoService.selectByUserAndType(param);
+        if(buyInfo == null){
+            return Result.toResult(ResultCode.BIND_PHONE_MUST);
+        }
         Pets pets = petsService.selectByLevel(level);
         Integer userId = users.getId();
         //是否在允许的时间范围内
@@ -125,6 +133,14 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         BlackList blackList = blackListService.selectByUserId(userId);
         if(blackList != null){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
+        }
+        /*先完成备用手机的绑定*/
+        Map<Object, Object> param = new HashMap<>();
+        param.put("userId", users.getId());
+        param.put("type", GlobalParams.PAY_PHONE);
+        BindInfo buyInfo = bindInfoService.selectByUserAndType(param);
+        if(buyInfo == null){
+            return Result.toResult(ResultCode.BIND_PHONE_MUST);
         }
 
         //如果是20秒整购买 直接返回失败（定时任务冲突)
@@ -217,7 +233,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
 
                 accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), BigDecimal.ZERO, userId, "领养消耗", petsMatchingList.getId());
             } else {
-                Map<Object, Object> param = new HashMap<>();
+                param = new HashMap<>();
                 param.put("level", level);
                 param.put("petListId", "-1");
                 param.put("buyUserId", userId);

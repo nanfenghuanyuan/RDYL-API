@@ -19,7 +19,7 @@ public class PayInfoModel {
      */
     private String name;
     /**
-     * 类型 0支付宝 1微信 2银行卡 3token
+     * 类型 0支付宝 1微信 2银行卡 3token 4备用手机
      */
     private Integer type;
 

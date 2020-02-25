@@ -171,6 +171,21 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         petsOrderModel.setTransTime(DateUtils.getDateFormate(petsList.getCreateTime()));
         petsOrderModel.setPayTime(petsMatchingList.getPayTime());
         petsOrderModel.setState(state);
+
+        Map<Object, Object> param = new HashMap<>();
+        param.put("userId", petsMatchingList.getBuyUserId());
+        param.put("type", GlobalParams.PAY_PHONE);
+        BindInfo buyInfo = bindInfoService.selectByUserAndType(param);
+        if(buyInfo != null) {
+            petsOrderModel.setBuyName(buyInfo.getName());
+            petsOrderModel.setSpareBuyPhone(buyInfo.getAccount());
+            param.put("userId", petsMatchingList.getSaleUserId());
+        }
+        buyInfo = bindInfoService.selectByUserAndType(param);
+        if(buyInfo != null) {
+            petsOrderModel.setSaleName(buyInfo.getName());
+            petsOrderModel.setSpareSalePhone(buyInfo.getAccount());
+        }
         return Result.toResult(ResultCode.SUCCESS, petsOrderModel);
     }
 

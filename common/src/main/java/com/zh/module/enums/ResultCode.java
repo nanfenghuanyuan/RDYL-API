@@ -84,6 +84,8 @@ public enum ResultCode {
     TRANSFER_MIN_AMOUNT(30056, "当可用余额小于%s时不能进行转赠操作"),
     WITHDRAW_ERROR(30057, "提现金额不正确，请更换后重试"),
     WITHDRAW_QUOTA_NONE(30058, "提现额度不足，请完成一次交易后重试"),
+    BIND_PHONE_MUST(30059, "请先完成备用手机的绑定"),
+    TRANSFER_MIN_BALANCE(30060, "转赠金额不能小于%s"),
 
 
     /* 系统错误：40001-49999 */

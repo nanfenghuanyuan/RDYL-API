@@ -51,7 +51,7 @@ public class BindInfoController {
         }
     }
     /**
-     * 绑定信息
+     * 取消绑定信息
      * @param users
      * @return
      */

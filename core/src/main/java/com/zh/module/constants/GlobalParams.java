@@ -27,6 +27,7 @@ public class GlobalParams {
     public static  final int PAY_WECHANT=1;//微信
     public static  final int PAY_BANK=2;//银行卡
     public static  final int PAY_TOKEN=3;//虚拟币
+    public static  final int PAY_PHONE=4;//备用手机号
     public static final int TRANSFER_TYPE_IN = 0;//转入
     public static final int TRANSFER_TYPE_OUT = 1;//转出
 

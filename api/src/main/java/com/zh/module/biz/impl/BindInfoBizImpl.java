@@ -56,18 +56,25 @@ public class BindInfoBizImpl implements BindInfoBiz {
                 return valiStr;
             }
         }
+        Integer type = params.getInteger("type");
+        Map<Object, Object> param = new HashMap<>();
+        param.put("userId", users.getId());
+        //必须先绑定备用手机
+        if(type != GlobalParams.PAY_PHONE){
+            param.put("type", GlobalParams.PAY_PHONE);
+            BindInfo bindInfo = bindInfoService.selectByUserAndType(param);
+            if(bindInfo == null){
+                return Result.toResult(ResultCode.BIND_PHONE_MUST);
+            }
+        }
         String url = params.getString("imgUrl");
         String account = params.getString("account");
-        Integer type = params.getInteger("type");
         String name = params.getString("name");
         if(type != GlobalParams.PAY_BANK) {
             if (StrUtils.isBlank(account) || StrUtils.isBlank(name)) {
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
         }
-
-        Map<Object, Object> param = new HashMap<>();
-        param.put("userId", users.getId());
         param.put("type", type);
         BindInfo bindInfo = bindInfoService.selectByUserAndType(param);
         if(bindInfo == null){

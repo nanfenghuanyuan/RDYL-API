@@ -61,4 +61,9 @@ public class PetsOrderModel {
      * 取消按钮
      */
     private boolean cancelBtn;
+    private String spareBuyPhone;
+    private String spareBuyName;
+    private String spareSalePhone;
+    private String spareSaleName;
+
 }

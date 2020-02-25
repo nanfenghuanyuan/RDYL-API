@@ -27,8 +27,6 @@ public class BaseBizImpl{
     private RedisTemplate<String,String> redis;
     @Autowired
     private SysparamsService sysparamsService;
-    @Autowired
-    private UsersService usersService;
     /**
      * 验证交易密码
      * @param users
