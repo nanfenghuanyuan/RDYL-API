@@ -154,6 +154,9 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             }
         }
         for(BindInfo bindInfo : bindInfos){
+            if(bindInfo.getType() == GlobalParams.PAY_PHONE){
+                continue;
+            }
             PayInfoModel payInfoModel = new PayInfoModel();
             payInfoModel.setAccount(bindInfo.getAccount());
             payInfoModel.setImgUrl(bindInfo.getImgUrl());

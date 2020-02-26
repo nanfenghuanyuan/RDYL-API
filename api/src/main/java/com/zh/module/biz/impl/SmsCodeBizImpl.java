@@ -59,7 +59,7 @@ public class SmsCodeBizImpl implements SmsCodeBiz {
         map.put("phone", phone);
         List<SmsRecord> list = smsRecordService.queryListByTimeLimit(map);
         if(list.size() != 0){
-            return Result.toResult(ResultCode.SMS_COUNTS_LIMIT_ERROR);
+            return Result.toResult(ResultCode.SMS_FREQUENT_SEND);
         }
 
         Users user = usersService.selectByPhone(phone);
