@@ -82,6 +82,8 @@ public class SmsCodeBizImpl implements SmsCodeBiz {
             }else if(user.getState() ==GlobalParams.LOGOFF){
                 return Result.toResult(ResultCode.USER_ACCOUNT_LOGOFF);
             }
+        }else if(type == GlobalParams.SMS_CODE_PHONE){
+
         }else{
             //参数类型无效
             return Result.toResult(ResultCode.PARAM_IS_INVALID);

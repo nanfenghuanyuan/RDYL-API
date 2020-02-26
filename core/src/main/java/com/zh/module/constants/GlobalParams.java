@@ -14,6 +14,7 @@ public class GlobalParams {
 
     public static final int SMS_CODE_REGIESTER = 0;//注册短信
     public static final int SMS_CODE_OTHER = 1;//业务短信
+    public static final int SMS_CODE_PHONE = 2;//支付信息 备用手机号验证
 
     public static final int WITHDRAW_NO_PAY = 0;//提现未处理
     public static final int WITHDRAW_PAY = 1;//提现已处理

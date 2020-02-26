@@ -97,7 +97,7 @@ public class BindInfoBizImpl implements BindInfoBiz {
             return Result.toResult(ResultCode.PARAM_IS_BLANK);
         }
         //绑定姓名要和实名的一致
-        if (type != GlobalParams.PAY_PHONE && type != GlobalParams.PAY_TOKEN) {
+        if (type != GlobalParams.PAY_PHONE) {
             if(StrUtils.isBlank(name) || !name.equals(users.getNickName())){
                 return Result.toResult(ResultCode.USER_IDSTATE_ERROR);
             }
