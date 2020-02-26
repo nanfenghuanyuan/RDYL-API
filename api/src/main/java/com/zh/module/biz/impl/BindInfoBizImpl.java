@@ -93,15 +93,13 @@ public class BindInfoBizImpl implements BindInfoBiz {
         }
         String url = params.getString("imgUrl");
         String name = params.getString("name");
-        if(type != GlobalParams.PAY_BANK) {
-            if(type != GlobalParams.PAY_PHONE) {
-                if (StrUtils.isBlank(account) || StrUtils.isBlank(name)) {
-                    return Result.toResult(ResultCode.PARAM_IS_BLANK);
-                }
-            }else{
-                if (StrUtils.isBlank(account)) {
-                    return Result.toResult(ResultCode.PARAM_IS_BLANK);
-                }
+        if (StrUtils.isBlank(account)) {
+            return Result.toResult(ResultCode.PARAM_IS_BLANK);
+        }
+        //绑定姓名要和实名的一致
+        if (type != GlobalParams.PAY_PHONE && type != GlobalParams.PAY_TOKEN) {
+            if(StrUtils.isBlank(name) || !name.equals(users.getNickName())){
+                return Result.toResult(ResultCode.USER_IDSTATE_ERROR);
             }
         }
         param.put("type", type);
@@ -115,9 +113,6 @@ public class BindInfoBizImpl implements BindInfoBiz {
             bindInfo.setAccount(account);
             bindInfo.setName(name);
             if(type.equals(GlobalParams.PAY_BANK)){
-                if(!name.equals(users.getNickName())){
-                    return Result.toResult(ResultCode.USER_IDSTATE_ERROR);
-                }
                 String bankName = params.getString("bankName");
                 bindInfo.setBankName(bankName);
                 String branchName = params.getString("branchName");
@@ -130,9 +125,6 @@ public class BindInfoBizImpl implements BindInfoBiz {
             bindInfo.setAccount(account);
             bindInfo.setName(name);
             if(type.equals(GlobalParams.PAY_BANK)){
-                if(!name.equals(users.getNickName())){
-                    return Result.toResult(ResultCode.USER_IDSTATE_ERROR);
-                }
                 String bankName = params.getString("bankName");
                 bindInfo.setBankName(bankName);
                 String branchName = params.getString("branchName");
