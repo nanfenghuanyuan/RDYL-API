@@ -19,6 +19,8 @@ public class DateUtils {
 	private static final String CURRENT_TIME_STR = "yyyy-MM-dd HH:mm:ss";
 	private static final String CURRENT_TIME_2_STR = "yyyy-MM-dd";
 
+	private static final List<Integer> list = new ArrayList<>(Arrays.asList(0, 9, 10, 19, 20, 29, 30, 39, 40, 49, 50, 59));
+
 	public static Date getCurrentDate() {
 		Date date = new Date();
 		return date;
@@ -220,17 +222,6 @@ public class DateUtils {
 		System.out.println(DateUtils.secondBetween(times) % 20);
 		System.out.println(DateUtils.secondBetween(times) % 20 == 0);
 		System.out.println(-30 % 10);
-		List<Integer> list = new ArrayList<>();
-		list.add(0);
-		list.add(9);
-		list.add(10);
-		list.add(19);
-		list.add(20);
-		list.add(29);
-		list.add(30);
-		list.add(39);
-		list.add(40);
-		list.add(59);
 		System.out.println(list);
 		System.out.println(list.contains(21));
 	}
