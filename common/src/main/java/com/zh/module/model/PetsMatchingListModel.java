@@ -69,4 +69,9 @@ public class PetsMatchingListModel {
      * 状态 0预约中 1未付款 2未确认 3已完成 4已取消
      */
     private Integer state;
+
+    /**
+     * 状态 0预约中 1未付款 2未确认 3已完成 4已取消
+     */
+    private Integer resultState;
 }

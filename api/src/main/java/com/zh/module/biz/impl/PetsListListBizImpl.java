@@ -89,6 +89,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             price = new BigDecimal(map.get("price").toString());
             petsMatchingListModel.setPrice(price);
             petsMatchingListModel.setState(state);
+            petsMatchingListModel.setResultState(state);
             if(state == GlobalParams.PET_LIST_STATE_WAIT){
                 petsMatchingListModel.setAppointmentTime(map.get("start_time").toString());
             }else{
