@@ -421,6 +421,11 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         if(users == null){
             return;
         }
+        if(users.getTeamLevel() == GlobalParams.TEAM_LEVEL_0){
+            if(cursor > RewardType.PERSON_AWARD_TWO.code()){
+                return;
+            }
+        }
         //用户状态可用时才有收益
         if(users.getState() == GlobalParams.ACTIVE && users.getIdStatus() == GlobalParams.ACTIVE) {
             //团队 大于等于同级别拿团队1%  小于等级拿之差
