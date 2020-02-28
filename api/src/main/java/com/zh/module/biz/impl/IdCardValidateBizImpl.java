@@ -55,8 +55,7 @@ public class IdCardValidateBizImpl implements IdCardValidateBiz {
         if(idcardValidates.size() == 0){
            return null;
         }
-        IdcardValidate idcardValidate = idcardValidates.get(0);
-        return idcardValidate.getUserId();
+        return idcardValidates.size();
     }
 
     @Override

@@ -54,6 +54,9 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     @Autowired
     private RedisTemplate<String,String> redis;
 
+    private static final List<Integer> timeList = new ArrayList<>(Arrays.asList(0, 9, 10, 19, 20, 29, 30, 39, 40, 49, 50, 59));
+
+
     @Override
     public String appointment(Users users, Integer level) throws BanlanceNotEnoughException, ParseException {
         //验证用户状态
@@ -146,7 +149,10 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         //如果是20秒整购买 直接返回失败（定时任务冲突)
         String today = DateUtils.getCurrentTimeStr();
         String times = new StringBuilder(today).replace(17, 19,  "00").toString();
-        if(DateUtils.secondBetween(times) % 20 == 0){
+        /*if(DateUtils.secondBetween(times) % 10 == 0){
+            return Result.toResult(ResultCode.PETS_HAS_NONE);
+        }*/
+        if(timeList.contains(DateUtils.secondBetween(times))){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }
 

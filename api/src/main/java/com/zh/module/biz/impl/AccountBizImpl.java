@@ -101,11 +101,12 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         }
         //最小转增金额
         String transferMinAmount = sysparamsService.getValStringByKey(SystemParams.TRANSFER_MIN_AMOUNT);
+        String transferMinAmount_remain = sysparamsService.getValStringByKey(SystemParams.TRANSFER_MIN_AMOUNT_REMAIN);
         if(new BigDecimal(amount).compareTo(new BigDecimal(transferMinAmount)) < 0){
             return Result.toResultFormat(ResultCode.TRANSFER_MIN_BALANCE, transferMinAmount);
         }
         Account accounts = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, users.getId());
-        if(accounts != null && accounts.getAvailbalance().compareTo(new BigDecimal(transferMinAmount)) < 0){
+        if(accounts != null && accounts.getAvailbalance().subtract(new BigDecimal(transferMinAmount_remain)).compareTo(new BigDecimal(transferMinAmount)) < 0){
             return Result.toResultFormat(ResultCode.TRANSFER_MIN_AMOUNT, transferMinAmount);
         }
         String transferRole = sysparamsService.getValStringByKey(SystemParams.TRANSFER_ROLE);
@@ -340,6 +341,15 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
                     petsList.setTransferUserId(-1);
                     petsList.setUserId(userId);
                     petsListService.insertSelective(petsList);
+                    
+                    //保存记录
+                    Withdraw withdraw = new Withdraw();
+                    withdraw.setAmount(amountBig);
+                    withdraw.setCoinType(coinType.byteValue());
+                    withdraw.setState((byte) GlobalParams.WITHDRAW_PAY);
+                    withdraw.setUserId(userId);
+                    withdrawService.insertSelective(withdraw);
+
                     accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, coinType, BigDecimalUtils.plusMinus(amountBig), BigDecimal.ZERO, userId, "提现兑换", petsList.getId());
                     return Result.toResult(ResultCode.SUCCESS);
                 }
@@ -370,7 +380,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
             Map<Object, Object> param = new HashMap<>();
             String today = DateUtils.getCurrentDateStr();
             param.put("userId", users.getId());
-            param.put("coinType", CoinType.OS);
+            param.put("coinType", CoinType.CNY);
             param.put("time", today);
             int count = withdrawService.selectCounts(param);
             if(count < Integer.parseInt(numbers)){
@@ -403,8 +413,9 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         teamProfit = StrUtils.isBlank(teamProfit) ? "0" : teamProfit;
         //个人收益
         result.put("personProfit", new BigDecimal(personProfit).setScale(0, BigDecimal.ROUND_DOWN));
+        account = accountService.selectByUserIdAndAccountTypeAndType(accountType, CoinType.CNY, userId);
         //团队收益
-        result.put("teamProfit", new BigDecimal(teamProfit).setScale(0, BigDecimal.ROUND_DOWN));
+        result.put("teamProfit", account.getAvailbalance().setScale(0, BigDecimal.ROUND_DOWN));
 
         /*领养记录数量*/
         Map<Object, Object> params = new HashMap<>();

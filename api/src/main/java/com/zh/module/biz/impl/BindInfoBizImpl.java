@@ -331,6 +331,12 @@ public class BindInfoBizImpl implements BindInfoBiz {
         param.put("userId", userId);
         param.put("type", type);
         BindInfo bindInfo = bindInfoService.selectByUserAndType(param);
+        if(bindInfo != null) {
+            bindInfo.setName(users.getNickName());
+        }else{
+            bindInfo = new BindInfo();
+            bindInfo.setName(users.getNickName());
+        }
         return Result.toResult(ResultCode.SUCCESS, bindInfo);
     }
 }

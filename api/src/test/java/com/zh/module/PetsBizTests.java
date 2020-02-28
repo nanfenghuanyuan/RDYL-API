@@ -114,6 +114,7 @@ public class PetsBizTests {
     public void confirmReceipt2() {
         Map<Object, Object> param = new HashMap<>();
         param.put("state", GlobalParams.ACTIVE);
+        param.put("level", 4);
         List<Pets> petsList = petsService.selectAll(param);
         String time;
         String endTime;

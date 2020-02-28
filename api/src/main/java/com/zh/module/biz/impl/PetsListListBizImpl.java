@@ -543,6 +543,9 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             //如果收益后价格超出上限，则宠物升级
             if(petsList.getPrice().add(profitAmount).compareTo(priceMax) > 0){
                 newPets = petsService.selectByLevel(pets.getUpgradeId().intValue());
+                if(newPets.getState() == GlobalParams.INACTIVE){
+                    continue;
+                }
                 petsList.setLevel(newPets.getLevel());
                 petsList.setProfitCoin(newPets.getProfitCoin());
                 petsList.setProfitCoinRate(newPets.getProfitCoinRate());

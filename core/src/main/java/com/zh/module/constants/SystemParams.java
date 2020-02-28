@@ -114,4 +114,6 @@ public class SystemParams {
     public static final String AMOUNT_WITHDRAW_MIN_AMOUNT = "AMOUNT_WITHDRAW_MIN_AMOUNT";
     //提现额度系数
     public static final String WITHDRAW_QUOTA_RADIO = "WITHDRAW_QUOTA_RADIO";
+    //最少转增剩余金额
+    public static final String TRANSFER_MIN_AMOUNT_REMAIN = "TRANSFER_MIN_AMOUNT_REMAIN";
 }
