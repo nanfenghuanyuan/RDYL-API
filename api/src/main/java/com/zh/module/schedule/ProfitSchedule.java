@@ -47,7 +47,7 @@ public class ProfitSchedule {
 	 * 待领养队列
 	 */
 	@PostConstruct
-	@Scheduled(cron="0/20 * * * * ?")
+	@Scheduled(cron="0/30 * * * * ?")
 	public void censusAppointment(){
 		petsListBiz.censusAppointment();
 	}

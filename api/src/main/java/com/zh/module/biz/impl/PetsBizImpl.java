@@ -54,8 +54,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     @Autowired
     private RedisTemplate<String,String> redis;
 
-    private static final List<Integer> timeList = new ArrayList<>(Arrays.asList(0, 9, 10, 19, 20, 29, 30, 39, 40, 49, 50, 59));
-
+    private static final List<Integer> timeList = new ArrayList<>(Arrays.asList(0, 28, 29, 30));
 
     @Override
     public String appointment(Users users, Integer level) throws BanlanceNotEnoughException, ParseException {
@@ -149,12 +148,13 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         //如果是20秒整购买 直接返回失败（定时任务冲突)
         String today = DateUtils.getCurrentTimeStr();
         String times = new StringBuilder(today).replace(17, 19,  "00").toString();
-        /*if(DateUtils.secondBetween(times) % 10 == 0){
+        /*if(DateUtils.secondBetween(times) % 30 == 0){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }*/
         if(timeList.contains(DateUtils.secondBetween(times))){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }
+
 
         //每个人只允许持有一个
         Map<Object, Object> params = new HashMap<>();
@@ -177,6 +177,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         if(bindInfos.size() == 0){
             return Result.toResult(ResultCode.BIND_INFO_NONE);
         }
+        /*
         //保留购买时间
         String buysInterval = sysparamsService.getValStringByKey(SystemParams.PETS_BUYS_DISTRIBUTE_TIME);
 
@@ -190,7 +191,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         }
         if(!StrUtils.isBlank(flag)){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
-        }
+        }*/
 
         //购买库存列表
         redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
@@ -200,6 +201,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         }else {
             //自己不能和自己匹配
             if (petsList.getUserId() == null || petsList.getUserId().equals(userId)) {
+                RedisUtil.addListRight(redis, redisKey, petsList);
                 return Result.toResult(ResultCode.PETS_HAS_NONE);
             }
             Integer saleUserId = petsList.getUserId();
@@ -258,11 +260,10 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             }
 
             //删除redis预约记录
-            redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
+            /*redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
             RedisUtil.deleteKey(redis, redisKey);
 
             //总时间
-//            int seconds = DateUtils.secondBetween(new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getEndTime()).replace(17, 19,"00").toString(), new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString());
             int seconds = Integer.parseInt(buysInterval);
             redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_AMOUNT, pets.getLevel());
             //总数量
@@ -272,7 +273,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
 
             //已购买标记
             redisKey = String.format(RedisKey.PETS_LIST_BUY_FLAG, pets.getLevel());
-            RedisUtil.addString(redis, redisKey, time, "-1");
+            RedisUtil.addString(redis, redisKey, time, "-1");*/
             return Result.toResult(ResultCode.SUCCESS);
         }
     }
