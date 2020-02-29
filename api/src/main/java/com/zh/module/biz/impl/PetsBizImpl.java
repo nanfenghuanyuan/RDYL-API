@@ -114,7 +114,9 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     }
 
     @Override
-    public String buy(Users users, Integer level) throws ParseException {
+    public String
+
+    buy(Users users, Integer level) throws ParseException {
         String redisKey;
         //验证用户状态
         if(!checkUserState(users)){
@@ -130,7 +132,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         //如果是20秒整购买 直接返回失败（定时任务冲突)
         String today = DateUtils.getCurrentTimeStr();
         String times = new StringBuilder(today).replace(17, 19,  "00").toString();
-        if(DateUtils.secondBetween(times) % 20 == 0){
+        if(DateUtils.secondBetween(times) % 30 == 0){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }
 
@@ -156,7 +158,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             return Result.toResult(ResultCode.BIND_INFO_NONE);
         }
         //保留购买时间
-        String buysInterval = sysparamsService.getValStringByKey(SystemParams.PETS_BUYS_DISTRIBUTE_TIME);
+       /* String buysInterval = sysparamsService.getValStringByKey(SystemParams.PETS_BUYS_DISTRIBUTE_TIME);
 
         int second = DateUtils.secondBetween(DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":00");
         String flag = "";
@@ -168,7 +170,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         }
         if(!StrUtils.isBlank(flag)){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
-        }
+        }*/
 
         //购买库存列表
         redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, pets.getLevel());
@@ -241,7 +243,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
 
             //总时间
 //            int seconds = DateUtils.secondBetween(new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getEndTime()).replace(17, 19,"00").toString(), new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString());
-            int seconds = Integer.parseInt(buysInterval);
+            /*int seconds = Integer.parseInt(buysInterval);
             redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_AMOUNT, pets.getLevel());
             //总数量
             String size = RedisUtil.searchString(redis, redisKey);
@@ -250,7 +252,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
 
             //已购买标记
             redisKey = String.format(RedisKey.PETS_LIST_BUY_FLAG, pets.getLevel());
-            RedisUtil.addString(redis, redisKey, time, "-1");
+            RedisUtil.addString(redis, redisKey, time, "-1");*/
             return Result.toResult(ResultCode.SUCCESS);
         }
     }

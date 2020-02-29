@@ -388,7 +388,11 @@
     <if test="state == 1">
       SELECT pm.id
     </if>
-    , p.img_url, p.name, pm.price, pm.pets_number, pm.profit_days, pm.profit_rate, pm.start_time, pm.update_time FROM pets_list pm LEFT JOIN pets p ON p.level = pm.level
+    , p.img_url, p.name, pm.price, pm.pets_number, pm.profit_days, pm.profit_rate, pm.start_time, pm.update_time
+    <if test="state == 2">
+      ,pl.inactive_time
+    </if>
+    FROM pets_list pm LEFT JOIN pets p ON p.level = pm.level
     <if test="state != 1">
       LEFT JOIN pets_matching_list pl ON pl.pet_list_id=pm.id
     </if>

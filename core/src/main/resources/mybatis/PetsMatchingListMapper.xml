@@ -340,7 +340,7 @@
   </select>
 
   <select id="selectListPaging" parameterType="java.util.Map" resultType="map">
-    SELECT pm.id, p.img_url, p.name, pl.pets_number, pm.state, pl.price, pl.profit_days, pl.profit_rate, pl.start_time, pm.appointment_start_time,pm.appointment_end_time FROM pets_matching_list pm LEFT JOIN pets p ON p.level = pm.level LEFT JOIN pets_list pl ON pm.pet_list_id = pl.id
+    SELECT pm.id, p.img_url, p.name, pl.pets_number, pm.state, pl.price, pl.profit_days, pl.profit_rate, pm.inactive_time, pl.start_time, pm.appointment_start_time,pm.appointment_end_time FROM pets_matching_list pm LEFT JOIN pets p ON p.level = pm.level LEFT JOIN pets_list pl ON pm.pet_list_id = pl.id
     where buy_user_id = #{userId}
     <if test="state != null">
       <if test="state == 0">
