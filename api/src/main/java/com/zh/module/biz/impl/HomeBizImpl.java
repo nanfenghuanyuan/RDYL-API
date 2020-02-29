@@ -77,12 +77,16 @@ public class HomeBizImpl implements HomeBiz {
             String endTime = pets.getEndTime();
             startTime = new StringBuilder(today).replace(11, 16, startTime).replace(17, 19,"00").toString();
             endTime = new StringBuilder(today).replace(11, 16, endTime).replace(17, 19,"00").toString();
-
+            String canBuyTime = sysparamsService.getValStringByKey(SystemParams.CAN_BUY_TIME);
+            int buyTime = Integer.parseInt(canBuyTime);
             String waitAppointmentTime = sysparamsService.getValStringByKey(SystemParams.WAIT_APPOINTMENT_TIME);
             int waiTime = Integer.parseInt(waitAppointmentTime);
 
             if(pets.getState() == GlobalParams.INACTIVE){
                 petsModel.setState(GlobalParams.PET_STATE_6);
+            }else
+            if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
+                petsModel.setState(GlobalParams.PET_STATE_2);
             }else
             //开始前5分钟 变为待领养 不可操作
             if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
