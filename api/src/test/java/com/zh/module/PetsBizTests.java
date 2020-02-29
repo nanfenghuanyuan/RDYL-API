@@ -53,9 +53,8 @@ public class PetsBizTests {
 
     @Test
     public void buy() throws ParseException {
-        Users users = new Users();
-        users.setId(1);
-        System.out.println(petsBiz.buy(users, 2));
+        Users users = usersBiz.getUser(26);
+        System.out.println(petsBiz.buy(users, 4));
     };
     @Test
     public void init() throws ParseException {

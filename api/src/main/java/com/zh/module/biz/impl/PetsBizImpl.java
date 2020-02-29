@@ -1,5 +1,6 @@
 package com.zh.module.biz.impl;
 
+import com.zh.module.async.BuysAsync;
 import com.zh.module.biz.PetsBiz;
 import com.zh.module.constants.AccountType;
 import com.zh.module.constants.CoinType;
@@ -51,6 +52,8 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     private BindInfoService bindInfoService;
     @Autowired
     private BlackListService blackListService;
+    @Autowired
+    private BuysAsync buysAsync;
     @Autowired
     private RedisTemplate<String,String> redis;
 
@@ -204,60 +207,8 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                 RedisUtil.addListRight(redis, redisKey, petsList);
                 return Result.toResult(ResultCode.PETS_HAS_NONE);
             }
-            Integer saleUserId = petsList.getUserId();
-            petsList.setTransferUserId(userId);
-            petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAITING);
-            petsListService.updateByPrimaryKey(petsList);
 
-            //验证是否已存在预约记录
-            int count = checkMatchingRecord(userId, level, GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
-            BigDecimal appointmentAmount;
-
-
-            /*设置失效时间*/
-            int interval = 10;
-            Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_PAY_CANCEL_TIME);
-            if(param1 != null){
-                interval = Integer.parseInt(param1.getKeyval());
-            }
-            Calendar current = Calendar.getInstance();
-            current.add(Calendar.MINUTE, interval);
-            Date inactiveTime = new Timestamp(current.getTimeInMillis());
-
-            //没有预约
-            if (count == 0) {
-                appointmentAmount = pets.getPayAmount();
-                PetsMatchingList petsMatchingList = new PetsMatchingList();
-                petsMatchingList.setLevel(level.byteValue());
-                petsMatchingList.setAmount(appointmentAmount);
-                petsMatchingList.setBuyUserId(userId);
-                petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_NOPAY);
-                petsMatchingList.setPetListId(petsList.getId());
-                petsMatchingList.setSaleUserId(saleUserId);
-                petsMatchingList.setInactiveTime(inactiveTime);
-                petsMatchingList.setAppointmentStartTime(DateUtils.getCurrentTimeStr());
-                petsMatchingList.setAppointmentEndTime(DateUtils.getDateFormate(inactiveTime));
-                petsMatchingListService.insertSelective(petsMatchingList);
-
-                accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), BigDecimal.ZERO, userId, "领养消耗", petsMatchingList.getId());
-            } else {
-                param = new HashMap<>();
-                param.put("level", level);
-                param.put("petListId", "-1");
-                param.put("buyUserId", userId);
-                param.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
-                List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(param);
-                PetsMatchingList petsMatchingList =  petsMatchingLists == null || petsMatchingLists.size() == 0 ? null : petsMatchingLists.get(0);
-                if (petsMatchingList != null) {
-                    petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_NOPAY);
-                    petsMatchingList.setPetListId(petsList.getId());
-                    petsMatchingList.setSaleUserId(saleUserId);
-                    petsMatchingList.setInactiveTime(inactiveTime);
-                    petsMatchingList.setAppointmentStartTime(DateUtils.getCurrentTimeStr());
-                    petsMatchingList.setAppointmentEndTime(DateUtils.getDateFormate(inactiveTime));
-                    petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
-                }
-            }
+            buysAsync.buys(pets, petsList, userId);
 
             //删除redis预约记录
             /*redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
