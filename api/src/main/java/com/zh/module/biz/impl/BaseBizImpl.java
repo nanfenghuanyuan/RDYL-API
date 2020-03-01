@@ -8,6 +8,7 @@ import com.zh.module.entity.Pets;
 import com.zh.module.entity.Sysparams;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
+import com.zh.module.service.PetsMatchingListService;
 import com.zh.module.service.PetsService;
 import com.zh.module.service.SysparamsService;
 import com.zh.module.service.UsersService;
@@ -33,6 +34,8 @@ public class BaseBizImpl{
     private SysparamsService sysparamsService;
     @Autowired
     private PetsService petsService;
+    @Autowired
+    private PetsMatchingListService petsMatchingListService;
     /**
      * 验证交易密码
      * @param users
@@ -254,5 +257,12 @@ public class BaseBizImpl{
             endTime = new StringBuilder(today).replace(11, 16, pets.getStartTime()).toString();
             return DateUtils.secondBetween(endTime) < 0;
         }
+    }
+    public int checkMatchingRecord(Integer userId, Integer level){
+        Map<Object, Object> map = new HashMap<>();
+        map.put("level", level);
+        map.put("buyUserId", userId);
+        map.put("state", GlobalParams.PET_MATCHING_STATE_APPOINTMENTING);
+        return petsMatchingListService.selectCount(map);
     }
 }

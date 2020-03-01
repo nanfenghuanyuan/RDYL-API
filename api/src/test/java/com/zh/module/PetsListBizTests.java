@@ -1,9 +1,6 @@
 package com.zh.module;
 
-import com.zh.module.biz.PetsBiz;
-import com.zh.module.biz.PetsListBiz;
-import com.zh.module.biz.PetsMatchingListBiz;
-import com.zh.module.biz.UsersBiz;
+import com.zh.module.biz.*;
 import com.zh.module.constants.GlobalParams;
 import com.zh.module.constants.SmsTemplateCode;
 import com.zh.module.entity.Pets;
@@ -41,7 +38,7 @@ public class PetsListBizTests {
     @Autowired
     private PetsListBiz petsListBiz;
     @Autowired
-    private UsersService usersService;
+    private PetsV2Biz petsV2Biz;
     @Autowired
     private UsersBiz usersBiz;
     @Autowired
@@ -75,10 +72,17 @@ public class PetsListBizTests {
         petsListBiz.cancelNoConfirmSchedule();
     }
     /**
-     * 自动确认未确认
+     * 统计待分配宠物
      */
     @Test
     public void censusAppointment1(){
         petsListBiz.censusAppointment();
+    }
+    /**
+     * 宠物匹配
+     */
+    @Test
+    public void matching(){
+        petsV2Biz.matching(2);
     }
 }
