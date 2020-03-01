@@ -149,12 +149,12 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         }
 
         //如果是20秒整购买 直接返回失败（定时任务冲突)
-        String today = DateUtils.getCurrentTimeStr();
+       /* String today = DateUtils.getCurrentTimeStr();
         String times = new StringBuilder(today).replace(17, 19,  "00").toString();
-        /*if(DateUtils.secondBetween(times) % 30 == 0){
+        if(DateUtils.secondBetween(times) % 30 == 0){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
-        }*/
-        /*if(timeList.contains(DateUtils.secondBetween(times))){
+        }
+        if(timeList.contains(DateUtils.secondBetween(times))){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }*/
 
@@ -214,9 +214,9 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
             buysAsync.buys(pets, petsList, userId);
 
             //删除redis预约记录
-            /*redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
+            redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
             RedisUtil.deleteKey(redis, redisKey);
-
+            /*
             //总时间
             int seconds = Integer.parseInt(buysInterval);
             redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_AMOUNT, pets.getLevel());

@@ -74,4 +74,11 @@ public class PetsListBizTests {
     public void censusAppointment(){
         petsListBiz.cancelNoConfirmSchedule();
     }
+    /**
+     * 自动确认未确认
+     */
+    @Test
+    public void censusAppointment1(){
+        petsListBiz.censusAppointment();
+    }
 }

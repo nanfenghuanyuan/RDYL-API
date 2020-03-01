@@ -828,7 +828,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         for(Pets pets : petsList){
             time = DateUtils.getCurrentDateStr() + " " + pets.getStartTime() + ":00";
             endTime = DateUtils.getCurrentDateStr() + " " + pets.getEndTime() + ":00";
-            if(DateUtils.secondBetween(time) > -60 && DateUtils.secondBetween(endTime) < 0) {
+            if(DateUtils.secondBetween(time) > -60 && DateUtils.secondBetween(time) < 0) {
                 param = new HashMap<>();
                 param.put("level", pets.getLevel());
                 param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
