@@ -1,7 +1,6 @@
 package com.zh.module.biz;
 
 import com.zh.module.entity.Users;
-import com.zh.module.model.PageModel;
 
 import java.text.ParseException;
 
@@ -13,5 +12,17 @@ import java.text.ParseException;
  **/
 public interface PetsV2Biz {
 
+    /**
+     * 捕捉
+     * @param users
+     * @param level
+     * @return
+     * @throws ParseException
+     */
     String buy(Users users, Integer level) throws ParseException;
+
+    /**
+     * 匹配定时
+     */
+    void matching(Integer level);
 }

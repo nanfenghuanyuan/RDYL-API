@@ -93,6 +93,21 @@ public class PetsController {
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }
     }
+    @ResponseBody
+    @RequestMapping(value="getBuyState",method=RequestMethod.POST,produces="application/json;charset=utf-8")
+    public String getBuyState(@CurrentUser Users users, @RequestBody String param){
+        try {
+            JSONObject params = JSONObject.parseObject(param);
+            Integer level = params.getInteger("level");
+            if(level == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+            return petsBiz.getBuyState(users, level);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
 
 
 

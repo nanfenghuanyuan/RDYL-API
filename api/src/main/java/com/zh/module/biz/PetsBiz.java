@@ -35,4 +35,12 @@ public interface PetsBiz {
      * @return
      */
     String list(Users users, PageModel pageModel);
+
+    /**
+     * 获取购买信息
+     * @param users
+     * @param level
+     * @return
+     */
+    String getBuyState(Users users, Integer level);
 }

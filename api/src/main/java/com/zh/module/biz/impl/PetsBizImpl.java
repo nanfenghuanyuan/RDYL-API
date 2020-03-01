@@ -270,4 +270,26 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         }
         return Result.toResult(ResultCode.SUCCESS, listModels);
     }
+
+    @Override
+    public String getBuyState(Users users, Integer level) {
+        Map<Object, Object> param = new HashMap<>();
+        param.put("buyUserId", users.getId());
+        param.put("level", level);
+        param.put("state", GlobalParams.PET_MATCHING_STATE_NOPAY);
+        //查询未付款当前宠物列表
+        List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(param);
+        PetsMatchingList petsMatchingList = petsMatchingLists == null || petsMatchingLists.size() == 0 ? null : petsMatchingLists.get(0);
+        if(petsMatchingList != null){
+            Date inactiveTime = petsMatchingList.getInactiveTime();
+            //付款截至时间小于24小时
+            if(Math.abs(DateUtils.hoursBetween(DateUtils.getDateFormate(inactiveTime))) < 24){
+                return Result.toResult(ResultCode.SUCCESS);
+            }else{
+                return Result.toResult(ResultCode.PETS_HAS_NONE);
+            }
+        }else{
+            return Result.toResult(ResultCode.PETS_HAS_NONE);
+        }
+    }
 }

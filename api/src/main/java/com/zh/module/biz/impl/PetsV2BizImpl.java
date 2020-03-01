@@ -1,20 +1,12 @@
 package com.zh.module.biz.impl;
 
 import com.zh.module.async.BuysAsync;
-import com.zh.module.biz.PetsBiz;
 import com.zh.module.biz.PetsV2Biz;
-import com.zh.module.constants.AccountType;
-import com.zh.module.constants.CoinType;
 import com.zh.module.constants.GlobalParams;
-import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
-import com.zh.module.exception.BanlanceNotEnoughException;
-import com.zh.module.model.PageModel;
-import com.zh.module.model.PetsMatchingListModel;
 import com.zh.module.service.*;
-import com.zh.module.utils.BigDecimalUtils;
 import com.zh.module.utils.DateUtils;
 import com.zh.module.utils.RedisUtil;
 import com.zh.module.variables.RedisKey;
@@ -24,8 +16,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
 
@@ -61,11 +51,17 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
     private RedisTemplate<String,String> redis;
 
     @Override
-    public String buy(Users users, Integer level) throws ParseException {
+    public synchronized String buy(Users users, Integer level) throws ParseException {
         String redisKey;
         //验证用户状态
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
+        }
+        Pets pets = petsService.selectByLevel(level);
+        String startTime = new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString();
+        int second = DateUtils.secondBetween(startTime);
+        if(second > 90){
+            return Result.toResult(ResultCode.PETS_HAS_NONE);
         }
         Integer userId = users.getId();
         //判断是否在黑名单
@@ -107,8 +103,20 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
         List<Integer> list = RedisUtil.searchStringObj(redis, redisKey, List.class);
         list = list == null ? new LinkedList<>() : list;
         list.add(userId);
+        RedisUtil.deleteKey(redis, redisKey);
         RedisUtil.addStringObj(redis, redisKey, list);
 
         return Result.toResult(ResultCode.SUCCESS);
+    }
+
+    @Override
+    public void matching(Integer level) {
+        String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, level);
+        long size = RedisUtil.searchListSize(redis, redisKey);
+        for (int i = 0; i < size; i++) {
+            PetsList petsLists = RedisUtil.searchIndexList(redis, redisKey, i, PetsList.class);
+        }
+        PetsList petsList = RedisUtil.leftPopObj(redis, redisKey, PetsList.class);
+
     }
 }
