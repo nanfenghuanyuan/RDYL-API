@@ -93,7 +93,6 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
             return Result.toResult(ResultCode.PERSON_HAS_PETS);
         }
 
-        Pets pets = petsService.selectByLevel(level);
         //是否在允许的时间范围内
         if(!checkIsDateLimit(level, true)){
             return Result.toResult(ResultCode.TIME_ERROR);
