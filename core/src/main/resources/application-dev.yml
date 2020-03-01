@@ -5,7 +5,7 @@ spring:
   datasource:
     username: root
     password: ASas940916.
-    url: jdbc:mysql://localhost:3306/rdyl_db?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/rdyl_db?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: localhost

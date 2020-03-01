@@ -15,12 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
 
 @Component
+@Transactional
 public class BuysAsync {
     @Autowired
     private PetsMatchingListService petsMatchingListService;
@@ -59,6 +61,10 @@ public class BuysAsync {
         current.add(Calendar.MINUTE, interval);
         Date inactiveTime = new Timestamp(current.getTimeInMillis());
 
+        petsList.setTransferUserId(userId);
+        petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAITING);
+        petsListService.updateByPrimaryKey(petsList);
+
         //没有预约
         if (count == 0) {
             appointmentAmount = pets.getPayAmount();
@@ -93,10 +99,6 @@ public class BuysAsync {
                 petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
             }
         }
-
-        petsList.setTransferUserId(userId);
-        petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAITING);
-        petsListService.updateByPrimaryKey(petsList);
     }
     private int checkMatchingRecord(Integer userId, Integer level){
         Map<Object, Object> map = new HashMap<>();

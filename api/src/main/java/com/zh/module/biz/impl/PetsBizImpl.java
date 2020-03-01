@@ -127,7 +127,7 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
     }
 
     @Override
-    public String buy(Users users, Integer level) throws ParseException {
+    public synchronized String buy(Users users, Integer level) throws ParseException {
         String redisKey;
         //验证用户状态
         if(!checkUserState(users)){
@@ -154,9 +154,9 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         /*if(DateUtils.secondBetween(times) % 30 == 0){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }*/
-        if(timeList.contains(DateUtils.secondBetween(times))){
+        /*if(timeList.contains(DateUtils.secondBetween(times))){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
-        }
+        }*/
 
 
         //每个人只允许持有一个
@@ -207,7 +207,10 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
                 RedisUtil.addListRight(redis, redisKey, petsList);
                 return Result.toResult(ResultCode.PETS_HAS_NONE);
             }
-
+            Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, userId);
+            if(account == null || account.getAvailbalance().compareTo(pets.getPayAmount()) < 0){
+                return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
+            }
             buysAsync.buys(pets, petsList, userId);
 
             //删除redis预约记录
