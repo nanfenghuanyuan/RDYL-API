@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zh.module.annotation.CurrentUser;
 import com.zh.module.biz.HomeBiz;
 import com.zh.module.biz.PetsBiz;
+import com.zh.module.biz.PetsV2Biz;
 import com.zh.module.dto.Result;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
@@ -25,6 +26,8 @@ public class PetsController {
 
     @Autowired
     private PetsBiz petsBiz;
+    @Autowired
+    private PetsV2Biz petsV2Biz;
 
     /**
      * 预约
@@ -66,7 +69,7 @@ public class PetsController {
             if(level == null){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
-            return petsBiz.buy(users, level);
+            return petsV2Biz.buy(users, level);
         } catch (BanlanceNotEnoughException e){
             e.printStackTrace();
             return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);

@@ -42,6 +42,10 @@ public class PetsModel {
      */
     private int timestamp;
     /**
+     * 开始时间
+     */
+    private String startTime;
+    /**
      * 状态 0可预约 1已预约 2可领养 3待领养 4已领养 5成长中 6未开启
      */
     private Integer state;

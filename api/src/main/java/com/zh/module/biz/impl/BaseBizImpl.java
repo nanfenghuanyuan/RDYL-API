@@ -4,17 +4,21 @@ import com.zh.module.constants.GlobalParams;
 import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
 import com.zh.module.encrypt.MD5;
+import com.zh.module.entity.Pets;
 import com.zh.module.entity.Sysparams;
 import com.zh.module.entity.Users;
 import com.zh.module.enums.ResultCode;
+import com.zh.module.service.PetsService;
 import com.zh.module.service.SysparamsService;
 import com.zh.module.service.UsersService;
+import com.zh.module.utils.DateUtils;
 import com.zh.module.utils.RedisUtil;
 import com.zh.module.utils.StrUtils;
 import com.zh.module.variables.RedisKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +31,8 @@ public class BaseBizImpl{
     private RedisTemplate<String,String> redis;
     @Autowired
     private SysparamsService sysparamsService;
+    @Autowired
+    private PetsService petsService;
     /**
      * 验证交易密码
      * @param users
@@ -225,5 +231,28 @@ public class BaseBizImpl{
     public boolean checkUserState(Users users){
         int state = users.getState();
         return state == GlobalParams.ACTIVE;
+    }
+
+    /**
+     * 检查是否在时间允许的范围内 true：时间允许 false：不在范围内
+     * @param level
+     * @return
+     */
+    public boolean checkIsDateLimit(Integer level, boolean isBuy) throws ParseException {
+        if(isBuy) {
+            Pets pets = petsService.selectByLevel(level);
+            String startTime = pets.getStartTime();
+            String endTime = pets.getEndTime();
+            String today = DateUtils.getCurrentTimeStr();
+            startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
+            endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
+            return DateUtils.secondBetween(startTime) >= 0 && DateUtils.secondBetween(endTime) < 0;
+        }else{
+            Pets pets = petsService.selectByLevel(level);
+            String endTime;
+            String today = DateUtils.getCurrentTimeStr();
+            endTime = new StringBuilder(today).replace(11, 16, pets.getStartTime()).toString();
+            return DateUtils.secondBetween(endTime) < 0;
+        }
     }
 }

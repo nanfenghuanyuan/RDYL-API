@@ -77,6 +77,7 @@ public class HomeBizImpl implements HomeBiz {
             String endTime = pets.getEndTime();
             startTime = new StringBuilder(today).replace(11, 16, startTime).replace(17, 19,"00").toString();
             endTime = new StringBuilder(today).replace(11, 16, endTime).replace(17, 19,"00").toString();
+            petsModel.setStartTime(startTime);
             String canBuyTime = sysparamsService.getValStringByKey(SystemParams.CAN_BUY_TIME);
             int buyTime = Integer.parseInt(canBuyTime);
             String waitAppointmentTime = sysparamsService.getValStringByKey(SystemParams.WAIT_APPOINTMENT_TIME);
@@ -144,6 +145,7 @@ public class HomeBizImpl implements HomeBiz {
         String today = DateUtils.getCurrentTimeStr();
         startTime = new StringBuilder(today).replace(11, 16, startTime).replace(17, 19,"00").toString();
         endTime = new StringBuilder(today).replace(11, 16, endTime).replace(17, 19,"00").toString();
+        petsModel.setStartTime(startTime);
         String waitAppointmentTime = sysparamsService.getValStringByKey(SystemParams.WAIT_APPOINTMENT_TIME);
         String canBuyTime = sysparamsService.getValStringByKey(SystemParams.CAN_BUY_TIME);
         int buyTime = Integer.parseInt(canBuyTime);

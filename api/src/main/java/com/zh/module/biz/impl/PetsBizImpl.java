@@ -232,28 +232,6 @@ public class PetsBizImpl extends BaseBizImpl implements PetsBiz {
         }
     }
 
-    /**
-     * 检查是否在时间允许的范围内 true：时间允许 false：不在范围内
-     * @param level
-     * @return
-     */
-    public boolean checkIsDateLimit(Integer level, boolean isBuy) throws ParseException {
-        if(isBuy) {
-            Pets pets = petsService.selectByLevel(level);
-            String startTime = pets.getStartTime();
-            String endTime = pets.getEndTime();
-            String today = DateUtils.getCurrentTimeStr();
-            startTime = new StringBuilder(today).replace(11, 16, startTime).toString();
-            endTime = new StringBuilder(today).replace(11, 16, endTime).toString();
-            return DateUtils.secondBetween(startTime) >= 0 && DateUtils.secondBetween(endTime) < 0;
-        }else{
-            Pets pets = petsService.selectByLevel(level);
-            String endTime;
-            String today = DateUtils.getCurrentTimeStr();
-            endTime = new StringBuilder(today).replace(11, 16, pets.getStartTime()).toString();
-            return DateUtils.secondBetween(endTime) < 0;
-        }
-    }
 
     /**
      * 统计预约记录表数据数量
