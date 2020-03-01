@@ -25,4 +25,6 @@ public interface PetsV2Biz {
      * 匹配定时
      */
     void matching(Integer level);
+
+    void clear();
 }

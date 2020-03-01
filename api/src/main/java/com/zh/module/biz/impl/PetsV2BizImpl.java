@@ -13,6 +13,7 @@ import com.zh.module.service.*;
 import com.zh.module.utils.BigDecimalUtils;
 import com.zh.module.utils.DateUtils;
 import com.zh.module.utils.RedisUtil;
+import com.zh.module.utils.StrUtils;
 import com.zh.module.variables.RedisKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,11 +107,8 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
         }
 
         redisKey = String.format(RedisKey.PETS_LIST_BUY_LIST, level);
-        List<Integer> list = RedisUtil.searchStringObj(redis, redisKey, List.class);
-        list = list == null ? new LinkedList<>() : list;
-        list.add(userId);
-        RedisUtil.deleteKey(redis, redisKey);
-        RedisUtil.addStringObj(redis, redisKey, list);
+        RedisUtil.addListRight(redis, redisKey, userId);
+
 
         return Result.toResult(ResultCode.SUCCESS);
     }
@@ -120,19 +118,25 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
         String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, level);
         long size = RedisUtil.searchListSize(redis, redisKey);
         String redisKeys = String.format(RedisKey.PETS_LIST_BUY_LIST, level);
-        List<Integer> list = RedisUtil.searchStringObj(redis, redisKeys, List.class);
-        if(list == null){
-            return;
-        }
         Pets pets = petsService.selectByLevel(level);
-        for (int i = 0; i < size; i++) {
-            PetsList petsList = RedisUtil.searchIndexList(redis, redisKey, i, PetsList.class);
-            Integer userId = list.get(i);
-            if(userId != null && petsList != null){
-                Integer saleUserId = petsList.getUserId();
+        for (Integer i = 0; i < size; i++) {
+            PetsList petsList = RedisUtil.leftPopObj(redis, redisKey, PetsList.class);
+            String userIds = RedisUtil.searchIndexList(redis, redisKeys, i.longValue());
+            if(!StrUtils.isBlank(userIds) && petsList != null){
+                Integer userId = Integer.parseInt(userIds);
+                Map<Object, Object> param = new HashMap<>();
+                param.put("buyUserId", userId);
+                param.put("level", level);
+                param.put("state", GlobalParams.PET_MATCHING_STATE_NOPAY);
+                //查询未付款当前宠物列表
+                int count = petsMatchingListService.selectCount(param);
+                if(count != 0){
+                    continue;
+                }
+                Integer saleUserId = (Integer) petsList.getUserId();
 
                 //验证是否已存在预约记录
-                int count = checkMatchingRecord(userId, level);
+                count = checkMatchingRecord(userId, level);
                 BigDecimal appointmentAmount;
 
                 /*设置失效时间*/
@@ -166,7 +170,7 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
 
                     accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), BigDecimal.ZERO, userId, "领养消耗", petsMatchingList.getId());
                 } else {
-                    Map<Object, Object> param = new HashMap<>();
+                    param = new HashMap<>();
                     param.put("level", petsList.getLevel());
                     param.put("petListId", "-1");
                     param.put("buyUserId", userId);
@@ -183,10 +187,20 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
                         petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
                     }
                 }
-                redisKey = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
-                RedisUtil.deleteKey(redis, redisKey);
+                String key = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
+                RedisUtil.deleteKey(redis, key);
+                RedisUtil.deleteList(redis, redisKeys, userId.toString());
+            }else {
+                RedisUtil.addListRight(redis, redisKey, petsList);
             }
         }
+    }
 
+    @Override
+    public void clear() {
+        for (int i = 1; i < 5; i++) {
+            String redisKey = String.format(RedisKey.PETS_LIST_BUY_LIST, i);
+            RedisUtil.deleteKey(redis, redisKey);
+        }
     }
 }

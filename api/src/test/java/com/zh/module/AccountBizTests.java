@@ -2,7 +2,6 @@ package com.zh.module;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zh.module.biz.AccountBiz;
-import com.zh.module.biz.DailyCountBiz;
 import com.zh.module.biz.UsersBiz;
 import com.zh.module.entity.BindInfo;
 import com.zh.module.entity.Users;

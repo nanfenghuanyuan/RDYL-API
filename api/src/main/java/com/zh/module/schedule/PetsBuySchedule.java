@@ -18,10 +18,14 @@ public class PetsBuySchedule {
 	/**
 	 * 每日统计
 	 */
-	@Scheduled(cron="0 1 1 * * ?")
+	@Scheduled(cron="40 42 21 * * ?")
 	public void buys(){
 		Integer level = 2;
-		petsV2Biz.matching(2);
+		petsV2Biz.matching(level);
+	}
+	@Scheduled(cron="0 1 1 * * ?")
+	public void clear(){
+		petsV2Biz.clear();
 	}
 
 
