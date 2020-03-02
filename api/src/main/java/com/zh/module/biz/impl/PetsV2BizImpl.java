@@ -124,6 +124,12 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
             String userIds = RedisUtil.searchIndexList(redis, redisKeys, 0);
             if(!StrUtils.isBlank(userIds) && petsList != null){
                 Integer userId = Integer.parseInt(userIds);
+                //自己不能和自己匹配
+                if (petsList.getUserId() == null || petsList.getUserId().equals(userId)) {
+                    RedisUtil.addListRight(redis, redisKey, petsList);
+                    RedisUtil.deleteList(redis, redisKeys, userId.toString());
+                    continue;
+                }
                 Map<Object, Object> param = new HashMap<>();
                 param.put("buyUserId", userId);
                 param.put("level", level);
@@ -183,6 +189,11 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
             }else {
                 RedisUtil.addListRight(redis, redisKey, petsList);
             }
+        }
+        String userId = RedisUtil.searchIndexList(redis, redisKeys, 0);
+        size = RedisUtil.searchListSize(redis, redisKey);
+        if(!StrUtils.isBlank(userId) && size != 0){
+            matching(level);
         }
     }
 

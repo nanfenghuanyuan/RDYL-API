@@ -24,7 +24,7 @@ public class ProfitSchedule {
 	/**
 	 * 自动取消预约
 	 */
-//	@Scheduled(cron="1/5 * * * * ?")
+	@Scheduled(cron="1/5 * * * * ?")
 	@PostConstruct
 	public void cancelAppointment(){
 		petsListBiz.cancelAppointmentSchedule();
@@ -32,7 +32,7 @@ public class ProfitSchedule {
 	/**
 	 * 自动取消未付款
 	 */
-//	@Scheduled(cron="1/5 * * * * ?")
+	@Scheduled(cron="1/5 * * * * ?")
 	@PostConstruct
 	public void cancelNoPay(){
 		petsListBiz.cancelNoPaySchedule();
@@ -40,7 +40,7 @@ public class ProfitSchedule {
 	/**
 	 * 自动确认未确认
 	 */
-//	@Scheduled(cron="1/5 * * * * ?")
+	@Scheduled(cron="1/5 * * * * ?")
 	@PostConstruct
 	public void cancelNoConfirm(){
 		petsListBiz.cancelNoConfirmSchedule();

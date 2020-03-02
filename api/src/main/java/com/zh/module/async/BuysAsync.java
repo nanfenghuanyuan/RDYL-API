@@ -44,7 +44,7 @@ public class BuysAsync {
     private RedisTemplate<String,String> redis;
 
     @Async
-    public void buys(Pets pets, PetsList petsList, Integer userId){
+    public synchronized void buys(Pets pets, PetsList petsList, Integer userId){
         Integer saleUserId = petsList.getUserId();
 
         //验证是否已存在预约记录
