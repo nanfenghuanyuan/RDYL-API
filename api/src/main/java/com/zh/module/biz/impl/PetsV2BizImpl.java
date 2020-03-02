@@ -184,6 +184,11 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
                 RedisUtil.addListRight(redis, redisKey, petsList);
             }
         }
+        String userId = RedisUtil.searchIndexList(redis, redisKeys, 0);
+        size = RedisUtil.searchListSize(redis, redisKey);
+        if(!StrUtils.isBlank(userId) && size != 0){
+            matching(level);
+        }
     }
 
     private void updateAccount(int count, Pets pets, Integer userId, PetsList petsList, Integer saleUserId, Date inactiveTime) {
