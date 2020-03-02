@@ -16,11 +16,11 @@ public class PetsBuySchedule {
 	private PetsV2Biz petsV2Biz;
 
 	/**
-	 * 每日统计
+	 * 宠物匹配
 	 */
-	@Scheduled(cron="40 42 21 * * ?")
+	@Scheduled(cron="40 21 12 * * ?")
 	public void buys(){
-		Integer level = 2;
+		Integer level = 1;
 		petsV2Biz.matching(level);
 	}
 	@Scheduled(cron="0 1 1 * * ?")

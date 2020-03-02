@@ -89,6 +89,9 @@ public class HomeBizImpl implements HomeBiz {
             if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
                 petsModel.setState(GlobalParams.PET_STATE_2);
             }else
+            if(DateUtils.secondBetween(startTime) > 120){
+                petsModel.setState(GlobalParams.PET_STATE_5);
+            }else
             //开始前5分钟 变为待领养 不可操作
             if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
                 petsModel.setState(GlobalParams.PET_STATE_7);
@@ -156,6 +159,9 @@ public class HomeBizImpl implements HomeBiz {
         //开始前5分钟 变为待领养 不可操作
         if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
             petsModel.setState(GlobalParams.PET_STATE_7);
+        }else
+        if(DateUtils.secondBetween(startTime) > 120){
+            petsModel.setState(GlobalParams.PET_STATE_5);
         }else
         if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
             petsModel.setState(GlobalParams.PET_STATE_2);
