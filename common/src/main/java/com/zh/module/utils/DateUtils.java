@@ -1,6 +1,7 @@
 package com.zh.module.utils;
 
 import com.sun.xml.internal.ws.spi.db.BindingInfo;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -215,15 +216,7 @@ public class DateUtils {
 	}
 
 	public static void main(String[] args) {
-		//XXXX-XX-XX XX:XX:XX
-		String today = DateUtils.getCurrentTimeStr();
-		String times = new StringBuilder(today).replace(17, 19,  "00").toString();
-		System.out.println(DateUtils.secondBetween(times));
-		System.out.println(DateUtils.secondBetween(times) % 20);
-		System.out.println(DateUtils.secondBetween(times) % 20 == 0);
-		System.out.println(-30 % 10);
-		System.out.println(list);
-		System.out.println(list.contains(21));
+		System.out.println("1");
 	}
 
 	/**

@@ -38,6 +38,10 @@ logging:
     com:
       example:
         mapper: debug
+  path: output/logs
+  file:
+    max-history: 5
+    max-size: 200M
 mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mybatis/*.xml
