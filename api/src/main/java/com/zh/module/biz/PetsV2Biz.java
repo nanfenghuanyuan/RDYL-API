@@ -27,4 +27,12 @@ public interface PetsV2Biz {
     void matching(Integer level);
 
     void clear();
+
+    /**
+     * 获取已完成订单详情
+     * @param users
+     * @param id
+     * @return
+     */
+    String get(Users users, Integer id);
 }

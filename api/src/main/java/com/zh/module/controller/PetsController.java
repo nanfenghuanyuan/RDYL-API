@@ -108,7 +108,28 @@ public class PetsController {
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }
     }
+    /**
+     * 获取订单信息
+     * @param users
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/{id}",method=RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String getId(@CurrentUser Users users, @PathVariable("id") Integer id){
+        try {
+            if(id == null){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
 
+            return petsV2Biz.get(users, id);
+        } catch (BanlanceNotEnoughException e){
+            e.printStackTrace();
+            return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
 
 
 }

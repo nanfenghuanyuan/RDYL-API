@@ -1,9 +1,6 @@
 package com.zh.module;
 
-import com.zh.module.biz.PetsBiz;
-import com.zh.module.biz.PetsListBiz;
-import com.zh.module.biz.PetsMatchingListBiz;
-import com.zh.module.biz.UsersBiz;
+import com.zh.module.biz.*;
 import com.zh.module.constants.GlobalParams;
 import com.zh.module.constants.SmsTemplateCode;
 import com.zh.module.entity.Pets;
@@ -36,6 +33,8 @@ public class PetsBizTests {
 
     @Autowired
     private PetsBiz petsBiz;
+    @Autowired
+    private PetsV2Biz petsV2Biz;
     @Autowired
     private PetsMatchingListBiz petsMatchingListBiz;
     @Autowired
@@ -112,6 +111,11 @@ public class PetsBizTests {
     public void confirmReceipt1() {
         FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
         feigeSmsUtils.sendTemplatesSms("13165373280", SmsTemplateCode.SMS_C2C_PAY_NOTICE, "");
+    }
+    @Test
+    public void get1() {
+        Users users = usersBiz.getUser(72);
+        System.out.println(petsV2Biz.get(users, 4));
     }
 
     @Test

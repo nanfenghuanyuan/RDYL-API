@@ -238,8 +238,41 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
     @Override
     public void clear() {
         for (int i = 1; i < 5; i++) {
+            //预约用户列表
             String redisKey = String.format(RedisKey.PETS_LIST_BUY_LIST, i);
+            //未分配宠物列表
+            String redisKeys = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, i);
             RedisUtil.deleteKey(redis, redisKey);
+            RedisUtil.deleteKey(redis, redisKeys);
+        }
+    }
+
+    @Override
+    public String get(Users users, Integer id) {
+        Map<String, Object> result = new HashMap<>();
+        PetsList petsList = petsListService.selectByPrimaryKey(id);
+        if(petsList != null) {
+            Pets pets = petsService.selectByLevel(petsList.getLevel().intValue());
+            result.put("name", pets.getName());
+            result.put("number", petsList.getPetsNumber());
+            result.put("price", petsList.getPrice());
+            result.put("transferTime", petsList.getStartTime());
+            result.put("profit", pets.getProfitDays() + "天/" + pets.getProfitRate().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP) + "%");
+            result.put("profited", petsList.getPrice().multiply(pets.getProfitRate()).divide(pets.getProfitRate().add(new BigDecimal(1)), 2, BigDecimal.ROUND_HALF_UP));
+
+            Map<Object, Object> map = new HashMap<>();
+            map.put("petListId", petsList.getId());
+            map.put("level", pets.getLevel());
+            map.put("saleUserId", users.getId());
+            map.put("state", GlobalParams.PET_MATCHING_STATE_OVER);
+            List<PetsMatchingList> petsMatchingLists = petsMatchingListService.selectAll(map);
+            if(petsMatchingLists != null && petsMatchingLists.size() != 0){
+                PetsMatchingList petsMatchingList = petsMatchingLists.get(0);
+                result.put("imgUrl", petsMatchingList.getImgUrl());
+            }
+            return Result.toResult(ResultCode.SUCCESS, result);
+        }else{
+            return Result.toResult(ResultCode.PETS_STATE_ERROR);
         }
     }
 }
