@@ -86,6 +86,7 @@ public enum ResultCode {
     WITHDRAW_QUOTA_NONE(30058, "提现额度不足，请完成一次交易后重试"),
     BIND_PHONE_MUST(30059, "请先完成备用手机的绑定"),
     TRANSFER_MIN_BALANCE(30060, "转赠金额不能小于%s"),
+    PETS_SHARE_ERROR(30061, "宠物分发异常，请稍后到领养中查看结果"),
 
 
     /* 系统错误：40001-49999 */

@@ -68,7 +68,7 @@ public class TeamBizImpl implements TeamBiz {
                 TeamListModel teamListModel = new TeamListModel();
                 teamListModel.setName(user.getNickName());
                 teamListModel.setTime(DateUtils.getDateFormate2(user.getCreateTime()));
-                teamListModel.setPhone(user.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+                teamListModel.setPhone(user.getPhone());
                 teamListModel.setIdStatus(user.getState().intValue());
                 models.add(teamListModel);
             }
@@ -81,7 +81,7 @@ public class TeamBizImpl implements TeamBiz {
                     TeamListModel teamListModel = new TeamListModel();
                     teamListModel.setName(referUser.getNickName());
                     teamListModel.setTime(DateUtils.getDateFormate2(referUser.getCreateTime()));
-                    teamListModel.setPhone(referUser.getPhone().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+                    teamListModel.setPhone(referUser.getPhone());
                     teamListModel.setIdStatus(referUser.getState().intValue());
                     models.add(teamListModel);
                 }
