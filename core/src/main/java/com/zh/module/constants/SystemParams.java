@@ -116,4 +116,11 @@ public class SystemParams {
     public static final String WITHDRAW_QUOTA_RADIO = "WITHDRAW_QUOTA_RADIO";
     //最少转增剩余金额
     public static final String TRANSFER_MIN_AMOUNT_REMAIN = "TRANSFER_MIN_AMOUNT_REMAIN";
+
+    //宠物可购买时长（90秒）
+    public static final String PETS_BUY_TIME = "PETS_BUY_TIME";
+    //宠物提交获取结果时间
+    public static final String PETS_COMMIT_TIME = "PETS_COMMIT_TIME";
+    //动画播放时长
+    public static final String PETS_CARTOON_TIME = "PETS_CARTOON_TIME";
 }

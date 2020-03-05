@@ -26,5 +26,10 @@ public class Configuration implements Serializable{
     private Object notice;
 
     private List<CoinModule> coinList;
-
+    //宠物可购买时长（90秒）
+    private String buyTime;
+    //宠物提交获取结果时间
+    private String commitTime;
+    //动画播放时长
+    private String cartoonTime;
 }

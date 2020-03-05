@@ -73,10 +73,16 @@ public class SystemBizImpl implements SystemBiz {
             coinModules.add(coinModule);
         }
         String shareUrl = sysparamsService.getValStringByKey(SystemParams.REGIST_URL);
+        String buyTime = sysparamsService.getValStringByKey(SystemParams.PETS_BUY_TIME);
+        String commitTime = sysparamsService.getValStringByKey(SystemParams.PETS_COMMIT_TIME);
+        String cartoonTime = sysparamsService.getValStringByKey(SystemParams.PETS_CARTOON_TIME);
         Configuration config = new Configuration();
         config.setNotice(notice);
         config.setShareUrl(shareUrl + "?uuid=");
         config.setCoinList(coinModules);
+        config.setBuyTime(buyTime);
+        config.setCartoonTime(cartoonTime);
+        config.setCommitTime(commitTime);
         return Result.toResult(ResultCode.SUCCESS, config);
     }
 
