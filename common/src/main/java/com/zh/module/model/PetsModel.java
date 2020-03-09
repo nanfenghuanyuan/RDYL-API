@@ -42,6 +42,10 @@ public class PetsModel {
      */
     private int timestamp;
     /**
+     * 下表
+     */
+    private int id;
+    /**
      * 开始时间
      */
     private String startTime;

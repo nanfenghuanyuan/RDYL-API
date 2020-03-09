@@ -62,8 +62,11 @@ public class HomeBizImpl implements HomeBiz {
         Map<Object, Object> map = new HashMap<>();
         List<PetsModel> models = new LinkedList<>();
         String today = DateUtils.getCurrentTimeStr();
+        int i = 0;
         for(Pets pets : petsList){
             PetsModel petsModel = new PetsModel();
+            petsModel.setId(i);
+            i++;
             petsModel.setLevel(pets.getLevel().intValue());
             petsModel.setImgUrl(pets.getImgUrl());
             petsModel.setName(pets.getName());

@@ -32,6 +32,11 @@ spring:
     encoding: utf-8
     suffix: .html
     prefix: classpath:/templates/
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 0
+      max-file-size: 10MB
 #showSql
 logging:
   level:

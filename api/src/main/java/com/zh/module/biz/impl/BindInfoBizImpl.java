@@ -57,6 +57,8 @@ public class BindInfoBizImpl implements BindInfoBiz {
             if(valiStr != null){
                 return valiStr;
             }
+        }else {
+            return Result.toResult(ResultCode.ORDER_PASSWORD_NONE);
         }
         Integer type = params.getInteger("type");
         Map<Object, Object> param = new HashMap<>();

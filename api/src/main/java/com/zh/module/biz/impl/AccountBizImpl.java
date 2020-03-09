@@ -92,6 +92,9 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
         }
+        if(phone.equals(users.getPhone())){
+            return Result.toResult(ResultCode.TRANS_ROLE);
+        }
         /*校验交易密码*/
         if(!StrUtils.isBlank(password)){
             String valiStr = validateOrderPassword(users, password);

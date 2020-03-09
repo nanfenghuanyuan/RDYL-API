@@ -209,6 +209,9 @@ public class AccountController {
             if(!PatternUtil.isNumber(amount)){
                 return Result.toResult(ResultCode.AMOUNT_ERROR );
             }
+            if(address.length() > 100){
+                return Result.toResult(ResultCode.PARAM_IS_INVALID );
+            }
             return accountBiz.recharge(users, coinType, amount, address, password);
         }catch (Exception e) {
             e.printStackTrace();
