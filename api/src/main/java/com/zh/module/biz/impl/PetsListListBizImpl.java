@@ -99,6 +99,10 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
                     int time = DateUtils.secondBetween(inactiveTime);
                     petsMatchingListModel.setInactiveTime(String.valueOf(-time));
                 }
+                if(state == 3){
+                    price = new BigDecimal(map.get("buy_price").toString());
+                    petsMatchingListModel.setPrice(price);
+                }
                 petsMatchingListModel.setTransferTime(transferTime);
             }
             petsMatchingListModel.setProfited(price.multiply(new BigDecimal(map.get("profit_rate").toString()).setScale(2, BigDecimal.ROUND_HALF_UP)));
@@ -285,6 +289,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         petsListService.updateByPrimaryKeySelective(petsList);
 
         //修改匹配记录
+        petsMatchingList.setBuyPrice(petsList.getPrice());
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
         petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
 

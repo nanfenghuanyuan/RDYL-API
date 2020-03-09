@@ -8,6 +8,7 @@
     <result column="buy_user_id" jdbcType="INTEGER" property="buyUserId" />
     <result column="sale_user_id" jdbcType="INTEGER" property="saleUserId" />
     <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="buy_price" jdbcType="DECIMAL" property="buyPrice" />
     <result column="state" jdbcType="TINYINT" property="state" />
     <result column="pay_time" jdbcType="VARCHAR" property="payTime" />
     <result column="inactive_time" jdbcType="TIMESTAMP" property="inactiveTime" />
@@ -18,7 +19,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, pet_list_id, level, buy_user_id, sale_user_id, amount, state, pay_time, inactive_time, 
+    id, pet_list_id, level, buy_user_id, sale_user_id, amount, buy_price, state, pay_time, inactive_time,
     appointment_start_time, appointment_end_time, img_url, create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.PetsMatchingList">
@@ -340,7 +341,7 @@
   </select>
 
   <select id="selectListPaging" parameterType="java.util.Map" resultType="map">
-    SELECT pm.id, p.img_url, p.name, pl.pets_number, pm.state, pl.price, pl.profit_days, pl.profit_rate, pl.start_time, pm.appointment_start_time,pm.appointment_end_time, pm.inactive_time
+    SELECT pm.id, p.img_url, p.name, pl.pets_number, pm.state, pl.price, buy_price, pl.profit_days, pl.profit_rate, pl.start_time, pm.appointment_start_time,pm.appointment_end_time, pm.inactive_time
     FROM pets_matching_list pm LEFT JOIN pets p ON p.level = pm.level LEFT JOIN pets_list pl ON pm.pet_list_id = pl.id
     where buy_user_id = #{userId}
     <if test="state != null">
@@ -354,7 +355,7 @@
     order by pm.id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
   </select>
   <select id="selectOverPaging" parameterType="java.util.Map" resultType="map">
-    SELECT pl.id, p.img_url, p.name, pl.pets_number, pl.price, pl.profit_days, pl.profit_rate, pl.start_time, pm.update_time
+    SELECT pl.id, p.img_url, p.name, pl.pets_number, pl.price, buy_price, pl.profit_days, pl.profit_rate, pl.start_time, pm.update_time
     FROM pets_matching_list pm
     LEFT JOIN pets p ON p.level = pm.level
     LEFT JOIN pets_list pl ON pm.pet_list_id = pl.id

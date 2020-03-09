@@ -19,6 +19,8 @@ public class PetsMatchingList implements Serializable {
 
     private BigDecimal amount;
 
+    private BigDecimal buyPrice;
+
     private Byte state;
 
     private String payTime;
@@ -73,6 +75,14 @@ public class PetsMatchingList implements Serializable {
 
     public void setSaleUserId(Integer saleUserId) {
         this.saleUserId = saleUserId;
+    }
+
+    public BigDecimal getBuyPrice() {
+        return buyPrice;
+    }
+
+    public void setBuyPrice(BigDecimal buyPrice) {
+        this.buyPrice = buyPrice;
     }
 
     public BigDecimal getAmount() {
