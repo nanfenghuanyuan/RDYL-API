@@ -101,6 +101,9 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
                 }
                 if(state == 3){
                     price = new BigDecimal(map.get("buy_price").toString());
+                    if("0".equals(price)){
+                        price = new BigDecimal(map.get("price").toString());
+                    }
                     petsMatchingListModel.setPrice(price);
                 }
                 petsMatchingListModel.setTransferTime(transferTime);
