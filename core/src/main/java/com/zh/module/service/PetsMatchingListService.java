@@ -107,4 +107,11 @@ public interface PetsMatchingListService {
      * @param end
      */
     String consumeTodayAmount(String date, String end);
+
+    /**
+     * 查询当日记录
+     * @param params
+     * @return
+     */
+    List<PetsMatchingList> selectByTime(Map<Object, Object> params);
 }

@@ -32,4 +32,6 @@ public interface PetsMatchingListMapper {
     List<Map<String, Object>> selectOverPaging(Map<Object, Object> param);
 
     String consumeTodayAmount(@Param("start") String start, @Param("end") String end);
+
+    List<PetsMatchingList> selectByTime(Map<Object, Object> params);
 }

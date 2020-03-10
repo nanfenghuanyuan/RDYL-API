@@ -95,4 +95,9 @@ public class PetsMatchingListServiceImpl implements PetsMatchingListService {
     public String consumeTodayAmount(String date, String end) {
         return this.petsMatchingListMapper.consumeTodayAmount(date, end);
     }
+
+    @Override
+    public List<PetsMatchingList> selectByTime(Map<Object, Object> params) {
+        return this.petsMatchingListMapper.selectByTime(params);
+    }
 }

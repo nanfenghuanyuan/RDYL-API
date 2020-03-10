@@ -11,4 +11,6 @@ import com.zh.module.model.PageModel;
  **/
 public interface TeamBiz {
     String init(Users users, Integer type, PageModel pageModel);
+
+    void getProfit();
 }

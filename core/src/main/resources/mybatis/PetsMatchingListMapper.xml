@@ -365,5 +365,15 @@
   <select id="consumeTodayAmount" resultType="string" parameterType="string">
     SELECT SUM(amount) total FROM pets_matching_list pm WHERE state = 3 AND pay_time &gt; #{start} and pay_time &lt; #{end}
   </select>
-
+  <select id="selectByTime" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pets_matching_list
+    where 1=1
+    <if test="state != null">
+      and  state = #{state,jdbcType=TINYINT}
+    </if>
+    and update_time &lt; #{end} and update_time &gt; #{start}
+    order by id desc
+  </select>
 </mapper>
