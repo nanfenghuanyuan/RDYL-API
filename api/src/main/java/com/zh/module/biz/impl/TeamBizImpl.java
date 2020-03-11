@@ -193,7 +193,7 @@ public class TeamBizImpl implements TeamBiz {
             //团队累计奖励
             BigDecimal awardTotal = BigDecimal.ZERO;
             Users users = usersService.selectByUUID(buyUser.getReferId());
-            referLevelAward(users, petsList.getPrice().multiply(petsList.getProfitRate()), new BigDecimal(profit), cursor, awardTotal);
+            referLevelAward(users, petsList.getPrice().multiply(petsList.getProfitRate()), new BigDecimal(profit), cursor, awardTotal, petsList.getPetsNumber());
             //用户等级提升
             userLevel(buyUser);
             //增加提现额度
@@ -207,7 +207,7 @@ public class TeamBizImpl implements TeamBiz {
      * @param rate
      * @param cursor
      */
-    private void referLevelAward(Users users, BigDecimal amount, BigDecimal rate, Integer cursor, BigDecimal awardTotal) {
+    private void referLevelAward(Users users, BigDecimal amount, BigDecimal rate, Integer cursor, BigDecimal awardTotal, String petsNum) {
         if(users == null){
             return;
         }
@@ -239,7 +239,7 @@ public class TeamBizImpl implements TeamBiz {
 
             ProfitRecord profitRecord = new ProfitRecord();
             profitRecord.setAmount(newAmount);
-            profitRecord.setRemark("动态收益");
+            profitRecord.setRemark(petsNum);
             profitRecord.setType((byte) 1);
             profitRecord.setUserId(users.getId());
             profitRecordService.insertSelective(profitRecord);
@@ -260,7 +260,7 @@ public class TeamBizImpl implements TeamBiz {
         //当前推荐等级收益率
         String price = sysparamsService.getValStringByKey(RewardType.getMessage(cursor));
         //递归调用
-        referLevelAward(users, amount, new BigDecimal(price), cursor, awardTotal);
+        referLevelAward(users, amount, new BigDecimal(price), cursor, awardTotal, petsNum);
 
     }
 
