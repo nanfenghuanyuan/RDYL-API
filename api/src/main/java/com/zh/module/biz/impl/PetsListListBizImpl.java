@@ -616,7 +616,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             //团队累计奖励
             BigDecimal awardTotal = BigDecimal.ZERO;
             users = usersService.selectByUUID(buyUser.getReferId());
-            referLevelAward(users, petsList.getPrice(), new BigDecimal(profit), cursor, awardTotal);
+            referLevelAward(users, petsList.getPrice(), new BigDecimal(profit), cursor, awardTotal, petsList.getPetsNumber());
         }
     }
 
@@ -690,7 +690,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
      * @param rate
      * @param cursor
      */
-    private void referLevelAward(Users users, BigDecimal amount, BigDecimal rate, Integer cursor, BigDecimal awardTotal) {
+    private void referLevelAward(Users users, BigDecimal amount, BigDecimal rate, Integer cursor, BigDecimal awardTotal, String petsNum) {
         if(users == null){
             return;
         }
@@ -722,7 +722,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
 
             ProfitRecord profitRecord = new ProfitRecord();
             profitRecord.setAmount(newAmount);
-            profitRecord.setRemark("动态收益");
+            profitRecord.setRemark(petsNum);
             profitRecord.setType((byte) 1);
             profitRecord.setUserId(users.getId());
             profitRecordService.insertSelective(profitRecord);
@@ -743,7 +743,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         //当前推荐等级收益率
         String price = sysparamsService.getValStringByKey(RewardType.getMessage(cursor));
         //递归调用
-        referLevelAward(users, amount, new BigDecimal(price), cursor, awardTotal);
+        referLevelAward(users, amount, new BigDecimal(price), cursor, awardTotal, petsNum);
     }
     /**
      * 团队奖励记录累计金额
