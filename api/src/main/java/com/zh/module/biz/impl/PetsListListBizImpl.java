@@ -604,19 +604,6 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         if(buyUser != null){
             FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
             feigeSmsUtils.sendTemplatesSms(buyUser.getPhone(), SmsTemplateCode.SMS_C2C_CONFIRM_NOTICE, "");
-            //增加用户贡献值
-            buyUser.setContribution(buyUser.getContribution() + 1);
-            //设为用户为有效的
-            buyUser.setEffective((byte) GlobalParams.ACTIVE);
-            usersService.updateByPrimaryKeySelective(buyUser);
-            //团队奖励
-            String profit = sysparamsService.getValStringByKey(SystemParams.PERSON_AWARD_ONE);
-            //推荐代数
-            int cursor = 1;
-            //团队累计奖励
-            BigDecimal awardTotal = BigDecimal.ZERO;
-            users = usersService.selectByUUID(buyUser.getReferId());
-            referLevelAward(users, petsList.getPrice().multiply(petsList.getProfitRate()), new BigDecimal(profit), cursor, awardTotal, petsList.getPetsNumber());
         }
     }
 
