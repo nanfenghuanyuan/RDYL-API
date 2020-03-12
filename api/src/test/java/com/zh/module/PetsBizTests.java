@@ -90,7 +90,7 @@ public class PetsBizTests {
     }
     @Test
     public void getBuyState() {
-        Users users = usersBiz.getUser(1816);
+        Users users = usersBiz.getUser(1368);
         System.out.println(petsBiz.getBuyState(users, 2));
     }
     @Test
