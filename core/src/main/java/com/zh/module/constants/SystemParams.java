@@ -123,4 +123,6 @@ public class SystemParams {
     public static final String PETS_COMMIT_TIME = "PETS_COMMIT_TIME";
     //动画播放时长
     public static final String PETS_CARTOON_TIME = "PETS_CARTOON_TIME";
+    //接口刷新时间
+    public static final String COMMIT_REFRESH_TIME = "COMMIT_REFRESH_TIME";
 }

@@ -32,4 +32,6 @@ public class Configuration implements Serializable{
     private String commitTime;
     //动画播放时长
     private String cartoonTime;
+    //接口提交刷新时间
+    private String commitRefreshTime;
 }

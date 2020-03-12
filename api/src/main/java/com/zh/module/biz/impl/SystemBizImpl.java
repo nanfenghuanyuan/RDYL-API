@@ -76,6 +76,7 @@ public class SystemBizImpl implements SystemBiz {
         String buyTime = sysparamsService.getValStringByKey(SystemParams.PETS_BUY_TIME);
         String commitTime = sysparamsService.getValStringByKey(SystemParams.PETS_COMMIT_TIME);
         String cartoonTime = sysparamsService.getValStringByKey(SystemParams.PETS_CARTOON_TIME);
+        String commitRefreshTime = sysparamsService.getValStringByKey(SystemParams.COMMIT_REFRESH_TIME);
         Configuration config = new Configuration();
         config.setNotice(notice);
         config.setShareUrl(shareUrl + "?uuid=");
@@ -83,6 +84,7 @@ public class SystemBizImpl implements SystemBiz {
         config.setBuyTime(buyTime);
         config.setCartoonTime(cartoonTime);
         config.setCommitTime(commitTime);
+        config.setCommitRefreshTime(commitRefreshTime);
         return Result.toResult(ResultCode.SUCCESS, config);
     }
 
