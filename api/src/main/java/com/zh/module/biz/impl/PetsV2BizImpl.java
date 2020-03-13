@@ -253,11 +253,11 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
         PetsList petsList = petsListService.selectByPrimaryKey(id);
         if(petsList != null) {
             Pets pets = petsService.selectByLevel(petsList.getLevel().intValue());
-            String startTime = new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString();
+            /*String startTime = new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString();
             int second = DateUtils.secondBetween(startTime);
             if(second < 110){
                 return Result.toResult(ResultCode.PETS_SHARE_ERROR);
-            }
+            }*/
             result.put("name", pets.getName());
             result.put("number", petsList.getPetsNumber());
             result.put("price", petsList.getPrice());
