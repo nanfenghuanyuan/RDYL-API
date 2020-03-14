@@ -8,6 +8,7 @@ import com.zh.module.model.PageModel;
 import com.zh.module.service.PetsListService;
 import com.zh.module.utils.DateUtils;
 import com.zh.module.utils.RedisUtil;
+import com.zh.module.variables.RedisKey;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -41,12 +44,11 @@ public class RedisBizTests {
     }
     @Test
     public void appointment1() {
-        System.out.println(RedisUtil.searchListSize(redisTemplate, "test"));
-        for(int i = 0; i < 101; i ++) {
-            if(i % 2 == 0){
-                System.out.println(RedisUtil.leftPopObj(redisTemplate, "test", Notice.class));
-            }
-        }
-        System.out.println(RedisUtil.searchListSize(redisTemplate, "test"));
+        Map<String, Object> map = new HashMap<>();
+        map.put("a", 1);
+        map.put("s", "@");
+        String redisKey = String.format(RedisKey.TEAM_INFO, 1, 1);
+        Map<String, Object>  s = RedisUtil.searchStringObj(redisTemplate, redisKey, Map.class);
+        System.out.println(s.toString());
     }
 }
