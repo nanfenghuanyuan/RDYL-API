@@ -191,5 +191,8 @@
     select SUM(amount) AS sumamount
     from profit_record where user_id = #{userId} and type = #{type}
   </select>
+    <select id="selectCountByTime" resultType="string">
+      select sum(amount) from profit_record pr where pr.type = 1 and create_time &gt; #{start} and create_time &lt; #{end}
+    </select>
 
 </mapper>

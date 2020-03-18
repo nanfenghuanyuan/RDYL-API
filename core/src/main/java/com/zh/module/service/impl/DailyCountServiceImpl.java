@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * 
  * @author: autogeneration
- * @date: 2020-02-07 14:17:44
+ * @date: 2020-03-18 20:44:11
  **/ 
 @Service("dailyCountService")
 public class DailyCountServiceImpl implements DailyCountService {

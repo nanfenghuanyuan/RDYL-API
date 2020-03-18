@@ -10,10 +10,7 @@ import com.zh.module.dto.Result;
 import com.zh.module.encrypt.MD5;
 import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
-import com.zh.module.service.BindInfoService;
-import com.zh.module.service.DailyCountService;
-import com.zh.module.service.PetsMatchingListService;
-import com.zh.module.service.SysparamsService;
+import com.zh.module.service.*;
 import com.zh.module.utils.DateUtils;
 import com.zh.module.utils.RedisUtil;
 import com.zh.module.utils.StrUtils;
@@ -42,21 +39,27 @@ public class DailyCountBizImpl implements DailyCountBiz {
     @Autowired
     private DailyCountService dailyCountService;
     @Autowired
-    private RedisTemplate<String,String> redis;
+    private UsersService usersService;
+    @Autowired
+    private IdcardValidateService idcardValidateService;
+    @Autowired
+    private ProfitRecordService profitRecordService;
 
     @Override
     public void consume() {
         String date = DateUtils.getSomeDay1(-1);
         String start = date + " 00:00:00";
         String end = date + " 23:59:59";
+        //当日消耗数量
         String todayAmount = petsMatchingListService.consumeTodayAmount(start, end);
+        todayAmount = StrUtils.isBlank(todayAmount) ? "0" : todayAmount;
         Map<Object, Object> map = new HashMap<>();
         map.put("firstResult", 0);
         map.put("maxResult", 1);
         List<DailyCount> dailyCounts = dailyCountService.selectPaging(map);
         DailyCount dailyCount = new DailyCount();
         dailyCount.setCoinType((byte) CoinType.OS);
-        dailyCount.setDailtConsume(StrUtils.isBlank(todayAmount) ? "0" : todayAmount);
+        dailyCount.setDailtConsume(todayAmount);
         if(dailyCounts != null && dailyCounts.size() != 0){
             DailyCount dailyCount1 = dailyCounts.get(0);
             if(StrUtils.isBlank(dailyCount1.getTotalConsume())){
@@ -64,6 +67,15 @@ public class DailyCountBizImpl implements DailyCountBiz {
             }
             dailyCount.setTotalConsume(new BigDecimal(dailyCount1.getTotalConsume()).add(new BigDecimal(todayAmount)).toEngineeringString());
         }
+        //当日注册人数
+        int registerUser = usersService.selectCountByTime(start, end);
+        dailyCount.setRegisterNumber(String.valueOf(registerUser));
+        //当日实名人数
+        int realNameNumber = idcardValidateService.selectCountByTime(start, end);
+        dailyCount.setRealNameNumber(String.valueOf(realNameNumber));
+        //当日动态收益
+        String profitCount = profitRecordService.selectCountByTime(start, end);
+        dailyCount.setDynamicRevenue(profitCount);
         dailyCountService.insertSelective(dailyCount);
     }
 }

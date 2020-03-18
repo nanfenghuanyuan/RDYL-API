@@ -86,4 +86,5 @@ public interface IdcardValidateService {
     IdcardValidate queryByTaskId(String taskId);
     List<?> queryValidateTimes(Map<String, Object> map);
 
+    int selectCountByTime(String start, String end);
 }

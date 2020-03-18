@@ -6,20 +6,29 @@
     <result column="coin_type" jdbcType="TINYINT" property="coinType" />
     <result column="dailt_consume" jdbcType="VARCHAR" property="dailtConsume" />
     <result column="total_consume" jdbcType="VARCHAR" property="totalConsume" />
+    <result column="dynamic_revenue" jdbcType="VARCHAR" property="dynamicRevenue" />
+    <result column="register_number" jdbcType="VARCHAR" property="registerNumber" />
+    <result column="activation_number" jdbcType="VARCHAR" property="activationNumber" />
+    <result column="real_name_number" jdbcType="VARCHAR" property="realNameNumber" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, coin_type, dailt_consume, total_consume, create_time, update_time
+    id, coin_type, dailt_consume, total_consume, dynamic_revenue, register_number, activation_number, 
+    real_name_number, create_time, update_time
   </sql>
   <insert id="insert" parameterType="com.zh.module.entity.DailyCount">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into daily_count (coin_type, dailt_consume, total_consume, 
-      create_time, update_time)
+      dynamic_revenue, register_number, activation_number, 
+      real_name_number, create_time, update_time
+      )
     values (#{coinType,jdbcType=TINYINT}, #{dailtConsume,jdbcType=VARCHAR}, #{totalConsume,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{dynamicRevenue,jdbcType=VARCHAR}, #{registerNumber,jdbcType=VARCHAR}, #{activationNumber,jdbcType=VARCHAR}, 
+      #{realNameNumber,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zh.module.entity.DailyCount">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -35,6 +44,18 @@
       </if>
       <if test="totalConsume != null">
         total_consume,
+      </if>
+      <if test="dynamicRevenue != null">
+        dynamic_revenue,
+      </if>
+      <if test="registerNumber != null">
+        register_number,
+      </if>
+      <if test="activationNumber != null">
+        activation_number,
+      </if>
+      <if test="realNameNumber != null">
+        real_name_number,
       </if>
       <if test="createTime != null">
         create_time,
@@ -53,6 +74,18 @@
       <if test="totalConsume != null">
         #{totalConsume,jdbcType=VARCHAR},
       </if>
+      <if test="dynamicRevenue != null">
+        #{dynamicRevenue,jdbcType=VARCHAR},
+      </if>
+      <if test="registerNumber != null">
+        #{registerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="activationNumber != null">
+        #{activationNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="realNameNumber != null">
+        #{realNameNumber,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -66,6 +99,10 @@
     set coin_type = #{coinType,jdbcType=TINYINT},
       dailt_consume = #{dailtConsume,jdbcType=VARCHAR},
       total_consume = #{totalConsume,jdbcType=VARCHAR},
+      dynamic_revenue = #{dynamicRevenue,jdbcType=VARCHAR},
+      register_number = #{registerNumber,jdbcType=VARCHAR},
+      activation_number = #{activationNumber,jdbcType=VARCHAR},
+      real_name_number = #{realNameNumber,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
@@ -81,6 +118,18 @@
       </if>
       <if test="totalConsume != null">
         total_consume = #{totalConsume,jdbcType=VARCHAR},
+      </if>
+      <if test="dynamicRevenue != null">
+        dynamic_revenue = #{dynamicRevenue,jdbcType=VARCHAR},
+      </if>
+      <if test="registerNumber != null">
+        register_number = #{registerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="activationNumber != null">
+        activation_number = #{activationNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="realNameNumber != null">
+        real_name_number = #{realNameNumber,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -115,6 +164,18 @@
     <if test="totalConsume != null">
        and  total_consume = #{totalConsume,jdbcType=VARCHAR}
     </if>
+    <if test="dynamicRevenue != null">
+       and  dynamic_revenue = #{dynamicRevenue,jdbcType=VARCHAR}
+    </if>
+    <if test="registerNumber != null">
+       and  register_number = #{registerNumber,jdbcType=VARCHAR}
+    </if>
+    <if test="activationNumber != null">
+       and  activation_number = #{activationNumber,jdbcType=VARCHAR}
+    </if>
+    <if test="realNameNumber != null">
+       and  real_name_number = #{realNameNumber,jdbcType=VARCHAR}
+    </if>
     <if test="createTime != null">
        and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
@@ -137,6 +198,18 @@
     <if test="totalConsume != null">
        and  total_consume = #{totalConsume,jdbcType=VARCHAR}
     </if>
+    <if test="dynamicRevenue != null">
+       and  dynamic_revenue = #{dynamicRevenue,jdbcType=VARCHAR}
+    </if>
+    <if test="registerNumber != null">
+       and  register_number = #{registerNumber,jdbcType=VARCHAR}
+    </if>
+    <if test="activationNumber != null">
+       and  activation_number = #{activationNumber,jdbcType=VARCHAR}
+    </if>
+    <if test="realNameNumber != null">
+       and  real_name_number = #{realNameNumber,jdbcType=VARCHAR}
+    </if>
     <if test="createTime != null">
        and  create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
@@ -157,6 +230,18 @@
     </if>
     <if test="totalConsume != null">
        and  total_consume = #{totalConsume,jdbcType=VARCHAR}
+    </if>
+    <if test="dynamicRevenue != null">
+       and  dynamic_revenue = #{dynamicRevenue,jdbcType=VARCHAR}
+    </if>
+    <if test="registerNumber != null">
+       and  register_number = #{registerNumber,jdbcType=VARCHAR}
+    </if>
+    <if test="activationNumber != null">
+       and  activation_number = #{activationNumber,jdbcType=VARCHAR}
+    </if>
+    <if test="realNameNumber != null">
+       and  real_name_number = #{realNameNumber,jdbcType=VARCHAR}
     </if>
     <if test="createTime != null">
        and  create_time = #{createTime,jdbcType=TIMESTAMP}

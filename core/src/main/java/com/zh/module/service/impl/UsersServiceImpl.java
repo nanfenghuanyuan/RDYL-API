@@ -109,4 +109,9 @@ public class UsersServiceImpl implements UsersService {
         List<Users> users = selectAll(map);
         return users;
     }
+
+    @Override
+    public int selectCountByTime(String start, String end) {
+        return this.usersMapper.selectCountByTime(start, end);
+    }
 }

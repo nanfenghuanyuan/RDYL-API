@@ -374,4 +374,7 @@
        and  update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
   </select>
+    <select id="selectCountByTime" resultType="java.lang.Integer">
+      select count(*) from users u where create_time &gt; #{start} and create_time &lt; #{end}
+    </select>
 </mapper>

@@ -26,4 +26,6 @@ public interface ProfitRecordMapper {
     int selectCount(Map<Object, Object> param);
 
     String selectSumAmount(@Param("userId") Integer userId, @Param("type") int type);
+
+    String selectCountByTime(@Param("start") String start, @Param("end") String end);
 }

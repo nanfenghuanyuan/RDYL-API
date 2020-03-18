@@ -91,4 +91,6 @@ public interface UsersService {
     List<Users> selectByReferID(String referId);
 
     List<Users> selectByReferIDAndActive(String uuid);
+
+    int selectCountByTime(String start, String end);
 }

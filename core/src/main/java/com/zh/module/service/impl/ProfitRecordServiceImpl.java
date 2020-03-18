@@ -71,4 +71,9 @@ public class ProfitRecordServiceImpl implements ProfitRecordService {
     public String selectSumAmount(Integer userId, int type) {
         return this.profitRecordMapper.selectSumAmount(userId, type);
     }
+
+    @Override
+    public String selectCountByTime(String start, String end) {
+        return this.profitRecordMapper.selectCountByTime(start, end);
+    }
 }

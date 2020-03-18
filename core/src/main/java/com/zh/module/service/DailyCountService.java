@@ -7,14 +7,14 @@ import java.util.Map;
 /**
  * 
  * @author: autogeneration
- * @date: 2020-02-07 14:17:44
+ * @date: 2020-03-18 20:44:11
  **/ 
 public interface DailyCountService {
     /**
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2020-02-07 14:17:44
+     * @date: 2020-03-18 20:44:11
      **/ 
     int insert(DailyCount record);
 
@@ -22,7 +22,7 @@ public interface DailyCountService {
      * 添加
      * 
      * @author: autogeneration
-     * @date: 2020-02-07 14:17:44
+     * @date: 2020-03-18 20:44:11
      **/ 
     int insertSelective(DailyCount record);
 
@@ -30,7 +30,7 @@ public interface DailyCountService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2020-02-07 14:17:44
+     * @date: 2020-03-18 20:44:11
      **/ 
     int updateByPrimaryKey(DailyCount record);
 
@@ -38,7 +38,7 @@ public interface DailyCountService {
      * 更新
      * 
      * @author: autogeneration
-     * @date: 2020-02-07 14:17:44
+     * @date: 2020-03-18 20:44:11
      **/ 
     int updateByPrimaryKeySelective(DailyCount record);
 
@@ -46,7 +46,7 @@ public interface DailyCountService {
      * 删除
      * 
      * @author: autogeneration
-     * @date: 2020-02-07 14:17:44
+     * @date: 2020-03-18 20:44:11
      **/ 
     int deleteByPrimaryKey(Integer id);
 
@@ -54,7 +54,7 @@ public interface DailyCountService {
      * 按主键查询
      * 
      * @author: autogeneration
-     * @date: 2020-02-07 14:17:44
+     * @date: 2020-03-18 20:44:11
      **/ 
     DailyCount selectByPrimaryKey(Integer id);
 
@@ -62,7 +62,7 @@ public interface DailyCountService {
      * 条件查询
      * 
      * @author: autogeneration
-     * @date: 2020-02-07 14:17:44
+     * @date: 2020-03-18 20:44:11
      **/ 
     List<DailyCount> selectAll(Map<Object, Object> param);
 
@@ -70,7 +70,7 @@ public interface DailyCountService {
      * 分页查询
      * 
      * @author: autogeneration
-     * @date: 2020-02-07 14:17:44
+     * @date: 2020-03-18 20:44:11
      **/ 
     List<DailyCount> selectPaging(Map<Object, Object> param);
 
@@ -78,7 +78,7 @@ public interface DailyCountService {
      * 统计查询
      * 
      * @author: autogeneration
-     * @date: 2020-02-07 14:17:44
+     * @date: 2020-03-18 20:44:11
      **/ 
     int selectCount(Map<Object, Object> param);
 }

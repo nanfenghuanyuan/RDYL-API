@@ -1,6 +1,8 @@
 package com.zh.module.dao;
 
 import com.zh.module.entity.IdcardValidate;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +30,6 @@ public interface IdcardValidateMapper {
     List<Map<String, Object>> selectConditionPaging(Map<Object, Object> param);
 
     int selectConditionCount(Map<Object, Object> param);
+
+    int selectCountByTime(@Param("start") String start, @Param("end") String end);
 }

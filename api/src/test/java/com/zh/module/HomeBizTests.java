@@ -1,6 +1,7 @@
 package com.zh.module;
 
 import com.zh.module.biz.BindInfoBiz;
+import com.zh.module.biz.DailyCountBiz;
 import com.zh.module.biz.HomeBiz;
 import com.zh.module.biz.UsersBiz;
 import com.zh.module.entity.Users;
@@ -22,6 +23,8 @@ public class HomeBizTests {
 
     @Autowired
     private BindInfoBiz bindInfoBiz;
+    @Autowired
+    private DailyCountBiz dailyCountBiz;
     @Test
     public void init() {
         Users users = new Users();
@@ -37,6 +40,11 @@ public class HomeBizTests {
     public void get(){
         Users users = usersBiz.getUser(43);
         System.out.println(homeBiz.get(users, 1));
+    }
+
+    @Test
+    public void get2(){
+        dailyCountBiz.consume();
     }
 
 }

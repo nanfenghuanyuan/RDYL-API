@@ -83,4 +83,6 @@ public interface ProfitRecordService {
     int selectCount(Map<Object, Object> param);
 
     String selectSumAmount(Integer userId, int type);
+
+    String selectCountByTime(String start, String end);
 }

@@ -90,4 +90,9 @@ public class IdcardValidateServiceImpl implements IdcardValidateService {
     public int selectConditionCount(Map<Object, Object> param) {
         return this.idcardValidateMapper.selectConditionCount(param);
     }
+
+    @Override
+    public int selectCountByTime(String start, String end) {
+        return this.idcardValidateMapper.selectCountByTime(start, end);
+    }
 }

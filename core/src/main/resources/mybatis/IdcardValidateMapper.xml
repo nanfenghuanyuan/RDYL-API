@@ -232,4 +232,7 @@
       and iv.state = #{state,jdbcType=TINYINT}
     </if>
   </select>
+  <select id="selectCountByTime"  resultType="java.lang.Integer">
+    select count(*) from idcard_validate where state = 1 and create_time &gt; #{start} and create_time &lt; #{end}
+  </select>
 </mapper>
