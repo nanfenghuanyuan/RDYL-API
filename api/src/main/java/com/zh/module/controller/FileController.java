@@ -1,5 +1,13 @@
 package com.zh.module.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.qiniu.common.QiniuException;
+import com.qiniu.common.Zone;
+import com.qiniu.http.Response;
+import com.qiniu.storage.Configuration;
+import com.qiniu.storage.UploadManager;
+import com.qiniu.util.Auth;
+import com.zh.module.async.FileUtil;
 import com.zh.module.biz.FileBiz;
 import com.zh.module.constants.SystemParams;
 import com.zh.module.dto.Result;
@@ -19,10 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -32,6 +37,55 @@ public class FileController {
     private FileBiz fileBiz;
     @Autowired
     private SysparamsService sysparamsService;
+
+    // 设置好账号的ACCESS_KEY和SECRET_KEY
+    String ACCESS_KEY = "heYulmBpbOCjg8drZWAdeCmG3Mb0vPFoDlC_4p8x";
+    String SECRET_KEY = "Z97nlbHkmSwgLLv6yt1QfAi-px77meyagcPHsZ2b";
+    // 要上传的空间
+    String bucketname = "rdyl";
+
+    // 密钥配置
+    Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
+    // 构造一个带指定Zone对象的配置类,不同的七云牛存储区域调用不同的zone
+    Configuration cfg = new Configuration(Zone.zone0());
+    // ...其他参数参考类注释
+    UploadManager uploadManager = new UploadManager(cfg);
+
+    // 测试域名，只有30天有效期
+    private static String QINIU_IMAGE_DOMAIN = "http://q7ftp0xay.bkt.clouddn.com/";
+
+    // 简单上传，使用默认策略，只需要设置上传的空间名就可以了
+    private String getUpToken() {
+        return auth.uploadToken(bucketname);
+    }
+
+    private String saveImage(MultipartFile file) throws IOException {
+        try {
+            int dotPos = file.getOriginalFilename().lastIndexOf(".");
+            if (dotPos < 0) {
+                return null;
+            }
+            String fileExt = file.getOriginalFilename().substring(dotPos + 1).toLowerCase();
+            // 判断是否是合法的文件后缀
+            if (!FileUtil.isFileAllowed(fileExt)) {
+                return null;
+            }
+
+            String fileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + fileExt;
+            // 调用put方法上传
+            Response res = uploadManager.put(file.getBytes(), fileName, getUpToken());
+            // 打印返回的信息
+            if (res.isOK() && res.isJson()) {
+                // 返回这张存储照片的地址
+                return QINIU_IMAGE_DOMAIN + JSONObject.parseObject(res.bodyString()).get("key");
+            } else {
+                return null;
+            }
+        } catch (QiniuException e) {
+            // 请求失败时打印的异常的信息
+            return null;
+        }
+    }
     /**
      * 文件上传返回url
      */
@@ -42,43 +96,14 @@ public class FileController {
         File targetFile=null;
         //返回存储路径
         String url="";
-        //获取文件名加后缀
-        String fileName=file.getOriginalFilename();
-        log.info("文件名：" + fileName);
-        if(fileName!=null&&fileName!=""){
-            //文件存储位置
-//            String path = "/home/installPackage/imgs/";
-            String path = "C:/img";
-            System.out.println(path);
-            //文件后缀
-            String fileF = fileName.substring(fileName.lastIndexOf("."), fileName.length());
-            //新的文件名
-            fileName=System.currentTimeMillis()+"_"+new Random().nextInt(1000)+fileF;
-            //先判断文件是否存在
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            String fileAdd = sdf.format(new Date());
-            //获取文件夹路径
-            File file1 =new File(path+"/"+fileAdd);
-            //如果文件夹不存在则创建
-            if(!file1 .exists()  && !file1 .isDirectory()){
-                file1 .mkdir();
-            }
-            //将图片存入文件夹
-            targetFile = new File(file1, fileName);
-            try {
-                //将上传的文件写到服务器上指定的文件。
-                file.transferTo(targetFile);
-                String sysUrl = sysparamsService.getValStringByKey(SystemParams.SYSTEM_URL);
-                url= sysUrl + "/file/showImg.action?imgUrl="+fileAdd+"/"+fileName;
-                map.put("imgPath", url);
-                map.put("fileName", fileName);
-                return Result.toResult(ResultCode.SUCCESS, map);
-            } catch (Exception e) {
-                log.info(e.getMessage());
-                return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
-            }
+        try {
+            url = saveImage(file);
+            map.put("imgPath", url);
+            return Result.toResult(ResultCode.SUCCESS, map);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }
-        return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
     }
 
 
