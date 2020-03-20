@@ -99,6 +99,7 @@ public class FileController {
         try {
             url = saveImage(file);
             map.put("imgPath", url);
+            map.put("fileName", "");
             return Result.toResult(ResultCode.SUCCESS, map);
         } catch (Exception e) {
             log.info(e.getMessage());
