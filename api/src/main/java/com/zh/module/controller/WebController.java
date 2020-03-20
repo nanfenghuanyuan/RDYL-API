@@ -48,6 +48,10 @@ public class WebController {
         map.put("iosUrl", iosUrl);
         return "register";
     }
+    @RequestMapping(value="share",method= RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String share(Map<String, Object> map, String uuid){
+        return "share";
+    }
     /**
      * 获取校验码
      * @param phone
