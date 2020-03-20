@@ -27,4 +27,13 @@ public class ConsumeSchedule {
 	}
 
 
+	/**
+	 * 每日统计
+	 */
+	@Scheduled(cron="0 1 2 * * ?")
+	public void getPetsCount(){
+		dailyCountBiz.getPetsCount();
+	}
+
+
 }

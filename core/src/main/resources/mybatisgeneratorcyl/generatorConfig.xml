@@ -115,7 +115,7 @@
 			<generatedKey column="id" sqlStatement="MySql" identity="true" />
 		</table>
 		-->
-		<table schema="" tableName="daily_count"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+		<table schema="" tableName="pets_count"  enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
 			<generatedKey column="id" sqlStatement="MySql" identity="true" />
 		</table>
 	</context>

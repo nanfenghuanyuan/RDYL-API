@@ -46,5 +46,9 @@ public class HomeBizTests {
     public void get2(){
         dailyCountBiz.consume();
     }
+    @Test
+    public void get3(){
+        dailyCountBiz.getPetsCount();
+    }
 
 }

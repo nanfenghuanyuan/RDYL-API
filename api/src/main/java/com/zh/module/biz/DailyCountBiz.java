@@ -10,4 +10,6 @@ import com.zh.module.model.PageModel;
  **/
 public interface DailyCountBiz {
     void consume();
+
+    void getPetsCount();
 }

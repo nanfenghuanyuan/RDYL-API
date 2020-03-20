@@ -21,9 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: R.D.Y.LMain
@@ -40,6 +38,10 @@ public class DailyCountBizImpl implements DailyCountBiz {
     private DailyCountService dailyCountService;
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private PetsListService petsListService;
+    @Autowired
+    private PetsCountService petsCountService;
     @Autowired
     private IdcardValidateService idcardValidateService;
     @Autowired
@@ -77,5 +79,26 @@ public class DailyCountBizImpl implements DailyCountBiz {
         String profitCount = profitRecordService.selectCountByTime(start, end);
         dailyCount.setDynamicRevenue(profitCount);
         dailyCountService.insertSelective(dailyCount);
+    }
+
+    @Override
+    public void getPetsCount() {
+        Map<Object, Object> param = new HashMap<>();
+        PetsCount petsCount;
+        List<Integer> list = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4));
+        for (Integer level :list){
+            param.put("level", level);
+            param.put("state", GlobalParams.PET_LIST_STATE_PROFITING);
+            //收益中数量
+            int profitCount = petsListService.selectCount(param);
+            param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
+            //待转让数量
+            int waitCount = petsListService.selectCount(param);
+            petsCount = new PetsCount();
+            petsCount.setHoldNumber(profitCount);
+            petsCount.setWaitNumber(waitCount);
+            petsCount.setLevel(level.byteValue());
+            petsCountService.insertSelective(petsCount);
+        }
     }
 }
