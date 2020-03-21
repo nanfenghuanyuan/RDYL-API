@@ -52,7 +52,7 @@ public class FileController {
     UploadManager uploadManager = new UploadManager(cfg);
 
     // 测试域名，只有30天有效期
-    private static String QINIU_IMAGE_DOMAIN = "http://q7ftp0xay.bkt.clouddn.com/";
+    private static String QINIU_IMAGE_DOMAIN = "http://imgs.tlhe.cn/";
 
     // 简单上传，使用默认策略，只需要设置上传的空间名就可以了
     private String getUpToken() {

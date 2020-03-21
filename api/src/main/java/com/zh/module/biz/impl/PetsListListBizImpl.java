@@ -93,7 +93,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             if(state == GlobalParams.PET_LIST_STATE_WAIT){
                 petsMatchingListModel.setAppointmentTime(map.get("start_time").toString());
             }else{
-                transferTime = DateUtils.getDateFormate((Date) map.get("update_time"));
+                transferTime = DateUtils.getDateFormate((Date) map.get("start_time"));
                 if(state == 2) {
                     inactiveTime = map.get("inactive_time").toString();
                     int time = DateUtils.secondBetween(inactiveTime);

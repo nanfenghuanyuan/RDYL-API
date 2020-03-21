@@ -26,4 +26,9 @@ public class TeamBizTests {
         System.out.println(teamBiz.init(users, 2, pageModel));
     }
 
+    @Test
+    public void getProfit() {
+        teamBiz.getProfit();
+    }
+
 }
