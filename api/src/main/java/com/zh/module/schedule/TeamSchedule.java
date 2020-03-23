@@ -18,7 +18,7 @@ public class TeamSchedule {
 	/**
 	 * 团队每日奖励分配
 	 */
-	@Scheduled(cron="0 1 1 * * ?")
+	@Scheduled(cron="0 30 23 * * ?")
 	public void getProfit(){
 		teamBiz.getProfit();
 	}
