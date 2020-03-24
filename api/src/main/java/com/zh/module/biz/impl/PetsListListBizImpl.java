@@ -107,6 +107,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
                 }
                 petsMatchingListModel.setTransferTime(map.get("start_time").toString());
             }
+            price = price.divide(BigDecimal.ONE.add(new BigDecimal(map.get("profit_rate").toString())), 2, BigDecimal.ROUND_HALF_UP);
             petsMatchingListModel.setProfited(price.multiply(new BigDecimal(map.get("profit_rate").toString()).setScale(2, BigDecimal.ROUND_HALF_UP)));
             petsMatchingListModel.setProfit(map.get("profit_days").toString() + "天/" + new BigDecimal(map.get("profit_rate").toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             listModels.add(petsMatchingListModel);
