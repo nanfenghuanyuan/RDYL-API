@@ -18,7 +18,7 @@ public class PetsBuySchedule {
 	/**
 	 * 宠物匹配
 	 */
-	@Scheduled(cron="15 1 14 * * ?")
+	@Scheduled(cron="0 1 14 * * ?")
 	public void buys(){
 		Integer level = 2;
 		petsV2Biz.matching(level);
@@ -26,7 +26,7 @@ public class PetsBuySchedule {
 	/**
 	 * 宠物匹配
 	 */
-	@Scheduled(cron="15 1 15 * * ?")
+	@Scheduled(cron="0 1 15 * * ?")
 	public void buys1(){
 		Integer level = 1;
 		petsV2Biz.matching(level);
@@ -34,7 +34,7 @@ public class PetsBuySchedule {
 	/**
 	 * 宠物匹配
 	 */
-	@Scheduled(cron="15 1 16 * * ?")
+	@Scheduled(cron="0 1 16 * * ?")
 	public void buys2(){
 		Integer level = 3;
 		petsV2Biz.matching(level);
@@ -42,9 +42,25 @@ public class PetsBuySchedule {
 	/**
 	 * 宠物匹配
 	 */
-	@Scheduled(cron="25 1 17 * * ?")
-	public void buys5(){
+	@Scheduled(cron="0 1 17 * * ?")
+	public void buys4(){
 		Integer level = 4;
+		petsV2Biz.matching(level);
+	}
+	/**
+	 * 宠物匹配
+	 */
+//	@Scheduled(cron="0 26 1 * * ?")
+	public void buys5(){
+		Integer level = 5;
+		petsV2Biz.matching(level);
+	}
+	/**
+	 * 宠物匹配
+	 */
+//	@Scheduled(cron="0 26 1 * * ?")
+	public void buys6(){
+		Integer level = 6;
 		petsV2Biz.matching(level);
 	}
 	@Scheduled(cron="0 1 1 * * ?")
