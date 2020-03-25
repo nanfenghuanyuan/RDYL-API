@@ -383,7 +383,7 @@
 
   <select id="selectListPaging" parameterType="java.util.Map" resultType="map">
     <if test="state != 1">
-      SELECT pl.id
+      SELECT pl.id, pl.state statel
     </if>
     <if test="state == 1">
       SELECT pm.id

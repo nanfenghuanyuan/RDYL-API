@@ -67,7 +67,7 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
         Pets pets = petsService.selectByLevel(level);
         String startTime = new StringBuilder(DateUtils.getCurrentTimeStr()).replace(11, 16, pets.getStartTime()).replace(17, 19,"00").toString();
         int second = DateUtils.secondBetween(startTime);
-        if(second > 90){
+        if(second > 180){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }
         Integer userId = users.getId();

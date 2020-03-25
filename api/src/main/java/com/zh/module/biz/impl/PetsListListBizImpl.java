@@ -97,6 +97,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
                     inactiveTime = map.get("inactive_time").toString();
                     int time = DateUtils.secondBetween(inactiveTime);
                     petsMatchingListModel.setInactiveTime(String.valueOf(-time));
+                    petsMatchingListModel.setResultState(Integer.valueOf(map.get("statel").toString()));
                 }
                 if(state == 3){
                     price = new BigDecimal(map.get("buy_price").toString());
