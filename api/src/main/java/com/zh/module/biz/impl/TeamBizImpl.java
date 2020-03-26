@@ -164,7 +164,7 @@ public class TeamBizImpl implements TeamBiz {
             int allNumber = 0;
             int activeNumber = 0;
             int effectiveNumber = 0;
-            if(users.getIdStatus() == GlobalParams.ACTIVE){
+            if(users.getState() == GlobalParams.ACTIVE){
                 activeNumber ++;
             }
             if(users.getEffective() == GlobalParams.ACTIVE){
