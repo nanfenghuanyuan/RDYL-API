@@ -145,6 +145,8 @@ public class NoticeBizTests {
         //没有预约
         if (count == 0) {
             BigDecimal appointmentAmount = pets.getPayAmount();
+            accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), BigDecimal.ZERO, userId, "领养消耗", -1);
+
             PetsMatchingList petsMatchingList = new PetsMatchingList();
             petsMatchingList.setLevel(petsList.getLevel());
             petsMatchingList.setAmount(appointmentAmount);
@@ -157,7 +159,6 @@ public class NoticeBizTests {
             petsMatchingList.setAppointmentEndTime(DateUtils.getDateFormate(inactiveTime));
             petsMatchingListService.insertSelective(petsMatchingList);
 
-            accountService.updateAccountAndInsertFlow(userId, AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(appointmentAmount), BigDecimal.ZERO, userId, "领养消耗", petsMatchingList.getId());
         } else {
             Map<Object, Object> param = new HashMap<>();
             param.put("level", petsList.getLevel());
