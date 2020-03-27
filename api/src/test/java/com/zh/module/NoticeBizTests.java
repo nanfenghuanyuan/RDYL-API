@@ -56,7 +56,11 @@ public class NoticeBizTests {
         List<PetsList> petsLists = petsListService.selectAll(param);
         int i = 0;
         for(PetsList petsList : petsLists){
+            if(i > list.size()){
+                return;
+            }
             Integer userId = list.get(i);
+            i++;
             //自己不能和自己匹配
             if (petsList.getUserId() == null || petsList.getUserId().equals(userId)) {
                 continue;
