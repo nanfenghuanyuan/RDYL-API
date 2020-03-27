@@ -109,7 +109,7 @@ public class AccountBizImpl extends BaseBizImpl implements AccountBiz {
             return Result.toResultFormat(ResultCode.TRANSFER_MIN_BALANCE, transferMinAmount_remain);
         }
         Account accounts = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, users.getId());
-        if(accounts != null && accounts.getAvailbalance().subtract(new BigDecimal(transferMinAmount_remain)).compareTo(new BigDecimal(transferMinAmount)) < 0){
+        if(accounts != null && accounts.getAvailbalance().subtract(new BigDecimal(amount)).compareTo(new BigDecimal(transferMinAmount_remain)) < 0){
             return Result.toResultFormat(ResultCode.TRANSFER_MIN_AMOUNT, transferMinAmount_remain);
         }
         String transferRole = sysparamsService.getValStringByKey(SystemParams.TRANSFER_ROLE);
