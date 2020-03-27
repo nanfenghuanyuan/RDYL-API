@@ -53,7 +53,7 @@ public class NoticeBizTests {
     }
     @Test
     public void get() {
-        Integer level = 4;
+        Integer level = 1;
         Pets pets = petsService.selectByLevel(level);
         String falseRedisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_FALSE, level);
         Map<Object, Object> param = new HashMap<>();
@@ -81,12 +81,12 @@ public class NoticeBizTests {
                     continue;
                 }
 
-                Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, userId);
+                /*Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, userId);
                 if (account == null || account.getAvailbalance().compareTo(pets.getPayAmount()) < 0) {
                     RedisUtil.deleteList(redis, falseRedisKey, userId.toString());
                     log.info("【余额不足】====>" + userId);
                     continue;
-                }
+                }*/
 
                 Integer saleUserId = petsList.getUserId();
                 //验证是否已存在预约记录
@@ -106,13 +106,18 @@ public class NoticeBizTests {
                 petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAITING);
                 petsListService.updateByPrimaryKey(petsList);
 
-                try {
+               try {
                     updateAccount(count, pets, userId, petsList, saleUserId, inactiveTime);
                 } catch (Exception e) {
                     log.info("【扣款失败】====>" + userId);
                     RedisUtil.deleteList(redis, falseRedisKey, userId.toString());
                 }
+               log.info("【成功】=============>" + userId);
             }
+        }
+        petsLists = petsListService.selectAll(param);
+        if(petsLists.size() != 0){
+            get();
         }
     }
     @Test

@@ -146,14 +146,6 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
                     continue;
                 }
 
-                Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, userId);
-                if(account == null || account.getAvailbalance().compareTo(pets.getPayAmount()) < 0){
-                    RedisUtil.addListRight(redis, falseRedisKey, userId);
-                    RedisUtil.addListRight(redis, redisKey, petsList);
-                    RedisUtil.deleteList(redis, redisKeys, userId.toString());
-                    continue;
-                }
-
                 Integer saleUserId = (Integer) petsList.getUserId();
 
                 //验证是否已存在预约记录
@@ -200,8 +192,9 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
         size = RedisUtil.searchListSize(redis, redisKey);
         if(!StrUtils.isBlank(userId) && size != 0){
             matching(level);
+        }else {
+            log.info("=============宠物匹配完成================");
         }
-        log.info("=============宠物匹配完成================");
     }
 
     private void updateAccount(int count, Pets pets, Integer userId, PetsList petsList, Integer saleUserId, Date inactiveTime) {
