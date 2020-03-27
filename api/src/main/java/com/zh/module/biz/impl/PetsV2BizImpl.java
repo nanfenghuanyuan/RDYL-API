@@ -146,10 +146,20 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
                     continue;
                 }
 
-                Integer saleUserId = (Integer) petsList.getUserId();
+                Integer saleUserId = petsList.getUserId();
 
                 //验证是否已存在预约记录
                 count = checkMatchingRecord(userId, level);
+
+                if(count == 0){
+                    Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, userId);
+                    if(account == null || account.getAvailbalance().compareTo(pets.getPayAmount()) < 0){
+                        RedisUtil.addListRight(redis, falseRedisKey, userId);
+                        RedisUtil.addListRight(redis, redisKey, petsList);
+                        RedisUtil.deleteList(redis, redisKeys, userId.toString());
+                        continue;
+                    }
+                }
 
                 /*设置失效时间*/
                 int interval = 10;
