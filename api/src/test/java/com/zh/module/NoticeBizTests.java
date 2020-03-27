@@ -81,13 +81,6 @@ public class NoticeBizTests {
                     continue;
                 }
 
-                /*Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, userId);
-                if (account == null || account.getAvailbalance().compareTo(pets.getPayAmount()) < 0) {
-                    RedisUtil.deleteList(redis, falseRedisKey, userId.toString());
-                    log.info("【余额不足】====>" + userId);
-                    continue;
-                }*/
-
                 Integer saleUserId = petsList.getUserId();
                 //验证是否已存在预约记录
                 count = checkMatchingRecord(userId, level);

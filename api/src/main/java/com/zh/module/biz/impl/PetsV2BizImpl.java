@@ -178,6 +178,7 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
                     RedisUtil.deleteList(redis, redisKeys, userId.toString());
                     //记录失败用户
                     RedisUtil.addListRight(redis, falseRedisKey, userId);
+                    continue;
                 }
                 String key = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
                 //删除预约记录
