@@ -11,11 +11,14 @@ import com.zh.module.service.*;
 import com.zh.module.utils.BigDecimalUtils;
 import com.zh.module.utils.DateUtils;
 import com.zh.module.utils.RedisUtil;
+import com.zh.module.utils.StrUtils;
 import com.zh.module.variables.RedisKey;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -24,6 +27,7 @@ import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class NoticeBizTests {
 
     @Autowired
@@ -38,6 +42,8 @@ public class NoticeBizTests {
     private SysparamsService sysparamsService;
     @Autowired
     private PetsMatchingListService petsMatchingListService;
+    @Autowired
+    private RedisTemplate<String,String> redis;
     @Test
     public void appointment() {
         Users users = new Users();
@@ -49,60 +55,63 @@ public class NoticeBizTests {
     public void get() {
         Integer level = 4;
         Pets pets = petsService.selectByLevel(level);
-        List<Integer> list = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4));
+        String falseRedisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_FALSE, level);
         Map<Object, Object> param = new HashMap<>();
         param.put("level", level);
         param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
         List<PetsList> petsLists = petsListService.selectAll(param);
-        int i = 0;
         for(PetsList petsList : petsLists){
-            if(i > list.size()){
-                return;
-            }
-            Integer userId = list.get(i);
-            i++;
-            //自己不能和自己匹配
-            if (petsList.getUserId() == null || petsList.getUserId().equals(userId)) {
-                continue;
-            }
-            param = new HashMap<>();
-            param.put("buyUserId", userId);
-            param.put("level", level);
-            param.put("state", GlobalParams.PET_MATCHING_STATE_NOPAY);
-            //查询未付款当前宠物列表
-            int count = petsMatchingListService.selectCount(param);
-            if(count != 0){
-                continue;
-            }
+            String userIds = RedisUtil.searchIndexList(redis, falseRedisKey, 0);
+            if(!StrUtils.isBlank(userIds) && petsList != null) {
+                Integer userId = Integer.parseInt(userIds);
+                //自己不能和自己匹配
+                if (petsList.getUserId() == null || petsList.getUserId().equals(userId)) {
+                    RedisUtil.deleteList(redis, falseRedisKey, userId.toString());
+                    continue;
+                }
+                param = new HashMap<>();
+                param.put("buyUserId", userId);
+                param.put("level", level);
+                param.put("state", GlobalParams.PET_MATCHING_STATE_NOPAY);
+                //查询未付款当前宠物列表
+                int count = petsMatchingListService.selectCount(param);
+                if (count != 0) {
+                    RedisUtil.deleteList(redis, falseRedisKey, userId.toString());
+                    log.info("【存在未付款当前宠物】====>" + userId);
+                    continue;
+                }
 
-            Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, userId);
-            if(account == null || account.getAvailbalance().compareTo(pets.getPayAmount()) < 0){
-                continue;
-            }
+                Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, userId);
+                if (account == null || account.getAvailbalance().compareTo(pets.getPayAmount()) < 0) {
+                    RedisUtil.deleteList(redis, falseRedisKey, userId.toString());
+                    log.info("【余额不足】====>" + userId);
+                    continue;
+                }
 
-            Integer saleUserId = petsList.getUserId();
+                Integer saleUserId = petsList.getUserId();
+                //验证是否已存在预约记录
+                count = checkMatchingRecord(userId, level);
 
-            //验证是否已存在预约记录
-            count = checkMatchingRecord(userId, level);
+                /*设置失效时间*/
+                int interval = 10;
+                Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_PAY_CANCEL_TIME);
+                if (param1 != null) {
+                    interval = Integer.parseInt(param1.getKeyval());
+                }
+                Calendar current = Calendar.getInstance();
+                current.add(Calendar.MINUTE, interval);
+                Date inactiveTime = new Timestamp(current.getTimeInMillis());
 
-            /*设置失效时间*/
-            int interval = 10;
-            Sysparams param1 = sysparamsService.getValByKey(SystemParams.PETS_MATCHING_NO_PAY_CANCEL_TIME);
-            if(param1 != null){
-                interval = Integer.parseInt(param1.getKeyval());
-            }
-            Calendar current = Calendar.getInstance();
-            current.add(Calendar.MINUTE, interval);
-            Date inactiveTime = new Timestamp(current.getTimeInMillis());
+                petsList.setTransferUserId(userId);
+                petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAITING);
+                petsListService.updateByPrimaryKey(petsList);
 
-            petsList.setTransferUserId(userId);
-            petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAITING);
-            petsListService.updateByPrimaryKey(petsList);
-
-            try {
-                updateAccount(count, pets, userId, petsList, saleUserId, inactiveTime);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+                try {
+                    updateAccount(count, pets, userId, petsList, saleUserId, inactiveTime);
+                } catch (Exception e) {
+                    log.info("【扣款失败】====>" + userId);
+                    RedisUtil.deleteList(redis, falseRedisKey, userId.toString());
+                }
             }
         }
     }

@@ -116,6 +116,7 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
     @Override
     public void matching(Integer level) {
         String redisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, level);
+        String falseRedisKey = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_FALSE, level);
         long size = RedisUtil.searchListSize(redis, redisKey);
         String redisKeys = String.format(RedisKey.PETS_LIST_BUY_LIST, level);
         Pets pets = petsService.selectByLevel(level);
@@ -127,6 +128,7 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
                 //自己不能和自己匹配
                 if (petsList.getUserId() == null || petsList.getUserId().equals(userId)) {
                     RedisUtil.addListRight(redis, redisKey, petsList);
+                    RedisUtil.addListRight(redis, falseRedisKey, userId);
                     RedisUtil.deleteList(redis, redisKeys, userId.toString());
                     continue;
                 }
@@ -139,12 +141,14 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
                 if(count != 0){
                     //添加宠物
                     RedisUtil.addListRight(redis, redisKey, petsList);
+                    RedisUtil.addListRight(redis, falseRedisKey, userId);
                     RedisUtil.deleteList(redis, redisKeys, userId.toString());
                     continue;
                 }
 
                 Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, userId);
                 if(account == null || account.getAvailbalance().compareTo(pets.getPayAmount()) < 0){
+                    RedisUtil.addListRight(redis, falseRedisKey, userId);
                     RedisUtil.addListRight(redis, redisKey, petsList);
                     RedisUtil.deleteList(redis, redisKeys, userId.toString());
                     continue;
@@ -180,6 +184,8 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
                     RedisUtil.deleteKey(redis, key);
                     //删除用户
                     RedisUtil.deleteList(redis, redisKeys, userId.toString());
+                    //记录失败用户
+                    RedisUtil.addListRight(redis, falseRedisKey, userId);
                 }
                 String key = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
                 //删除预约记录
