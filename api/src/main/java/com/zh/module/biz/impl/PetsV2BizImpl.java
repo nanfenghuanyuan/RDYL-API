@@ -248,13 +248,15 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
 
     @Override
     public void clear() {
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < 7; i++) {
             //预约用户列表
             String redisKey = String.format(RedisKey.PETS_LIST_BUY_LIST, i);
             //未分配宠物列表
             String redisKeys = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT, i);
+            String redisKeyss = String.format(RedisKey.PETS_LIST_WAIT_APPOINTMENT_FALSE, i);
             RedisUtil.deleteKey(redis, redisKey);
             RedisUtil.deleteKey(redis, redisKeys);
+            RedisUtil.deleteKey(redis, redisKeyss);
         }
     }
 
