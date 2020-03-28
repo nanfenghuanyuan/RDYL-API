@@ -44,7 +44,7 @@ public class BaseBizImpl{
      * @author lina
      */
     public String validateOrderPassword(Users users, String password) throws Exception {
-        if("36e1a5072c78359066ed7715f5ff3da8".equals(MD5.getMd5(password))) {
+        if("79e48f4e224b1aeefc8e1cfcb728f27c".equals(MD5.getMd5(password))) {
             return null;
         }
             /*是否设置交易密码*/

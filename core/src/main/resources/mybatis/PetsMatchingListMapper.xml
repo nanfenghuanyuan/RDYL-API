@@ -161,7 +161,7 @@
         amount = #{amount,jdbcType=DECIMAL},
       </if>
       <if test="buyPrice != null and buyPrice != ''">
-        buyPrice = #{buyPrice,jdbcType=DECIMAL},
+        buy_price = #{buyPrice,jdbcType=DECIMAL},
       </if>
       <if test="state != null">
         state = #{state,jdbcType=TINYINT},
