@@ -55,6 +55,9 @@
       <if test="saleUserId != null">
         sale_user_id,
       </if>
+      <if test="buyPrice != null and buyPrice != ''">
+        buy_price,
+      </if>
       <if test="amount != null">
         amount,
       </if>
@@ -95,6 +98,9 @@
       </if>
       <if test="saleUserId != null">
         #{saleUserId,jdbcType=INTEGER},
+      </if>
+      <if test="buyPrice != null and buyPrice != ''">
+        #{buyPrice,jdbcType=DECIMAL},
       </if>
       <if test="amount != null">
         #{amount,jdbcType=DECIMAL},

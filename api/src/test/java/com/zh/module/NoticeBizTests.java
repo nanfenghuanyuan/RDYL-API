@@ -122,10 +122,10 @@ public class NoticeBizTests {
     }
     @Test
     public void get2() throws InterruptedException {
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < 15; i++) {
             PetsList petsList = new PetsList();
-            petsList.setLevel((byte) 2);
-            petsList.setPrice(new BigDecimal(301));
+            petsList.setLevel((byte) 4);
+            petsList.setPrice(new BigDecimal(1501));
             petsList.setProfitCoin("0");
             petsList.setProfitCoinRate("1");
             petsList.setPetsNumber("NO" + System.currentTimeMillis());
