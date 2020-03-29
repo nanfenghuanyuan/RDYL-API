@@ -120,7 +120,7 @@ public class TeamBizImpl implements TeamBiz {
         for(Users users : list){
             List<Users> lists = usersService.selectByReferID(users.getUuid());
             for(Users users1: lists){
-                if(users1.getIdStatus() == GlobalParams.ACTIVE){
+                if(users1.getState() == GlobalParams.ACTIVE){
                     activeNumber ++;
                 }
                 if(users1.getEffective() == GlobalParams.ACTIVE){
@@ -141,7 +141,7 @@ public class TeamBizImpl implements TeamBiz {
         int activeNumber = 0;
         int effectiveNumber = 0;
         for(Users users : list){
-            if(users.getIdStatus() == GlobalParams.ACTIVE){
+            if(users.getState() == GlobalParams.ACTIVE){
                 activeNumber ++;
             }
             if(users.getEffective() == GlobalParams.ACTIVE){
