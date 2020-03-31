@@ -590,6 +590,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
 
         //修改匹配记录
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
+        petsMatchingList.setBuyPrice(petsList.getPrice());
         petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
 
         //留存转让记录
