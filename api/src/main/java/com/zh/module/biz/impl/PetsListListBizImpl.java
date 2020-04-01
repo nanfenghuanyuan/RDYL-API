@@ -295,13 +295,13 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         //修改匹配记录
         petsMatchingList.setBuyPrice(petsList.getPrice());
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
+        petsMatchingList.setUpdateTime(DateUtils.getCurrentDate());
         petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
 
         //留存转让记录
         petsMatchingList.setId(null);
         petsMatchingList.setSaleUserId(users.getId());
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_OVER);
-        petsMatchingList.setUpdateTime(DateUtils.getCurrentDate());
         petsMatchingListService.insertSelective(petsMatchingList);
 
 
@@ -591,13 +591,13 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         //修改匹配记录
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_COMPLIETE);
         petsMatchingList.setBuyPrice(petsList.getPrice());
+        petsMatchingList.setUpdateTime(DateUtils.getCurrentDate());
         petsMatchingListService.updateByPrimaryKeySelective(petsMatchingList);
 
         //留存转让记录
         petsMatchingList.setId(null);
         petsMatchingList.setSaleUserId(petsMatchingList.getSaleUserId());
         petsMatchingList.setState((byte) GlobalParams.PET_MATCHING_STATE_OVER);
-        petsMatchingList.setUpdateTime(DateUtils.getCurrentDate());
         petsMatchingListService.insertSelective(petsMatchingList);
 
         /*短信通知买家*/
