@@ -163,7 +163,7 @@ public class HomeBizImpl implements HomeBiz {
         if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
             petsModel.setState(GlobalParams.PET_STATE_7);
         }else
-        if(DateUtils.secondBetween(startTime) > 120){
+        if(DateUtils.secondBetween(startTime) > 240){
             petsModel.setState(GlobalParams.PET_STATE_5);
         }else
         if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
