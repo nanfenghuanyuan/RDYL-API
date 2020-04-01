@@ -377,7 +377,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             profitAmount = petsList.getProfitRate().multiply(petsList.getPrice());
             priceMax = pets.getPriceMix();
             //如果收益后价格超出上限，则宠物升级
-            if(petsList.getPrice().add(profitAmount).compareTo(priceMax) > 0){
+            if(petsList.getPrice().add(profitAmount).setScale(0, BigDecimal.ROUND_UP).compareTo(priceMax) > 0){
                 newPets = petsService.selectByLevel(pets.getUpgradeId().intValue());
                 if(newPets.getState() == GlobalParams.INACTIVE){
                     continue;
@@ -388,7 +388,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
                 petsList.setProfitDays(newPets.getProfitDays());
                 petsList.setProfitRate(newPets.getProfitRate());
             }
-            petsList.setPrice(petsList.getPrice().add(profitAmount));
+            petsList.setPrice(petsList.getPrice().add(profitAmount).setScale(0, BigDecimal.ROUND_UP));
             petsList.setState((byte) GlobalParams.PET_LIST_STATE_WAIT);
             petsListService.updateByPrimaryKeySelective(petsList);
 
