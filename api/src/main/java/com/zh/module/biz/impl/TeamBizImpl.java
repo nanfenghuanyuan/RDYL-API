@@ -78,9 +78,7 @@ public class TeamBizImpl implements TeamBiz {
         List<TeamListModel> models = new LinkedList<>();
         param = new HashMap<>();
         param.put("referId", users.getUuid());
-        param.put("firstResult", pageModel.getFirstResult());
-        param.put("maxResult", pageModel.getMaxResult());
-        List<Users> usersList = usersService.selectPaging(param);
+        List<Users> usersList = usersService.selectAll(param);
         if(type == 1){
             for(Users user : usersList){
                 TeamListModel teamListModel = new TeamListModel();

@@ -21,7 +21,7 @@ public class TeamBizTests {
     private UsersBiz usersBiz;
     @Test
     public void init() {
-        Users users = usersBiz.getUser(13);
+        Users users = usersBiz.getUser(44);
         PageModel pageModel = new PageModel(1, 10);
         System.out.println(teamBiz.init(users, 2, pageModel));
     }
