@@ -103,6 +103,9 @@ public class WebController {
         if(!PatternUtil.isTradePwd(orderPassword)){
             return Result.toResult(ResultCode.USER_LOGIN_ERROR);
         }
+        if(0 == (phone.indexOf("170")) || 0 == (phone.indexOf("165"))){
+            return Result.toResult(ResultCode.PHONE_ERROR);
+        }
         try {
             return usersBiz.register(phone, userPassword, referPhone, codeId, code, orderPassword);
         } catch (Exception e) {

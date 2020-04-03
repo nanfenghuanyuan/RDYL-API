@@ -45,6 +45,9 @@ public class UserController {
         if(phone.length() != 11){
             return Result.toResult(ResultCode.PHONE_TYPE_ERROR);
         }
+        if(0 == (phone.indexOf("170")) || 0 == (phone.indexOf("165"))){
+            return Result.toResult(ResultCode.PHONE_ERROR);
+        }
         //推荐人id校验
         if(uuid.length() != 8){
             return Result.toResult(ResultCode.REFERPHONE_TYPE_ERROR);

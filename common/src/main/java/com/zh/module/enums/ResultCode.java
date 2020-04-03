@@ -88,6 +88,7 @@ public enum ResultCode {
     TRANSFER_MIN_BALANCE(30060, "转赠金额不能小于%s"),
     PETS_SHARE_ERROR(30061, "宠物分发异常，请稍后到领养中查看结果"),
     ORDER_PASSWORD_NONE(30062, "请输入交易密码"),
+    PHONE_ERROR(30063, "该号段为虚拟号段，不能注册，请联系客服"),
 
 
     /* 系统错误：40001-49999 */
