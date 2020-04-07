@@ -114,4 +114,10 @@ public interface PetsMatchingListService {
      * @return
      */
     List<PetsMatchingList> selectByTime(Map<Object, Object> params);
+
+    /**
+     * 删除该宠物的所有转让记录
+     * @param id
+     */
+    void deleteAllByPetListId(Integer id);
 }

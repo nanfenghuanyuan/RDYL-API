@@ -200,7 +200,10 @@
     delete from pets_matching_list
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <delete id="deleteAllByPetListId">
+        delete from pets_matching_list where pet_list_id = #{id}
+    </delete>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from pets_matching_list

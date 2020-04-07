@@ -153,4 +153,32 @@ public class PetsListController {
             return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
         }
     }
+    /**
+     * MEPC兑换
+     * @param users
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="exchange",method=RequestMethod.POST,produces="application/json;charset=utf-8")
+    public String exchange(@CurrentUser Users users, @RequestBody String param){
+        try {
+            JSONObject json = JSONObject.parseObject(param);
+            Integer id = json.getInteger("id");
+            String amount = json.getString("amount");
+
+            /*参数校验*/
+            if(id == null || StrUtils.isBlank(amount)){
+                return Result.toResult(ResultCode.PARAM_IS_BLANK);
+            }
+
+            return petsListBiz.exchange(users, id, amount);
+        } catch (BanlanceNotEnoughException e){
+            e.printStackTrace();
+            return Result.toResult(ResultCode.AMOUNT_NOT_ENOUGH);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
 }

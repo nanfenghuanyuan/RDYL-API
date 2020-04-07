@@ -34,4 +34,6 @@ public interface PetsMatchingListMapper {
     String consumeTodayAmount(@Param("start") String start, @Param("end") String end);
 
     List<PetsMatchingList> selectByTime(Map<Object, Object> params);
+
+    void deleteAllByPetListId(@Param("id") Integer id);
 }

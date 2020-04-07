@@ -100,4 +100,9 @@ public class PetsMatchingListServiceImpl implements PetsMatchingListService {
     public List<PetsMatchingList> selectByTime(Map<Object, Object> params) {
         return this.petsMatchingListMapper.selectByTime(params);
     }
+
+    @Override
+    public void deleteAllByPetListId(Integer id) {
+        this.petsMatchingListMapper.deleteAllByPetListId(id);
+    }
 }

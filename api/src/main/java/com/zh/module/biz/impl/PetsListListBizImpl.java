@@ -59,8 +59,6 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     @Autowired
     private ProfitRecordService profitRecordService;
     @Autowired
-    private WithdrawQuoteService withdrawQuoteService;
-    @Autowired
     private RedisTemplate<String,String> redis;
 
     @Override
@@ -756,5 +754,26 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             teamAwardRecord.setAmount(teamAwardRecord.getAmount().add(amount));
         }
         teamAwardRecordService.updateOrInsert(teamAwardRecord);
+    }
+
+    @Override
+    public String exchange(Users users, Integer id, String amount) {
+        //验证用户状态
+        if(!checkUserState(users)){
+            return Result.toResult(ResultCode.USER_STATE_ERROR);
+        }
+        PetsMatchingList petsMatchingList = petsMatchingListService.selectByPrimaryKey(id);
+
+        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId());
+        //判断订单状态 仅有转让中和未确认未付款状态可行
+        if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAIT){
+            return Result.toResult(ResultCode.PETS_STATE_ERROR);
+        }
+        //删除该宠物的所有转让记录
+        petsMatchingListService.deleteAllByPetListId(petsList.getId());
+        //删除该宠物
+        petsListService.deleteByPrimaryKey(petsList.getId());
+        accountService.updateAccountAndInsertFlow(users.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, new BigDecimal(amount), BigDecimal.ZERO, users.getId(), "MEPC兑换", id);
+        return Result.toResult(ResultCode.SUCCESS);
     }
 }

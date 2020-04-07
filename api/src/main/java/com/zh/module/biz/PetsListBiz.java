@@ -69,4 +69,13 @@ public interface PetsListBiz {
      * 统计
      */
     void censusAppointment();
+
+    /**
+     * mepc兑换
+     * @param users
+     * @param id
+     * @param amount
+     * @return
+     */
+    String exchange(Users users, Integer id, String amount);
 }
