@@ -52,6 +52,10 @@ public class PetsMatchingListModel {
      * 转让时间
      */
     private String transferTime;
+    /**
+     * 兑换mepc数量
+     */
+    private BigDecimal mepcPrice;
 
     /**
      * 图片url

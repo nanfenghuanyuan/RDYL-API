@@ -125,4 +125,6 @@ public class SystemParams {
     public static final String PETS_CARTOON_TIME = "PETS_CARTOON_TIME";
     //接口刷新时间
     public static final String COMMIT_REFRESH_TIME = "COMMIT_REFRESH_TIME";
+    //MEPC兑换倍数
+    public static final String MEPC_MUL = "MEPC_MUL";
 }

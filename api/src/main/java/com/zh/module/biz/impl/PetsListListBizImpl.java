@@ -91,7 +91,9 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
             petsMatchingListModel.setState(state);
             petsMatchingListModel.setResultState(state);
             if(state == GlobalParams.PET_LIST_STATE_WAIT){
+                String mepcMul = sysparamsService.getValStringByKey(SystemParams.MEPC_MUL);
                 petsMatchingListModel.setAppointmentTime(map.get("start_time").toString());
+                petsMatchingListModel.setMepcPrice(price.multiply(new BigDecimal(mepcMul)));
             }else{
                 if(state == 2) {
                     inactiveTime = map.get("inactive_time").toString();
