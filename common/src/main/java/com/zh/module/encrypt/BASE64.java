@@ -86,5 +86,5 @@ public class BASE64 {
 		System.out.println("【解密明文Byte】:"+deStrByte);
 		System.out.println("*******************************************************");
 	}
-	
+
 }

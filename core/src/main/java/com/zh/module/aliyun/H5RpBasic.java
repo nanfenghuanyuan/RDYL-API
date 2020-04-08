@@ -10,21 +10,26 @@ import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.zh.module.constants.GlobalParams;
+import com.zh.module.encrypt.BASE64;
 import com.zh.module.entity.IdcardValidate;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.lang.management.GarbageCollectorMXBean;
+import java.util.Base64;
 import java.util.UUID;
 
 @Component
 public class H5RpBasic {
-    public JSONObject init(String userName, String idCard){
+    private static String KEY = "TFRBSTRGZjZDZGlQUTN5dXl5OWN6Y1R5";
+    private static String SECRET = "MHRPV1gxSVU5bFpTMWZPMWtISjl6ejY3S1NxWEY0";
+    public JSONObject init(String userName, String idCard) throws IOException {
         JSONObject jsonObject = new JSONObject();
         //创建DefaultAcsClient实例并初始化
         DefaultProfile profile = DefaultProfile.getProfile(
                 "cn-hangzhou",             //默认
-                "LTAIwwPb2BAVB2wu",         //您的Access Key ID
-                "SGJYBHkH8MP4ocBcMehUCLjW1O9ivS");    //您的Access Key Secret
+                BASE64.decoder(KEY),         //您的Access Key ID
+                BASE64.decoder(SECRET));    //您的Access Key Secret
         IAcsClient client = new DefaultAcsClient(profile);
         String biz = "222"; //您在控制台上创建的、采用RPH5BioOnly认证方案的认证场景标识, 创建方法：https://help.aliyun.com/document_detail/59975.html
         String ticketId = UUID.randomUUID().toString(); //认证ID, 由使用方指定, 发起不同的认证任务需要更换不同的认证ID
@@ -54,11 +59,11 @@ public class H5RpBasic {
         return jsonObject;
     }
 
-    public JSONObject getStatus(String ticketId){
+    public JSONObject getStatus(String ticketId) throws IOException {
         DefaultProfile profile = DefaultProfile.getProfile(
                 "cn-hangzhou",             //默认
-                "LTAIwwPb2BAVB2wu",         //您的Access Key ID
-                "SGJYBHkH8MP4ocBcMehUCLjW1O9ivS");    //您的Access Key Secret
+                BASE64.decoder(KEY),         //您的Access Key ID
+                BASE64.decoder(SECRET));    //您的Access Key Secret
         IAcsClient client = new DefaultAcsClient(profile);
         String biz = "222";  //您在控制台上创建的、采用RPH5BioOnly认证方案的认证场景标识, 创建方法：https://help.aliyun.com/document_detail/59975.html
         String token = null; //认证token, 表达一次认证会话
@@ -96,5 +101,10 @@ public class H5RpBasic {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("json", iv);
         return jsonObject;
+    }
+
+    public static void main(String[] args) throws IOException {
+        H5RpBasic h5RpBasic = new H5RpBasic();
+        System.out.println(h5RpBasic.init("赵赫", "370883199409167412"));
     }
 }
