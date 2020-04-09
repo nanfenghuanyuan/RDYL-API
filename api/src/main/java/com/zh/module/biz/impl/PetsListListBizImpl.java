@@ -760,7 +760,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
     public String exchange(Users users, Integer id, String amount) {
         //功能开关
         String noPayPunish = sysparamsService.getValStringByKey(SystemParams.EXCHANGE_ONOFF);
-        if(StrUtils.isBlank(noPayPunish) || noPayPunish.equals(GlobalParams.INACTIVE)){
+        if(Integer.parseInt(noPayPunish) == GlobalParams.INACTIVE){
             return Result.toResult(ResultCode.PERMISSION_NO_ACCESS);
         }
         //验证用户状态
