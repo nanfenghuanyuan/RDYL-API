@@ -764,7 +764,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         }
         PetsMatchingList petsMatchingList = petsMatchingListService.selectByPrimaryKey(id);
 
-        PetsList petsList = petsListService.selectByPrimaryKey(petsMatchingList.getPetListId());
+        PetsList petsList = petsListService.selectByPrimaryKey(id);
         //判断订单状态 仅有转让中和未确认未付款状态可行
         if(petsList == null || petsList.getState() != GlobalParams.PET_LIST_STATE_WAIT){
             return Result.toResult(ResultCode.PETS_STATE_ERROR);
