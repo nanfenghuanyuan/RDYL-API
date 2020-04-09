@@ -127,4 +127,6 @@ public class SystemParams {
     public static final String COMMIT_REFRESH_TIME = "COMMIT_REFRESH_TIME";
     //MEPC兑换倍数
     public static final String MEPC_MUL = "MEPC_MUL";
+    //兌換功能
+    public static final String EXCHANGE_ONOFF = "EXCHANGE_ONOFF";
 }
