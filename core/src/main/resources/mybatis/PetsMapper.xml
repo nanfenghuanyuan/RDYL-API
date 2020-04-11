@@ -387,7 +387,7 @@
   <select id="selectByPrice"  resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
-    FROM pets  WHERE #{amount} &lt;= price_mix AND #{amount} &gt;= price_min
+    FROM pets  WHERE #{amount} &lt;= price_mix AND #{amount} &gt;= price_min limit 0,1
   </select>
   <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
     select count(*) 
