@@ -182,7 +182,7 @@ public class PetsListListBizImpl extends BaseBizImpl implements PetsListBiz {
         petsOrderModel.setPayInfoModels(payInfoModels);
         petsOrderModel.setName(pets.getName());
         petsOrderModel.setNumber(petsList.getPetsNumber() == null ? "" : petsList.getPetsNumber());
-        petsOrderModel.setPrice(petsList.getPrice());
+        petsOrderModel.setPrice(petsMatchingList.getBuyPrice());
         petsOrderModel.setProfit(petsList.getProfitDays() + "天/" + new BigDecimal(petsList.getProfitRate().toString()).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         petsOrderModel.setTransTime(petsMatchingList.getAppointmentStartTime());
         petsOrderModel.setPayTime(petsMatchingList.getPayTime());
