@@ -273,6 +273,7 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
             }*/
             result.put("name", pets.getName());
             result.put("number", petsList.getPetsNumber());
+            result.put("price", petsList.getPrice());
             result.put("transferTime", petsList.getStartTime());
             result.put("profit", pets.getProfitDays() + "天/" + pets.getProfitRate().multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP) + "%");
             result.put("profited", petsList.getPrice().multiply(pets.getProfitRate()).divide(pets.getProfitRate().add(new BigDecimal(1)), 2, BigDecimal.ROUND_HALF_UP));
@@ -286,7 +287,6 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
             if(petsMatchingLists != null && petsMatchingLists.size() != 0){
                 PetsMatchingList petsMatchingList = petsMatchingLists.get(0);
                 result.put("imgUrl", petsMatchingList.getImgUrl());
-                result.put("price", petsMatchingList.getBuyPrice());
             }
             return Result.toResult(ResultCode.SUCCESS, result);
         }else{
