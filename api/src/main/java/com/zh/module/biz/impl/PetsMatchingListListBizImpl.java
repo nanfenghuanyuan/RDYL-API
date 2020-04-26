@@ -88,7 +88,7 @@ public class PetsMatchingListListBizImpl implements PetsMatchingListBiz {
                     price = map.get("price") == null ? BigDecimal.ZERO : new BigDecimal(map.get("price").toString());
                 }
                 petsMatchingListModel.setPrice(price);
-                appointmentTime =map.get("start_time").toString();
+                appointmentTime =map.get("appointment_start_time").toString();
                 petsMatchingListModel.setAppointmentTime(appointmentTime);
                 petsMatchingListModel.setProfited(price.multiply(new BigDecimal(map.get("profit_rate").toString()).setScale(2, BigDecimal.ROUND_HALF_UP)));
             }
