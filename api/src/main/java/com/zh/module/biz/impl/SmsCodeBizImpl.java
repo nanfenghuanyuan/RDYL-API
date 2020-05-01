@@ -11,10 +11,7 @@ import com.zh.module.entity.*;
 import com.zh.module.enums.ResultCode;
 import com.zh.module.model.PetsModel;
 import com.zh.module.service.*;
-import com.zh.module.utils.DateUtils;
-import com.zh.module.utils.FeigeSmsUtils;
-import com.zh.module.utils.RedisUtil;
-import com.zh.module.utils.StrUtils;
+import com.zh.module.utils.*;
 import com.zh.module.variables.RedisKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -90,8 +87,8 @@ public class SmsCodeBizImpl implements SmsCodeBiz {
         }
 
         /*发送短信，并处理结果*/
-        FeigeSmsUtils feigeSmsUtils = new FeigeSmsUtils();
-        JSONObject codeJson = feigeSmsUtils.getFeiGeValidateCode(phone, SmsTemplateCode.SMS_VALIDATE_CODE);
+        AliyunSmsUtils aliyunSmsUtils = new AliyunSmsUtils();
+        JSONObject codeJson = aliyunSmsUtils.getValidateCode(phone, SmsTemplateCode.SMS_VALIDATE_CODE);
         String state =codeJson.getString("code");
         String code = "";
 

@@ -3,7 +3,7 @@ package com.zh.module.constants;
 public class SmsTemplateCode {
 
 
-	public static final String SMS_VALIDATE_CODE = "101621" ; //验证码
+	public static final String SMS_VALIDATE_CODE = "SMS_141580455" ; //验证码
 
 	public static final String SMS_C2C_NOTICE = "101747" ;//C2C交易通知
 
