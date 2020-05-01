@@ -87,4 +87,8 @@ public class BASE64 {
 		System.out.println("*******************************************************");
 	}
 
+	public static void main(String[] args) throws Exception {
+		test("0tOWX1IU9lZS1fO1kHJ9zz67KSqXF4");
+	}
+
 }

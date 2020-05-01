@@ -9,13 +9,24 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
+import com.zh.module.encrypt.BASE64;
 import com.zh.module.model.FeiGeSmsResponse;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.Random;
 
 public class AliyunSmsUtils {
+
+    private static String key = "TFRBSTRGZjZDZGlQUTN5dXl5OWN6Y1R5";
+    private static String secret = "MHRPV1gxSVU5bFpTMWZPMWtISjl6ejY3S1NxWEY0";
         public static String sendSms(String phone, String code) {
-            DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4Ff6CdiPQ3yuyy9czcTy", "0tOWX1IU9lZS1fO1kHJ9zz67KSqXF4");
+            DefaultProfile profile = null;
+            try {
+                profile = DefaultProfile.getProfile("cn-hangzhou", BASE64.decoder(key), BASE64.decoder(secret));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             IAcsClient client = new DefaultAcsClient(profile);
 
             CommonRequest request = new CommonRequest();
