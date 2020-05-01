@@ -1,5 +1,6 @@
 package com.zh.module.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
@@ -62,7 +63,7 @@ public class AliyunSmsUtils {
         String code = getCode(6);
         json.put("codes", code);
         String result = AliyunSmsUtils.sendSms(phone, code);
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = JSON.parseObject(result);
         String message = jsonObject.getString("Message");
         if(message == null||!message.equals("OK")){
             json.put("code", 416);
