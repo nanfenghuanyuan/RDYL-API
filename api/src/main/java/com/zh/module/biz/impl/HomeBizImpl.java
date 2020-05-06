@@ -89,7 +89,7 @@ public class HomeBizImpl implements HomeBiz {
             if(pets.getState() == GlobalParams.INACTIVE){
                 petsModel.setState(GlobalParams.PET_STATE_6);
             }else
-            if(DateUtils.secondBetween(startTime) > 240){
+            if(DateUtils.secondBetween(startTime) > 380){
                 petsModel.setState(5);
             }else
             if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
@@ -163,7 +163,7 @@ public class HomeBizImpl implements HomeBiz {
         if(DateUtils.minBetween(startTime) > -waiTime && DateUtils.minBetween(startTime) < 0){
             petsModel.setState(GlobalParams.PET_STATE_7);
         }else
-        if(DateUtils.secondBetween(startTime) > 240){
+        if(DateUtils.secondBetween(startTime) > 380){
             petsModel.setState(GlobalParams.PET_STATE_5);
         }else
         if(DateUtils.secondBetween(startTime) > 0 && DateUtils.secondBetween(startTime) < buyTime){
