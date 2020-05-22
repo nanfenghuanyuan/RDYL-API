@@ -1,15 +1,15 @@
 package com.zh.module;
 
 import com.zh.module.biz.*;
+import com.zh.module.constants.AccountType;
+import com.zh.module.constants.CoinType;
 import com.zh.module.constants.GlobalParams;
 import com.zh.module.constants.SmsTemplateCode;
 import com.zh.module.entity.Pets;
 import com.zh.module.entity.PetsList;
 import com.zh.module.entity.Users;
 import com.zh.module.model.PageModel;
-import com.zh.module.service.PetsListService;
-import com.zh.module.service.PetsService;
-import com.zh.module.service.UsersService;
+import com.zh.module.service.*;
 import com.zh.module.utils.DateUtils;
 import com.zh.module.utils.FeigeSmsUtils;
 import com.zh.module.utils.RedisUtil;
@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -45,6 +46,10 @@ public class PetsBizTests {
     private UsersBiz usersBiz;
     @Autowired
     private PetsService petsService;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private PetsMatchingListService petsMatchingListService;
     @Autowired
     private PetsListService petsListService;
     @Autowired
@@ -155,4 +160,28 @@ public class PetsBizTests {
         }
     }
 
+    @Test
+    public void petsToMepc() {
+        Map<Object, Object> param = new HashMap<>();
+        param.put("state", GlobalParams.PET_LIST_STATE_PROFITING);
+        List<PetsList> petsLists = petsListService.selectAll(param);
+        for(PetsList petsList : petsLists){
+            BigDecimal amount = petsList.getPrice().multiply(new BigDecimal(2));
+            //删除该宠物的所有转让记录
+            petsMatchingListService.deleteAllByPetListId(petsList.getId());
+            //删除该宠物
+            petsListService.deleteByPrimaryKey(petsList.getId());
+            accountService.updateAccountAndInsertFlow(petsList.getUserId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, amount, BigDecimal.ZERO, petsList.getUserId(), "MEPC兑换", petsList.getId());
+        }
+    }
+    @Test
+    public void petsToMepc1() {
+        PetsList petsList = petsListService.selectByPrimaryKey(1);
+        BigDecimal amount = petsList.getPrice().multiply(new BigDecimal(2));
+        //删除该宠物的所有转让记录
+        petsMatchingListService.deleteAllByPetListId(petsList.getId());
+        //删除该宠物
+        petsListService.deleteByPrimaryKey(petsList.getId());
+        accountService.updateAccountAndInsertFlow(petsList.getUserId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, amount, BigDecimal.ZERO, petsList.getUserId(), "MEPC兑换", petsList.getId());
+        }
 }
