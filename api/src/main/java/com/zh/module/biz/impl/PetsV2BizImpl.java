@@ -76,6 +76,12 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
         if(blackList != null){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
         }
+        //判断抢购最小账户余额
+        String minTotal = sysparamsService.getValStringByKey(SystemParams.MIN_BALANCE_BUYING);
+        Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, userId);
+        if(new BigDecimal(minTotal).compareTo(account.getAvailbalance()) > 0){
+            return Result.toResult(ResultCode.PETS_HAS_NONE);
+        }
         /*先完成备用手机的绑定*/
         Map<Object, Object> param = new HashMap<>();
         param.put("userId", users.getId());

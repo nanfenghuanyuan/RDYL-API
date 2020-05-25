@@ -129,4 +129,6 @@ public class SystemParams {
     public static final String MEPC_MUL = "MEPC_MUL";
     //兌換功能
     public static final String EXCHANGE_ONOFF = "EXCHANGE_ONOFF";
+    //抢购最小账户余额
+    public static final String MIN_BALANCE_BUYING = "MIN_BALANCE_BUYING";
 }
