@@ -131,4 +131,6 @@ public class SystemParams {
     public static final String EXCHANGE_ONOFF = "EXCHANGE_ONOFF";
     //抢购最小账户余额
     public static final String MIN_BALANCE_BUYING = "MIN_BALANCE_BUYING";
+    //跨平台划转开关
+    public static final String RPC_TRANSFER_ON_OFF = "RPC_TRANSFER_ON_OFF";
 }
