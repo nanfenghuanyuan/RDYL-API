@@ -26,4 +26,6 @@ public interface RpcBiz {
      * @return
      */
     String transferIn(String phone, String amount);
+
+    String transferList(Users user, Integer page, Integer rows);
 }

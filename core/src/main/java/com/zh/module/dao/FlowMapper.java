@@ -26,4 +26,6 @@ public interface FlowMapper {
     int selectCount(Map<Object, Object> param);
 
     String selectPersonProfitSumAmount(@Param("userId") Integer userId, @Param("operType") String operType);
+
+    List<Map<String, Object>> selectByTransferList(Map<Object, Object> map);
 }

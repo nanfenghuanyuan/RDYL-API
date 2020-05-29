@@ -83,4 +83,6 @@ public interface FlowService {
     int selectCount(Map<Object, Object> param);
 
     String selectPersonProfitSumAmount(Integer userId, String type);
+
+    List<Map<String, Object>> selectByTransferList(Integer id, Integer pageInt, Integer rowsInt);
 }

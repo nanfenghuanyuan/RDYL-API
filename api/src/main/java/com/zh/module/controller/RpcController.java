@@ -52,6 +52,23 @@ public class RpcController {
         }
     }
     /**
+     * 划转列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="transferList",method= RequestMethod.GET,produces="application/json;charset=utf-8")
+    public String transferList(@CurrentUser Users user, Integer page, Integer rows){
+        try {
+            return rpcBiz.transferList(user, page, rows);
+        }catch (NumberFormatException | JSONException e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.toResult(ResultCode.SYSTEM_INNER_ERROR);
+        }
+    }
+    /**
      * 转人
      * @return
      */

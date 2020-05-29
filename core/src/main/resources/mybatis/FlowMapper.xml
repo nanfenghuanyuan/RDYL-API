@@ -274,4 +274,15 @@
       select SUM(amount) AS sumamount
     from flow where user_id = #{userId} and oper_type = #{operType}
     </select>
+    <select id="selectByTransferList" resultType="java.util.Map">
+      select
+      <include refid="Base_Column_List" />
+      from flow
+      where 1=1
+      <if test="userId != null">
+        and  user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      and  oper_type LIKE '%跨平台%'
+      order by id desc limit #{firstResult,jdbcType=INTEGER},#{maxResult,jdbcType=INTEGER}
+    </select>
 </mapper>

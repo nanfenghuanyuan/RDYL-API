@@ -81,4 +81,6 @@ public interface CoinManagerService {
      * @date: 2019-12-31 16:40:21
      **/ 
     int selectCount(Map<Object, Object> param);
+
+    CoinManager queryByCoinType(int coin_type);
 }

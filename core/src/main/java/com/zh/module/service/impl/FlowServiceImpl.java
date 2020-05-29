@@ -3,6 +3,8 @@ package com.zh.module.service.impl;
 import com.zh.module.dao.FlowMapper;
 import com.zh.module.entity.Flow;
 import com.zh.module.service.FlowService;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -70,5 +72,14 @@ public class FlowServiceImpl implements FlowService {
     @Override
     public String selectPersonProfitSumAmount(Integer userId, String type) {
         return this.flowMapper.selectPersonProfitSumAmount(userId, type);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectByTransferList(Integer userId, Integer page, Integer rows) {
+        Map<Object,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        map.put("firstResult",page * rows);
+        map.put("maxResult",rows);
+        return this.flowMapper.selectByTransferList(map);
     }
 }

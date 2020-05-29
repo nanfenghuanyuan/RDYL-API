@@ -3,6 +3,8 @@ package com.zh.module.service.impl;
 import com.zh.module.dao.CoinManagerMapper;
 import com.zh.module.entity.CoinManager;
 import com.zh.module.service.CoinManagerService;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -65,5 +67,13 @@ public class CoinManagerServiceImpl implements CoinManagerService {
     @Override
     public int selectCount(Map<Object, Object> param) {
         return this.coinManagerMapper.selectCount(param);
+    }
+
+    @Override
+    public CoinManager queryByCoinType(int coinType) {
+        Map<Object,Object> map = new HashMap<>();
+        map.put("coinType",coinType);
+        List<CoinManager> coinManages = selectAll(map);
+        return coinManages.size() == 0 ? null : coinManages.get(0);
     }
 }
