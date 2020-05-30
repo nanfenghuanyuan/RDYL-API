@@ -89,6 +89,7 @@ public enum ResultCode {
     PETS_SHARE_ERROR(30061, "宠物分发异常，请稍后到领养中查看结果"),
     ORDER_PASSWORD_NONE(30062, "请输入交易密码"),
     PHONE_ERROR(30063, "该号段为虚拟号段，不能注册，请联系客服"),
+    IN_COMMIT(30064, "请不要重复提交"),
 
 
     /* 系统错误：40001-49999 */

@@ -59,7 +59,12 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
 
     @Override
     public synchronized String buy(Users users, Integer level) throws ParseException {
-        String redisKey;
+        String redisKey = String.format(RedisKey.PETS_LIST_BUY_LIST, level);
+        String redisKeys = String.format(RedisKey.PETS_LIST_BUYS_LIST, level,users.getId());
+        String data = RedisUtil.searchString(redis, redisKeys);
+        if(!StrUtils.isBlank(data) || data != null){
+            return Result.toResult(ResultCode.IN_COMMIT);
+        }
         //验证用户状态
         if(!checkUserState(users)){
             return Result.toResult(ResultCode.USER_STATE_ERROR);
@@ -69,6 +74,10 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
         int second = DateUtils.secondBetween(startTime);
         if(second > 240){
             return Result.toResult(ResultCode.PETS_HAS_NONE);
+        }
+        //是否在允许的时间范围内
+        if(!checkIsDateLimit(level, true)){
+            return Result.toResult(ResultCode.TIME_ERROR);
         }
         Integer userId = users.getId();
         //判断是否在黑名单
@@ -102,19 +111,14 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
             return Result.toResult(ResultCode.PERSON_HAS_PETS);
         }
 
-        //是否在允许的时间范围内
-        if(!checkIsDateLimit(level, true)){
-            return Result.toResult(ResultCode.TIME_ERROR);
-        }
         //查看绑定信息
         List<BindInfo> bindInfos = bindInfoService.queryByUser(userId);
         if(bindInfos.size() == 0){
             return Result.toResult(ResultCode.BIND_INFO_NONE);
         }
 
-        redisKey = String.format(RedisKey.PETS_LIST_BUY_LIST, level);
         RedisUtil.addListRight(redis, redisKey, userId);
-
+        RedisUtil.addString(redis, redisKeys, userId.toString());
 
         return Result.toResult(ResultCode.SUCCESS);
     }
@@ -264,6 +268,9 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
             RedisUtil.deleteKey(redis, redisKeys);
             RedisUtil.deleteKey(redis, redisKeyss);
         }
+        String redisKey = "rdyl:buys:";
+        Set<String> keys = redis.keys(redisKey + "*");
+        redis.delete(keys);
     }
 
     @Override

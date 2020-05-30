@@ -42,6 +42,8 @@ public class RedisKey {
 	public static final String PETS_LIST_BUY_FLAG = "rdyl:buyflag:%s";
 	//用户待捕捉列表 等级 用戶
 	public static final String PETS_LIST_BUY_LIST = "rdyl:buy:%s";
+	//用户待捕捉提交信息 等级 用戶
+	public static final String PETS_LIST_BUYS_LIST = "rdyl:buys:%s:%s";
 	//团队信息 类型 userId
 	public static final String TEAM_INFO = "rdyl:team:%s:%s";
 

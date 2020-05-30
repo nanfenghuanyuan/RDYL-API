@@ -17,10 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -44,11 +41,16 @@ public class RedisBizTests {
     }
     @Test
     public void appointment1() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("a", 1);
-        map.put("s", "@");
-        String redisKey = String.format(RedisKey.TEAM_INFO, 1, 1);
-        Map<String, Object>  s = RedisUtil.searchStringObj(redisTemplate, redisKey, Map.class);
-        System.out.println(s.toString());
+        String redisKey = "rdyl:buys:";
+        Set<String> keys = redisTemplate.keys(redisKey + "*");
+        redisTemplate.delete(keys);
+       /* String redisKey = String.format(RedisKey.PETS_LIST_BUYS_LIST, 1, "2");
+        String data = RedisUtil.searchString(redisTemplate, redisKey);
+        System.out.println("data===" + data);
+        System.out.println(data == null);
+        RedisUtil.addString(redisTemplate, redisKey, "2");
+        data = RedisUtil.searchString(redisTemplate, redisKey);
+        System.out.println("data===" + data);
+        System.out.println(data == null);*/
     }
 }
