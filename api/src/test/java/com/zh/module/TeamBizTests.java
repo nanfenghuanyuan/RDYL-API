@@ -30,5 +30,9 @@ public class TeamBizTests {
     public void getProfit() {
         teamBiz.getProfit();
     }
+    @Test
+    public void dayProfit() {
+        teamBiz.dayProfit();
+    }
 
 }

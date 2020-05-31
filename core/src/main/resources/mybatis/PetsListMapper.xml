@@ -428,4 +428,7 @@
     LEFT JOIN pets_matching_list pm ON pm.pet_list_id=pl.id
     WHERE pl.state=#{state} AND pl.level=#{level}
   </select>
+  <select id="selectToDayList" resultType="com.zh.module.entity.PetsList">
+    select <include refid="Base_Column_List" /> from pets_list where state = 0 and start_time &gt; #{start} and start_time &lt; #{end}
+  </select>
 </mapper>

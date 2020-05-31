@@ -86,4 +86,9 @@ public class PetsListServiceImpl implements PetsListService {
     public List<PetsList> selectDoBuy(Map<Object, Object> param) {
         return this.petsListMapper.selectDoBuy(param);
     }
+
+    @Override
+    public List<PetsList> selectToDayList(String start, String end) {
+        return this.petsListMapper.selectToDayList(start, end);
+    }
 }

@@ -22,6 +22,13 @@ public class TeamSchedule {
 	public void getProfit(){
 		teamBiz.getProfit();
 	}
+	/**
+	 * 定时每天给当天进行交易的宠物增加价值
+	 */
+	@Scheduled(cron="0 30 23 * * ?")
+	public void dayProfit(){
+		teamBiz.dayProfit();
+	}
 
 
 }

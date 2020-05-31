@@ -133,4 +133,8 @@ public class SystemParams {
     public static final String MIN_BALANCE_BUYING = "MIN_BALANCE_BUYING";
     //跨平台划转开关
     public static final String RPC_TRANSFER_ON_OFF = "RPC_TRANSFER_ON_OFF";
+    //定时每天给当天进行交易的宠物增加价值开关
+    public static final String DAY_PROFIT_ON_OFF = "DAY_PROFIT_ON_OFF";
+    //定时每天给当天进行交易的宠物增加价值比例
+    public static final String DAY_PROFIT_RADIO = "DAY_PROFIT_RADIO";
 }

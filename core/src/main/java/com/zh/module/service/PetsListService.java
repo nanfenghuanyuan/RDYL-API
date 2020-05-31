@@ -104,4 +104,12 @@ public interface PetsListService {
      * @return
      */
     List<PetsList> selectDoBuy(Map<Object, Object> param);
+
+    /**
+     * 查询当天进行交易的宠物
+     * @param start
+     * @param end
+     * @return
+     */
+    List<PetsList> selectToDayList(String start, String end);
 }

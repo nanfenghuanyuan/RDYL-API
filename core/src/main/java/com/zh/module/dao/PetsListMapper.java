@@ -1,6 +1,8 @@
 package com.zh.module.dao;
 
 import com.zh.module.entity.PetsList;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -30,4 +32,6 @@ public interface PetsListMapper {
     String selectSumAmountByUser(Integer id);
 
     List<PetsList> selectDoBuy(Map<Object, Object> param);
+
+    List<PetsList> selectToDayList(@Param("start") String start, @Param("end") String end);
 }

@@ -13,4 +13,9 @@ public interface TeamBiz {
     String init(Users users, Integer type, PageModel pageModel);
 
     void getProfit();
+
+    /**
+     * 定时每天给当天进行交易的宠物增加价值
+     */
+    void dayProfit();
 }
