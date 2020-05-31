@@ -373,22 +373,24 @@ public class TeamBizImpl implements TeamBiz {
         if(StrUtils.isBlank(dayProfitOnOff) || "0".equals(dayProfitOnOff)){
             return;
         }
-        String date = DateUtils.getSomeDay1(0);
+        String date = DateUtils.getSomeDay1(-1);
         String start = date + " 00:00:00";
         String end = date + " 23:59:59";
         List<PetsList> petsLists = petsListService.selectToDayList(start, end);
         for(PetsList petsList : petsLists){
             Account account = accountService.selectByUserIdAndAccountTypeAndType(AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, petsList.getUserId());
             //若账户中可用余额小于当前宠物价值 跳过
-            if(account.getAvailbalance().compareTo(petsList.getPrice()) < 0){
+            BigDecimal price = petsList.getPrice();
+            if(account.getAvailbalance().compareTo(price) < 0){
                 continue;
             }
             String dayProfitRadio = sysparamsService.getValStringByKey(SystemParams.DAY_PROFIT_RADIO);
             BigDecimal radio = BigDecimal.ONE.add(new BigDecimal(dayProfitRadio));
-            petsList.setPrice(petsList.getPrice().multiply(radio));
+            petsList.setPrice(price.multiply(radio));
             petsListService.updateByPrimaryKeySelective(petsList);
             //修改账户余额 记录流水
-            accountService.updateAccountAndInsertFlow(petsList.getUserId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(petsList.getPrice()), BigDecimal.ZERO, petsList.getUserId(), "宠物升级消耗", petsList.getId());
+            accountService.updateAccountAndInsertFlow(petsList.getUserId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(price), BigDecimal.ZERO, petsList.getUserId(), "宠物升级消耗", petsList.getId());
+            System.out.println(petsList.getPrice());
         }
     }
 }

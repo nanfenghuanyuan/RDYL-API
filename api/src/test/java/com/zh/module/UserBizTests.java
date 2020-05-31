@@ -78,12 +78,13 @@ public class UserBizTests {
         for(Account account : list){
             if(account.getAvailbalance().compareTo(new BigDecimal("200")) < 0) {
                 Users users = usersBiz.getUser(account.getUserId());
-                users.setState((byte) 3);
-                usersService.updateByPrimaryKeySelective(users);
+                if(users != null) {
+                    users.setState((byte) 3);
+                    usersService.updateByPrimaryKeySelective(users);
+                }
             }
 
         }
-        System.out.println(usersBiz.getStatus(1));
     }
 
 }

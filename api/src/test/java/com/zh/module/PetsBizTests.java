@@ -124,7 +124,7 @@ public class PetsBizTests {
     }
     @Test
     public void get22() {
-        petsV2Biz.matching(2);
+        petsV2Biz.matching(4);
 
     }
 
@@ -163,7 +163,7 @@ public class PetsBizTests {
     @Test
     public void petsToMepc() {
         Map<Object, Object> param = new HashMap<>();
-        param.put("state", GlobalParams.PET_LIST_STATE_PROFITING);
+        param.put("state", GlobalParams.PET_LIST_STATE_WAIT);
         List<PetsList> petsLists = petsListService.selectAll(param);
         for(PetsList petsList : petsLists){
             BigDecimal amount = petsList.getPrice().multiply(new BigDecimal(2));
@@ -176,7 +176,7 @@ public class PetsBizTests {
     }
     @Test
     public void petsToMepc1() {
-        PetsList petsList = petsListService.selectByPrimaryKey(1);
+        PetsList petsList = petsListService.selectByPrimaryKey(79);
         BigDecimal amount = petsList.getPrice().multiply(new BigDecimal(2));
         //删除该宠物的所有转让记录
         petsMatchingListService.deleteAllByPetListId(petsList.getId());
