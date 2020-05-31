@@ -192,12 +192,16 @@ public class PetsV2BizImpl extends BaseBizImpl implements PetsV2Biz {
                     //添加宠物
                     RedisUtil.addListRight(redis, redisKey, petsList);
                     String key = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
-                    //删除预约记录
-                    RedisUtil.deleteKey(redis, key);
-                    //删除用户
-                    RedisUtil.deleteList(redis, redisKeys, userId.toString());
-                    //记录失败用户
-                    RedisUtil.addListRight(redis, falseRedisKey, userId);
+                    try {
+                        //删除预约记录
+                        RedisUtil.deleteKey(redis, key);
+                        //删除用户
+                        RedisUtil.deleteList(redis, redisKeys, userId.toString());
+                        //记录失败用户
+                        RedisUtil.addListRight(redis, falseRedisKey, userId);
+                    } catch (Exception ex) {
+                        continue;
+                    }
                     continue;
                 }
                 String key = String.format(RedisKey.BUY_APPOINTMENT_USER, level, userId);
