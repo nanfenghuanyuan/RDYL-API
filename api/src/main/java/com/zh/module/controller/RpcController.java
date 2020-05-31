@@ -32,17 +32,17 @@ public class RpcController {
      */
     @ResponseBody
     @RequestMapping(value="transfer",method= RequestMethod.GET,produces="application/json;charset=utf-8")
-    public String transfer(@CurrentUser Users user, String amount, String phone, String code, Integer codeId){
+    public String transfer(@CurrentUser Users user, String amount, String phone, String password){
         try {
             /*参数校验*/
-            if(StrUtils.isBlank(phone) || StrUtils.isBlank(amount) || StrUtils.isBlank(code) || codeId == null){
+            if(StrUtils.isBlank(phone) || StrUtils.isBlank(amount) || StrUtils.isBlank(password)){
                 return Result.toResult(ResultCode.PARAM_IS_BLANK);
             }
             /*正则校验*/
             if(!PatternUtil.isPhone(phone)){
                 return Result.toResult(ResultCode.PHONE_TYPE_ERROR);
             }
-            return rpcBiz.transfer(user, phone, amount, code, codeId);
+            return rpcBiz.transfer(user, phone, amount, password);
         }catch (NumberFormatException | JSONException e) {
             e.printStackTrace();
             return Result.toResult(ResultCode.PARAM_TYPE_BIND_ERROR);
