@@ -75,9 +75,13 @@ public class RpcBizImpl extends BaseBizImpl implements RpcBiz {
     @Override
     public String transferIn(String phone, String amount) {
         Users user = usersService.selectByPhone(phone);
-        accountService.updateAccountAndInsertFlow(user.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, new BigDecimal(amount),
-                BigDecimal.ZERO, user.getId(), "MEPC跨平台转入", 1);
-        return Result.toResult(ResultCode.SUCCESS);
+        if(user != null) {
+            accountService.updateAccountAndInsertFlow(user.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, new BigDecimal(amount),
+                    BigDecimal.ZERO, user.getId(), "MEPC跨平台转入", 1);
+            return Result.toResult(ResultCode.SUCCESS);
+        }else{
+            return Result.toResult(ResultCode.USER_NOT_EXIST);
+        }
     }
 
     @Override
