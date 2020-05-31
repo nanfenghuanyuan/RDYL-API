@@ -78,7 +78,7 @@ public class FlowServiceImpl implements FlowService {
     public List<Map<String, Object>> selectByTransferList(Integer userId, Integer page, Integer rows) {
         Map<Object,Object> map = new HashMap<>();
         map.put("userId",userId);
-        map.put("firstResult",page * rows);
+        map.put("firstResult", (page - 1) * rows);
         map.put("maxResult",rows);
         return this.flowMapper.selectByTransferList(map);
     }
