@@ -44,27 +44,18 @@ public class RpcBizImpl extends BaseBizImpl implements RpcBiz {
     @Autowired
     private CoinManagerService coinManagerService;
     @Override
-    public String transfer(Users user, String phone, String amount, String code, Integer codeId) {
+    public String transfer(Users user, String phone, String amount, String password) throws Exception {
         /*校验功能开关*/
         String transferOnOff = sysparamsService.getValStringByKey(SystemParams.RPC_TRANSFER_ON_OFF);
         if(StrUtils.isBlank(transferOnOff) || !"1".equals(transferOnOff)){
             return Result.toResult(ResultCode.PERMISSION_NO_ACCESS);
         }
-        /*校验验证码是否正确*/
-        SmsRecord sms = smsRecordService.getByIdAndPhone(codeId, user.getPhone());
-        if(sms == null || !code.equals(sms.getCode())){
-            if(validateErrorTimesOfSms(codeId)){
-                return Result.toResult(ResultCode.SMS_CHECK_ERROR);
-            }else{
-                return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
+        /*校验交易密码*/
+        if(!StrUtils.isBlank(password)){
+            String valiStr = validateOrderPassword(user, password);
+            if(valiStr!=null){
+                return valiStr;
             }
-        }
-
-        /*校验验证码有效期*/
-        Sysparams timeLimit = sysparamsService.getValByKey(SystemParams.SMS_TIME_LIMIT);
-        int interval = (int) ((System.currentTimeMillis() - sms.getCreateTime().getTime()) / (1000*60));
-        if(timeLimit==null || sms.getTimes()!= GlobalParams.ACTIVE|| interval>=Integer.parseInt(timeLimit.getKeyval()) || !validataStateOfSms(codeId)){
-            return Result.toResult(ResultCode.SMS_TIME_LIMIT_ERROR);
         }
         accountService.updateAccountAndInsertFlow(user.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(new BigDecimal(amount)),
                 BigDecimal.ZERO, user.getId(), "MEPC跨平台提取", 1);

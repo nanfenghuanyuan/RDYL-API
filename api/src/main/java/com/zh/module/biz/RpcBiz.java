@@ -13,11 +13,9 @@ public interface RpcBiz {
      * @param user
      * @param phone
      * @param amount
-     * @param code
-     * @param codeId
      * @return
      */
-    String transfer(Users user, String phone, String amount, String code, Integer codeId);
+    String transfer(Users user, String phone, String amount, String password) throws Exception;
 
     /**
      * 划转入
