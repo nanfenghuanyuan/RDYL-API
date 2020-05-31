@@ -386,7 +386,7 @@ public class TeamBizImpl implements TeamBiz {
             }
             String dayProfitRadio = sysparamsService.getValStringByKey(SystemParams.DAY_PROFIT_RADIO);
             BigDecimal radio = BigDecimal.ONE.add(new BigDecimal(dayProfitRadio));
-            petsList.setPrice(price.multiply(radio));
+            petsList.setPrice(price.multiply(radio).setScale(0, BigDecimal.ROUND_HALF_UP));
             petsListService.updateByPrimaryKeySelective(petsList);
             //修改账户余额 记录流水
             accountService.updateAccountAndInsertFlow(petsList.getUserId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(price), BigDecimal.ZERO, petsList.getUserId(), "宠物升级消耗", petsList.getId());
