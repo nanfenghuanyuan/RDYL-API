@@ -59,7 +59,7 @@ public class RpcBizImpl extends BaseBizImpl implements RpcBiz {
         }
         accountService.updateAccountAndInsertFlow(user.getId(), AccountType.ACCOUNT_TYPE_ACTIVE, CoinType.OS, BigDecimalUtils.plusMinus(new BigDecimal(amount)),
                 BigDecimal.ZERO, user.getId(), "MEPC跨平台提取", 1);
-        String url = "http://localhost:8081/rpc/transferIn";
+        String url = "http://118.190.146.100:8081/rpc/transferIn";
         Map<String, String> param = new HashMap<>();
         param.put("phone", phone);
         param.put("amount", amount);
