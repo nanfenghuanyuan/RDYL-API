@@ -52,7 +52,7 @@ public class PetsBuySchedule {
 	 */
 	@Scheduled(cron="0 4 19 * * ?")
 	public void buys5(){
-		Integer level = 6;
+		Integer level = 5;
 		petsV2Biz.matching(level);
 	}
 	/**
@@ -60,7 +60,7 @@ public class PetsBuySchedule {
 	 */
 	@Scheduled(cron="0 4 20 * * ?")
 	public void buys6(){
-		Integer level = 5;
+		Integer level = 6;
 		petsV2Biz.matching(level);
 	}
 	@Scheduled(cron="0 1 1 * * ?")
